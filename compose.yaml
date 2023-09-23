@@ -19,22 +19,22 @@ services:
       - db-data:/var/lib/postgresql/data
     init: true
 
-  # frontend:
-  #   build:
-  #     context: ./frontend
-  #     dockerfile: Dockerfile
-  #   image: frontend
-  #   container_name: frontend
-  #   ports:
-  #     - 3000:3000
-  #   restart: on-failure
-  #   env_file:
-  #     - .env
-  #   networks:
-  #     - matcha
-  #   volumes:
-  #     - ./frontend/mount:/frontend
-  #   init: true
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    image: frontend
+    container_name: frontend
+    ports:
+      - 3000:3000
+    restart: on-failure
+    env_file:
+      - .env
+    networks:
+      - matcha
+    volumes:
+      - ./frontend/mount:/frontend
+    init: true
 
   backend:
     build:
