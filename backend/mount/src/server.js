@@ -4,6 +4,8 @@ const app = express()
 
 app.use(logger)
 
+console.log('bonjour')
+
 app.get('/', (req, res) => {
 	res.send('Hiii')
 })
@@ -13,4 +15,4 @@ function logger(req, res, next) {
 	next()
 }
 
-app.listen(3000)
+app.listen(3333)
