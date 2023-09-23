@@ -1,6 +1,12 @@
 import { useState } from "react";
 
-function MobileMenuBoutton() {
+function MobileMenuBoutton({
+  showMenu,
+  setShowMenu,
+}: {
+  showMenu: boolean;
+  setShowMenu: any;
+}) {
   return (
     <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
       {/* <!-- Mobile menu button--> */}
@@ -9,6 +15,7 @@ function MobileMenuBoutton() {
         className="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
         aria-controls="mobile-menu"
         aria-expanded="false"
+        onClick={() => setShowMenu(!showMenu)}
       >
         <span className="absolute -inset-0.5"></span>
         <span className="sr-only">Open main menu</span>
@@ -55,54 +62,38 @@ function MobileMenuBoutton() {
   );
 }
 
-function MobileMenu() {
-  return (
+function MobileMenu({ showMenu }: { showMenu: boolean }) {
+  return showMenu ? (
     <>
       {/* <!-- Mobile menu, show/hide based on menu state. --> */}
       <div className="sm:hidden" id="mobile-menu">
         <div className="space-y-1 px-2 pb-3 pt-2">
           {/* <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" --> */}
-          <a
-            href="#"
-            className="bg-gray-900 text-white block rounded-md px-3 py-2 text-base font-medium"
-            aria-current="page"
-          >
-            Dashboard
-          </a>
-          <a
-            href="#"
-            className="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium"
-          >
-            Team
-          </a>
-          <a
-            href="#"
-            className="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium"
-          >
-            Projects
-          </a>
-          <a
-            href="#"
-            className="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium"
-          >
-            Calendar
-          </a>
+          <ButtonLinkNavBar text="Dashboard" selected={true} block={true} />
+          <ButtonLinkNavBar text="Team" selected={false} block={true} />
+          <ButtonLinkNavBar text="Projects" selected={false} block={true} />
+          <ButtonLinkNavBar text="Calendar" selected={false} block={true} />
         </div>
       </div>
     </>
-  );
+  ) : null;
 }
 function ButtonLinkNavBar({
   text,
   selected,
+  block,
 }: {
   text: string;
   selected: boolean;
+  block: boolean;
 }) {
-  let style: string =
-    "text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium";
+  let style: string = `text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium ${
+    block && "block"
+  }`;
   if (selected)
-    style = "bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium";
+    style = `bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium ${
+      block && "block"
+    }`;
   return (
     <a href="#" className={style} aria-current="page">
       {text}
@@ -114,11 +105,10 @@ function LinkNavBar() {
   return (
     <div className="hidden sm:ml-6 sm:block">
       <div className="flex space-x-4">
-        {/* <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" --> */}
-        <ButtonLinkNavBar text="Dashboard" selected={true} />
-        <ButtonLinkNavBar text="Team" selected={false} />
-        <ButtonLinkNavBar text="Projects" selected={false} />
-        <ButtonLinkNavBar text="Calendar" selected={false} />
+        <ButtonLinkNavBar text="Dashboard" selected={true} block={false} />
+        <ButtonLinkNavBar text="Team" selected={false} block={false} />
+        <ButtonLinkNavBar text="Projects" selected={false} block={false} />
+        <ButtonLinkNavBar text="Calendar" selected={false} block={false} />
       </div>
     </div>
   );
@@ -127,7 +117,7 @@ function LinkNavBar() {
 function LogoNavBar() {
   return (
     <div className="flex flex-shrink-0 items-center">
-      <img className="h-8 w-auto" src="./logo-matcha.png" alt="Matcha" />
+      <img className="h-8 w-auto" src="./logo-matcha-red.png" alt="Matcha" />
     </div>
   );
 }
@@ -172,21 +162,22 @@ function ButtonDropdownMenu({ text }: { text: string }) {
 }
 
 function DropdownMenuLinks() {
-	return (<div
-        className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
-        role="menu"
-        aria-orientation="vertical"
-        aria-labelledby="user-menu-button"
-      >
-        {/* <!-- Active: "bg-gray-100", Not Active: "" --> */}
-        <ButtonDropdownMenu text="Your Profile" />
-        <ButtonDropdownMenu text="Settings" />
-        <ButtonDropdownMenu text="Sign out" />
-      </div>
-    )
+  return (
+    <div
+      className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+      role="menu"
+      aria-orientation="vertical"
+      aria-labelledby="user-menu-button"
+    >
+      {/* <!-- Active: "bg-gray-100", Not Active: "" --> */}
+      <ButtonDropdownMenu text="Your Profile" />
+      <ButtonDropdownMenu text="Settings" />
+      <ButtonDropdownMenu text="Sign out" />
+    </div>
+  );
 }
 function DropdownMenu() {
-	const [showMenu, setShowMenu] = useState<boolean>(false);
+  const [showMenu, setShowMenu] = useState<boolean>(false);
   // console.log('menu')
   return (
     <div className="relative ml-3">
@@ -197,7 +188,7 @@ function DropdownMenu() {
           id="user-menu-button"
           aria-expanded="false"
           aria-haspopup="true"
-		  onClick={() => setShowMenu(!showMenu)}
+          onClick={() => setShowMenu(!showMenu)}
         >
           <span className="absolute -inset-1.5"></span>
           <span className="sr-only">Open user menu</span>
@@ -219,30 +210,29 @@ function DropdownMenu() {
 	  From: "transform opacity-100 scale-100"
 	  To: "transform opacity-0 scale-95"
   --> */}
-  {showMenu && <DropdownMenuLinks />}
-  </div>
+      {showMenu && <DropdownMenuLinks />}
+    </div>
   );
 }
 
 function NavBar() {
+  const [showMenu, setShowMenu] = useState<boolean>(false);
   return (
     <nav className="bg-gray-800">
       <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
         <div className="relative flex h-16 items-center justify-between">
-          <MobileMenuBoutton />
+          <MobileMenuBoutton showMenu={showMenu} setShowMenu={setShowMenu} />
           <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
             <LogoNavBar />
             <LinkNavBar />
           </div>
           <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
             <ButtonNotifications />
-
-            {/* <!-- Profile dropdown --> */}
             <DropdownMenu />
           </div>
         </div>
       </div>
-      <MobileMenu />
+      <MobileMenu showMenu={showMenu} />
     </nav>
   );
 }
