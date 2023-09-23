@@ -4,7 +4,6 @@ import {
   Route,
   BrowserRouter,
 } from "react-router-dom";
-import "./App.css";
 import HomePage from "./pages/HomePage";
 import Page404 from "./pages/Page404";
 import NavBar from "./components/NavBar";
