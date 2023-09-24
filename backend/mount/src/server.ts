@@ -6,13 +6,23 @@ const app = express()
 
 app.use(logger)
 
-console.log('bonjour');
+console.log('bonjour')
 
 
+const db = new Database;
+db.connectDb();
+// db.selectUsers();
 
-// const db = new Database();
+process.on('exit', () => {
+	db.client.end()
+	  .then(() => {
+		console.log('Connexion à la base de données fermée');
+	  })
+	  .catch((err: any) => {
+		console.error('Erreur lors de la fermeture de la connexion à la base de données :', err);
+	  });
+  });
 
-// db.connectDabase();
 
 app.get('/', (req: Request, res: Response) => {
 	res.send('Hiii')
