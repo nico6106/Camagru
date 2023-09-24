@@ -56,6 +56,18 @@ services:
       - ./backend/mount:/backend
     init: true
 
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    restart: on-failure
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL} # Remplacez par votre email
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD} # Remplacez par votre mot de passe
+    ports:
+      - 8080:80
+    networks:
+      - matcha
+
 volumes:
   db-data:
     name: db-data
