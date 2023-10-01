@@ -1,9 +1,12 @@
 import { Database } from "./database/db"
 import { Request, Response } from 'express';
 
+const cookieParser = require('cookie-parser')
+
 const express = require('express')
 const app = express()
 app.use(logger)
+app.use(cookieParser());
 
 console.log('bonjour')
 
