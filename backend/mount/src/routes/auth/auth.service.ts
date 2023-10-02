@@ -23,7 +23,7 @@ export async function SignUp(db: Database, req: Request, res: Response) {
   const confirmID: string = generateId();
   let retour: QueryResult | null = null;
   let values: string[] = [username, email, firstname, lastname, hash, confirmID];
-  const fields: string = "username, email, first_name, last_name, password, emailConfirmId";
+  const fields: string = "username, email, first_name, last_name, password, email_confirm_id";
 
   //add user to db
   retour = await db.insertToTable(TableUsersName, fields, values);
@@ -74,7 +74,6 @@ export async function SignInWithCookie(payload: PayloadJWTType, res: Response): 
 export async function SignIn(db: Database, req: Request, res: Response) {
 	const { username, password } = req.body;
 	const argon2 = require("argon2");
-	// console.log("sign in");
 
 	const user: TableUser[] | null = await db.selectOneElemFromTable(TableUsersName, 'username', username);
 	// console.log(user)
@@ -109,11 +108,49 @@ export async function SignOut(db: Database, req: Request, res: Response) {
 	return res.status(200).json({ message: "success" });
 }
 
+export async function ConfirmEmail(db: Database, req: Request, res: Response) {
+	const confirmID = req.params.confirmId;
+	console.log('confirm')
+	//recuperer USER
+	const user: TableUser[] | null = await db.selectOneElemFromTable(TableUsersName, 'email_confirm_id', confirmID);
+	console.log(user)
+
+	if (!user || user.length !== 1)
+		return res.status(400).json({ message: "Error - unknown link" });
+	if (user[0].email_verified === true)
+		return res.status(400).json({ message: "already validated" });
+
+	db.AmendOneElemFromTable(TableUsersName, 'email_verified', 'id', user[0].id, true);
+
+	return res.status(200).json({ message: "success" });
+}
+
+//test
 export async function testJWT(db: Database, req: Request, res: Response) {
-	// console.log('test');
+	console.log('test');
+
+	const token = req.cookies.signin_matcha;
+	let decoded: PayloadJWTType | null = null;
+	if (token) {
+		try {
+			decoded = await verifyJWT(token);
+			console.log('decoded')
+			console.log(decoded)
+		} catch (err) {
+			return res.status(400).json({ error: "Not connected" });
+		}
+
+		if (!decoded)
+			return res.status(400).json({msg: 'NOK'})
+
+		const user: TableUser[] | null = await db.selectOneElemFromTable(TableUsersName, 'username', decoded.login);
+		console.log(user)
+		return res.status(200).json({msg: 'ok'})
+	}
+
 	// console.log(req.cookies.signin_matcha)
 	// sendEmailTest();
-	return res.status(200).json({msg: 'ok'})
+	return res.status(400).json({msg: 'NOK'})
 }
 
 export async function signJWT(payload: PayloadJWTType) {

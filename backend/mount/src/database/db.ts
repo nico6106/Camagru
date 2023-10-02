@@ -4,6 +4,7 @@ import { exec_executeQueryNoArg, exec_executeQueryOneArg, exec_insertToTable } f
 import { test_SelectEntryOneArg } from "./db-testEntries";
 import { TableUser } from "./data";
 import { exec_SelectOneElemFromTable } from "./db-select";
+import { exec_AmendOneElemFromTable } from "./db-amend";
 
 export class Database {
   user: string;
@@ -57,6 +58,12 @@ export class Database {
   //select one elem from Table
   async selectOneElemFromTable(table: string, field: string, elem: string): Promise<TableUser[] | null> {
 	return exec_SelectOneElemFromTable(this, table, field, elem);
+  }
+
+  //UPDATE
+  //update $table with $field = $elem WHERE $whereField = $whereId
+  async AmendOneElemFromTable(table: string, field: string, whereField: string, whereId: any , elem: any): Promise<QueryResult | null> {
+	return exec_AmendOneElemFromTable(this, table, field, whereField, whereId, elem);
   }
 
 
