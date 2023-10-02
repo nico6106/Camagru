@@ -33,6 +33,9 @@ db.initConnectionDb();
 const authRouter = require('./routes/auth/auth.controllers')
 app.use('/auth', authRouter)
 
+const usersRouter = require('./routes/users/users.controllers')
+app.use('/users', usersRouter)
+
 app.get('/', (req: Request, res: Response) => {
 	res.send('Hiii')
 })

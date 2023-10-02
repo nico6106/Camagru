@@ -1,6 +1,8 @@
 import { useState } from "react";
 import OutsideClickHandler from "react-outside-click-handler";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useUserContext } from "../context/UserContext";
+import Button from "./elems/Button";
 
 function MobileMenuBoutton({
   showMenu,
@@ -157,9 +159,14 @@ function DropdownMenuLinks() {
   );
 }
 function DropdownMenu() {
+  const { user } = useUserContext();
+  const navigate = useNavigate();
   const [showDropMenu, setShowDropMenu] = useState<boolean>(false);
-  // console.log('menu')
-  return (
+  
+  console.log('user')
+  console.log(user)
+
+  return user ? (
     <div className="relative ml-3">
       <OutsideClickHandler
         onOutsideClick={() => {
@@ -188,7 +195,12 @@ function DropdownMenu() {
         {showDropMenu && <DropdownMenuLinks />}
       </OutsideClickHandler>
     </div>
-  );
+  ) : (<Button
+	text="Sign in"
+	onClick={() => {
+		navigate('/signin');
+	}}
+/>);
 }
 
 function NavBar() {

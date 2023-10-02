@@ -11,10 +11,10 @@ export async function checkConnected(req: Request, res: Response, next: any) {
 				return ;
 			}
 			else
-				return res.status(400).json({ error: "Not connected" });
+				return res.status(200).json({ error: "Not connected" });
 		} catch (err) {
-			return res.status(400).json({ error: "Not connected" });
+			return res.status(200).json({ error: "Not connected" });
 		}
 	}
-	return res.status(400).json({ error: "Not connected" });
+	return res.status(200).json({ error: "Not connected" });
 }
