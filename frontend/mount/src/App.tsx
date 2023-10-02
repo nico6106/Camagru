@@ -10,6 +10,7 @@ import NavBar from './components/NavBar';
 import ConfirmEmailPage from './pages/ConfirmEmailPage';
 import { UserProvider } from './context/UserContext';
 import SignInPage from './pages/SignInPage';
+import SignOutPage from './pages/SignOutPage';
 
 function App() {
     return (
@@ -23,6 +24,7 @@ function App() {
                         element={<ConfirmEmailPage />}
                     />
 					<Route path="/signin" element={<SignInPage />} />
+					<Route path="/signout" element={<SignOutPage />} />
                     <Route path="/404" element={<Page404 />} />
                     <Route path="*" element={<Page404 />} />
                 </Routes>

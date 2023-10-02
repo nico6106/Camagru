@@ -94,7 +94,7 @@ export async function SignIn(db: Database, req: Request, res: Response) {
         'username',
         username,
     );
-    // console.log(user)
+    console.log(user)
     if (!user) return res.status(200).json({ message: 'unknown user' });
     if (user.length !== 1)
         return res.status(200).json({ message: 'error - multiples users' });
@@ -119,7 +119,7 @@ export async function SignIn(db: Database, req: Request, res: Response) {
         login: user[0].username,
     };
     const token = await SignInWithCookie(payload, res);
-    return res.status(200).json({ message: 'success' });
+    return res.status(200).json({ message: 'success', user: user[0] });
 }
 
 export async function SignOut(db: Database, req: Request, res: Response) {

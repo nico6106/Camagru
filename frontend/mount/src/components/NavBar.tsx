@@ -162,9 +162,6 @@ function DropdownMenu() {
   const { user } = useUserContext();
   const navigate = useNavigate();
   const [showDropMenu, setShowDropMenu] = useState<boolean>(false);
-  
-  console.log('user')
-  console.log(user)
 
   return user ? (
     <div className="relative ml-3">
