@@ -23,8 +23,8 @@ export function sendEmail(username: string, toEmail: string, idConfirm: string):
     text: "Last step",
     html: `<b>Hey ${username}! </b><br>
 	We are happy to have you here at MatchaLove42.<br>
-	Please confirm your email with this link : <a href='http://${process.env.REACT_APP_SERVER_ADDRESS}:3333/auth/confirm/${idConfirm}'>
-	http://${process.env.REACT_APP_SERVER_ADDRESS}:3333/auth/confirm/${idConfirm}</a> <br/>`,
+	Please confirm your email with this link : <a href='http://${process.env.REACT_APP_SERVER_ADDRESS}:3000/confirm/${idConfirm}'>
+	http://${process.env.REACT_APP_SERVER_ADDRESS}:3000/confirm/${idConfirm}</a> <br/>`,
   };
 
 

@@ -116,9 +116,9 @@ export async function ConfirmEmail(db: Database, req: Request, res: Response) {
 	console.log(user)
 
 	if (!user || user.length !== 1)
-		return res.status(400).json({ message: "Error - unknown link" });
+		return res.status(200).json({ message: "unknown link" });
 	if (user[0].email_verified === true)
-		return res.status(400).json({ message: "already validated" });
+		return res.status(200).json({ message: "already validated" });
 
 	db.AmendOneElemFromTable(TableUsersName, 'email_verified', 'id', user[0].id, true);
 

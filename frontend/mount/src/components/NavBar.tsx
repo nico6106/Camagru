@@ -1,5 +1,6 @@
 import { useState } from "react";
 import OutsideClickHandler from "react-outside-click-handler";
+import { Link } from "react-router-dom";
 
 function MobileMenuBoutton({
   showMenu,
@@ -49,10 +50,10 @@ function MobileMenu({ showMenu }: { showMenu: boolean }) {
       <div className="sm:hidden" id="mobile-menu">
         <div className="space-y-1 px-2 pb-3 pt-2">
           {/* <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" --> */}
-          <ButtonLinkNavBar text="Dashboard" selected={true} block={true} />
-          <ButtonLinkNavBar text="Team" selected={false} block={true} />
-          <ButtonLinkNavBar text="Projects" selected={false} block={true} />
-          <ButtonLinkNavBar text="Calendar" selected={false} block={true} />
+          <ButtonLinkNavBar text="Dashboard" page="/dashboard" selected={true} block={true} />
+          <ButtonLinkNavBar text="Team" page="/" selected={false} block={true} />
+          <ButtonLinkNavBar text="Projects" page="/" selected={false} block={true} />
+          <ButtonLinkNavBar text="Calendar" page="/" selected={false} block={true} />
         </div>
       </div>
     </>
@@ -60,10 +61,12 @@ function MobileMenu({ showMenu }: { showMenu: boolean }) {
 }
 function ButtonLinkNavBar({
   text,
+  page,
   selected,
   block,
 }: {
   text: string;
+  page: string;
   selected: boolean;
   block: boolean;
 }) {
@@ -75,9 +78,10 @@ function ButtonLinkNavBar({
       block && "block"
     }`;
   return (
-    <a href="#" className={style} aria-current="page">
-      {text}
-    </a>
+	<Link to={page}><p className={style} aria-current="page">{text}</p></Link>
+    // <a href="#" className={style} aria-current="page">
+      
+    // </a>
   );
 }
 
@@ -85,10 +89,10 @@ function LinkNavBar() {
   return (
     <div className="hidden sm:ml-6 sm:block">
       <div className="flex space-x-4">
-        <ButtonLinkNavBar text="Dashboard" selected={true} block={false} />
-        <ButtonLinkNavBar text="Team" selected={false} block={false} />
-        <ButtonLinkNavBar text="Projects" selected={false} block={false} />
-        <ButtonLinkNavBar text="Calendar" selected={false} block={false} />
+        <ButtonLinkNavBar text="Dashboard" page="/dashboard" selected={true} block={false} />
+        <ButtonLinkNavBar text="Team" page="" selected={false} block={false} />
+        <ButtonLinkNavBar text="Projects" page="" selected={false} block={false} />
+        <ButtonLinkNavBar text="Calendar" page="" selected={false} block={false} />
       </div>
     </div>
   );
@@ -128,16 +132,12 @@ function ButtonNotifications() {
   );
 }
 
-function ButtonDropdownMenu({ text }: { text: string }) {
+function ButtonDropdownMenu({ text, page }: { text: string, page: string }) {
   return (
-    <a
-      href="#"
-      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200 "
-      role="menuitem"
-      id="user-menu-item-0"
-    >
-      {text}
-    </a>
+	<p className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200 "
+	role="menuitem"
+	id="user-menu-item-0"><Link to={page}>{text}</Link></p>
+      
   );
 }
 
@@ -150,9 +150,9 @@ function DropdownMenuLinks() {
       aria-labelledby="user-menu-button"
     >
       {/* <!-- Active: "bg-gray-100", Not Active: "" --> */}
-      <ButtonDropdownMenu text="Your Profile" />
-      <ButtonDropdownMenu text="Settings" />
-      <ButtonDropdownMenu text="Sign out" />
+      <ButtonDropdownMenu text="Your Profile" page="/dashboard" />
+      <ButtonDropdownMenu text="Settings" page="/settings" />
+      <ButtonDropdownMenu text="Sign out" page="/signout" />
     </div>
   );
 }

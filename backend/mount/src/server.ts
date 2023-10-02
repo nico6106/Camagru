@@ -15,6 +15,16 @@ const bodyParser = require('body-parser');
 app.use(bodyParser.json()); // Pour les données de requête JSON
 app.use(bodyParser.urlencoded({ extended: true })); // Pour les données de formulaire
 
+//cors
+var cors = require('cors');
+app.use(cors({
+	origin: `http://${process.env.REACT_APP_SERVER_ADDRESS}:3000`,
+	methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true,
+}));
+
+
 //DB
 const db = new Database;
 db.initConnectionDb();
