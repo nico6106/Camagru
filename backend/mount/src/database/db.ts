@@ -2,6 +2,8 @@ import { Client, QueryResult } from "pg";
 import { connexion_connectDb, connexion_initConnectionDb, connexion_testTable } from "./db-connexions";
 import { exec_executeQueryNoArg, exec_executeQueryOneArg, exec_insertToTable } from "./db-execQuery";
 import { test_SelectEntryOneArg } from "./db-testEntries";
+import { TableUser } from "./data";
+import { exec_SelectOneElemFromTable } from "./db-select";
 
 export class Database {
   user: string;
@@ -51,6 +53,12 @@ export class Database {
 		return null;
 	}
   }
+
+  //select one elem from Table
+  async selectOneElemFromTable(table: string, field: string, elem: string): Promise<TableUser[] | null> {
+	return exec_SelectOneElemFromTable(this, table, field, elem);
+  }
+
 
   
   //tests

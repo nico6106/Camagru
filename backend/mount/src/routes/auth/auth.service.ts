@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { Database } from "../../database/db";
 import { QueryResult } from "pg";
-import { TableUsersName } from "../../database/data";
+import { TableUser, TableUsersName } from "../../database/data";
 import { PayloadJWTType } from "./types";
 
 export async function SignUp(db: Database, req: Request, res: Response) {
@@ -21,13 +21,24 @@ export async function SignUp(db: Database, req: Request, res: Response) {
   const fields: string = "username, email, first_name, last_name, password";
 
   //add user to db
-
   retour = await db.insertToTable(TableUsersName, fields, values);
-  if (retour && retour.rowCount !== 0)
-    return res.status(200).json({ message: "success" });
+  if (retour && retour.rowCount !== 0) {
+	//get the user
+	const user: TableUser[] | null = await db.selectOneElemFromTable(TableUsersName, 'username', username);
+	console.log(user)
+	if (!user)
+		return res.status(400).json({ message: "error creating user" });
+	
+	//manage sign in with cookie
+	const payload: PayloadJWTType = {
+		userId: user[0].id,
+    	login:user[0].username,
+	}
+	const token = await SignInWithCookie(payload, res);
+	// if (token)
+	return res.status(200).json({ message: "success" });
+  }
   return res.status(400).json({ message: "error creating user" });
-
-  console.log(retour);
 }
 
 export async function hashPassword(password: string): Promise<string> {
@@ -41,35 +52,54 @@ export async function hashPassword(password: string): Promise<string> {
   return hash;
 }
 
+export async function SignInWithCookie(payload: PayloadJWTType, res: Response): Promise<string | null> {
+	const token = await signJWT(payload);
+	if (process.env.JWT_ACCESS_TOKEN_COOKIE) {
+		res.cookie(process.env.JWT_ACCESS_TOKEN_COOKIE, token);
+		console.log("token=" + token);
+		return token;
+	}
+	else {
+		//to handle ?
+		return null;
+	}
+}
+
 export async function SignIn(db: Database, req: Request, res: Response) {
-  console.log("sign in");
-  
+	const { username, password } = req.body;
+	const argon2 = require("argon2");
+	console.log("sign in");
 
-  const payload: PayloadJWTType = {
-    userId: 1,
-    login: "nico",
-  };
+	const user: TableUser[] | null = await db.selectOneElemFromTable(TableUsersName, 'username', username);
+	console.log(user)
+	if (!user)
+		return res.status(400).json({ message: "unknown user" });
+	if (user.length !== 1)
+		return res.status(400).json({ message: "error - multiples users" });
+	
+		//check pwd
+	try {
+		if (await argon2.verify(user[0].password, password)) {
+		  // password match
+		} else {
+			return res.status(400).json({ message: "incorrect password" });
+		}
+	  } catch (err) {
+		return res.status(400).json({ message: "internal error" });
+	  }
+	  
+	//manage sign in with cookie
+	const payload: PayloadJWTType = {
+		userId: user[0].id,
+    	login:user[0].username,
+	}
+	const token = await SignInWithCookie(payload, res);
+	return res.status(200).json({ message: "success" });
   
-  const token = await signJWT(payload);
-  if (process.env.JWT_ACCESS_TOKEN_COOKIE)
-  	res.cookie(process.env.JWT_ACCESS_TOKEN_COOKIE, token);
-  else {
-	//to handle ?
-  }
-  console.log("token=" + token);
-  const { tokenBody } = req.body;
-  console.log("tokenBody=" + tokenBody);
-
-  
-  const decoded = await verifyJWT(tokenBody);
-  console.log(decoded);
-
-  return res.status(200).json({ token: token });
 }
 
 export async function testJWT(db: Database, req: Request, res: Response) {
 	console.log('test');
-	console.log(req.cookies)
 	console.log(req.cookies.signin_matcha)
 	return res.status(200).json({msg: 'ok'})
 }

@@ -2,6 +2,8 @@ import { Request, Response } from 'express';
 import { Database } from "../../database/db"
 import { validateSignUpBody } from './middlewares/signup.middleware';
 import { SignUp, SignIn, testJWT } from './auth.service';
+import { checkConnected } from './middlewares/check-connection.middleware';
+import { validateSignInBody } from './middlewares/signin.body.middleware';
 
 const express = require('express')
 const router = express.Router();
@@ -15,11 +17,11 @@ router.post('/signup', validateSignUpBody, (req: Request, res: Response) => {
 	return SignUp(db, req, res);
 })
 
-router.post('/signin', (req: Request, res: Response) => {
+router.post('/signin', validateSignInBody, (req: Request, res: Response) => {
 	return SignIn(db, req, res);
 })
 
-router.post('/test', (req: Request, res: Response) => {
+router.post('/test', checkConnected, (req: Request, res: Response) => {
 	return testJWT(db, req, res);
 })
 
