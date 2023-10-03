@@ -3,12 +3,12 @@ import LinkText from '../elems/LinkText';
 import TramePage from '../elems/TramePage';
 import TextPage from '../elems/TextPage';
 
-function ConfirmUserCreation() {
+function ConfirmMailConfirmationSent() {
     return (
 		<TramePage>
-            <TitleSmall text={'Congratulations !'} />
+            <TitleSmall text={'Check your emails..'} />
 			<TextPage>
-                <p>Last steps.. Check your inbox to confirm your email !</p>
+                <p>A recovery link have been sent to your inbox.</p>
 				<LinkText
                     linkText="Get back home"
                     link="/"
@@ -19,4 +19,4 @@ function ConfirmUserCreation() {
     );
 }
 
-export default ConfirmUserCreation;
+export default ConfirmMailConfirmationSent;

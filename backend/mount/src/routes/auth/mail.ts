@@ -1,4 +1,4 @@
-export function sendEmail(username: string, toEmail: string, idConfirm: string): boolean {
+export function sendEmail(subjectEmail: string, toEmail: string, bodyEmail: string): boolean {
   const nodemailer = require("nodemailer");
 
   // create reusable transporter object using the default SMTP transport
@@ -19,14 +19,10 @@ export function sendEmail(username: string, toEmail: string, idConfirm: string):
   const mailData = {
     from: process.env.NODEMAILDER_EMAIL, // sender address
     to: toEmail, // list of receivers
-    subject: "Verify your account",
+    subject: subjectEmail,
     text: "Last step",
-    html: `<b>Hey ${username}! </b><br>
-	We are happy to have you here at MatchaLove42.<br>
-	Please confirm your email with this link : <a href='http://${process.env.REACT_APP_SERVER_ADDRESS}:3000/confirm/${idConfirm}'>
-	http://${process.env.REACT_APP_SERVER_ADDRESS}:3000/confirm/${idConfirm}</a> <br/>`,
+    html: bodyEmail,
   };
-
 
   //send email
   transporter.sendMail(mailData, (err: any, info: any) => {

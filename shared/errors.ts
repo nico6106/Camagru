@@ -19,3 +19,8 @@ export const WrongEmailFormat: string = 'Wrong email format';
 export const MissingEmail: string = 'Missing email';
 export const MissingFirstName: string = 'Missing first name';
 export const MissingLastName: string = 'Missing last name';
+
+export const WeakPwd: string = 'password too weak';
+
+//
+export const InvalidId: string = 'Invalid Id';

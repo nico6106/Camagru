@@ -44,11 +44,19 @@ export async function SignUp(db: Database, req: Request, res: Response) {
             username,
         );
         console.log(user);
-        sendEmail(username, email, confirmID);
+		const emailBody: string = generateEmailBodyNewUser(username, confirmID);
+        sendEmail('Verify your account', email, emailBody);
 
         return res.status(200).json({ message: 'success' });
     }
     return res.status(200).json({ message: 'error', error: 'error creating user' });
+}
+
+function generateEmailBodyNewUser(username: string, confirmID: string): string {
+	return (`<b>Hey ${username}! </b><br>
+	We are happy to have you here at MatchaLove42.<br>
+	Please confirm your email using this link : <a href='http://${process.env.REACT_APP_SERVER_ADDRESS}:3000/confirm/${confirmID}'>
+	http://${process.env.REACT_APP_SERVER_ADDRESS}:3000/confirm/${confirmID}</a> <br/>`)
 }
 
 export async function hashPassword(password: string): Promise<string> {
@@ -234,4 +242,97 @@ export async function verifyJWT(
     } catch (err) {
         return null;
     }
+}
+
+export async function ForgotPwd(db: Database, req: Request, res: Response) {
+	const { email } = req.body;
+
+	//recuperer USER
+    const users: TableUser[] | null = await db.selectOneElemFromTable(
+        TableUsersName,
+        'email',
+        email,
+    );
+	if (!users || users.length !== 1)
+        return res.status(200).json({ message: 'error' , error: UnknownUsername });
+	const user: TableUser = users[0];
+
+	//generate a link to reset pwd
+	const confirmID: string = generateId();
+
+	db.AmendElemsFromTable(
+        TableUsersName,
+        'id',
+        user.id,
+		['reset_pwd'],
+        [confirmID],
+    );
+
+	//send Email
+	// const emailBody: string = generateEmailBodyForgotPwd(user.username, confirmID);
+	// sendEmail('Reset your password', email, emailBody);
+
+    return res.status(200).json({ message: 'success' });
+}
+
+function generateEmailBodyForgotPwd(username: string, confirmID: string): string {
+	return (`<b>Hey ${username}! </b><br>
+	Someone requested a password reset for your account.<br>
+	To reset your password, please go to : <a href='http://${process.env.REACT_APP_SERVER_ADDRESS}:3000/forgot/${confirmID}'>
+	http://${process.env.REACT_APP_SERVER_ADDRESS}:3000/forgot/${confirmID}</a> <br/><br/>
+	If it was not you, just ignore this email and nothing will happen`)
+}
+
+export async function TmpShowUserByEmail(db: Database, req: Request, res: Response) {
+	const { email } = req.body;
+
+	//recuperer USER
+    const users: TableUser[] | null = await db.selectOneElemFromTable(
+        TableUsersName,
+        'email',
+        email,
+    );
+	if (!users || users.length !== 1)
+        return res.status(200).json({ message: 'error' , error: UnknownUsername });
+	const user: TableUser = users[0];
+	console.log('------USER------');
+	console.log(user)
+
+    return res.status(200).json({ message: 'success' });
+}
+
+export async function ConfirmForgotPwd(db: Database, req: Request, res: Response) {
+	const confirmID = req.params.confirmId;
+    console.log('confirm');
+
+    //recuperer USER
+    const user: TableUser[] | null = await db.selectOneElemFromTable(
+        TableUsersName,
+        'reset_pwd',
+        confirmID,
+    );
+    console.log(user);
+
+    if (!user || user.length !== 1)
+        return res.status(200).json({ message: 'unknown link' });
+
+    return res.status(200).json({ message: 'success', username: user[0].username });
+}
+
+export async function ResetPwd(db: Database, req: Request, res: Response) {
+	const confirmID = req.params.confirmId;
+    console.log('confirm');
+
+    //recuperer USER
+    const user: TableUser[] | null = await db.selectOneElemFromTable(
+        TableUsersName,
+        'reset_pwd',
+        confirmID,
+    );
+    console.log(user);
+
+    if (!user || user.length !== 1)
+        return res.status(200).json({ message: 'unknown link' });
+
+    return res.status(200).json({ message: 'success' });
 }

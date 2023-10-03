@@ -1,22 +1,18 @@
-import { useNavigate } from 'react-router-dom';
 import ShowErrorMessage from '../components/auth/ShowErrorMessage';
 import { ErrorField } from '../components/elems/ErrorFields';
 import Button from '../components/elems/Button';
 import { useEffect, useState } from 'react';
 import { useUserContext } from '../context/UserContext';
 import {
-    EmailNotVerified,
     EmailTaken,
     InvalidEmail,
     InvalidFirstName,
     InvalidLastName,
-    InvalidPassword,
     InvalidUsername,
     MissingFirstName,
     MissingLastName,
     MissingPwd,
     MissingUsername,
-    UnknownUsername,
 	UsernameTaken,
 } from '../shared/errors';
 import axios from 'axios';

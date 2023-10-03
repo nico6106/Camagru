@@ -1,9 +1,12 @@
 import { Request, Response } from 'express';
 import { Database } from "../../database/db"
 import { validateSignUpBody } from './middlewares/signup.middleware';
-import { SignUp, SignIn, SignOut, ConfirmEmail, testJWT } from './auth.service';
+import { SignUp, SignIn, SignOut, ConfirmEmail, testJWT, ForgotPwd, TmpShowUserByEmail, ConfirmForgotPwd, ResetPwd } from './auth.service';
 import { checkConnected } from './middlewares/check-connection.middleware';
 import { validateSignInBody } from './middlewares/signin.body.middleware';
+import { validateForgotPwdBody } from './middlewares/forgotpwd.middleware';
+import { validateConfirmIdParam } from './middlewares/confirm-is.body.middleware';
+import { validateResetPwdBody } from './middlewares/check-pwd.body.middleware';
 
 const express = require('express')
 const router = express.Router();
@@ -25,12 +28,28 @@ router.get('/signout', checkConnected, (req: Request, res: Response) => {
 	return SignOut(db, req, res);
 })
 
-router.get('/confirm/:confirmId', (req: Request, res: Response) => {
+router.get('/confirm/:confirmId', validateConfirmIdParam, (req: Request, res: Response) => {
 	return ConfirmEmail(db, req, res);
 })
 
 router.post('/test', checkConnected, (req: Request, res: Response) => {
 	return testJWT(db, req, res);
+})
+
+router.post('/forgotpwd', validateForgotPwdBody, (req: Request, res: Response) => {
+	return ForgotPwd(db, req, res);
+})
+
+router.post('/showuser', validateForgotPwdBody, (req: Request, res: Response) => {
+	return TmpShowUserByEmail(db, req, res);
+})
+
+router.get('/forgot/:confirmId', validateConfirmIdParam,(req: Request, res: Response) => {
+	return ConfirmForgotPwd(db, req, res);
+})
+
+router.post('/forgot/:confirmId', validateConfirmIdParam, validateResetPwdBody,(req: Request, res: Response) => {
+	return ResetPwd(db, req, res);
 })
 
 module.exports = router

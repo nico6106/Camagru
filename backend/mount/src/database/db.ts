@@ -4,7 +4,7 @@ import { exec_executeQueryNoArg, exec_executeQueryOneArg, exec_insertToTable } f
 import { test_SelectEntryOneArg } from "./db-testEntries";
 import { TableUser } from "./data";
 import { exec_SelectOneElemFromTable } from "./db-select";
-import { exec_AmendOneElemFromTable } from "./db-amend";
+import { exec_AmendElemsFromTable, exec_AmendOneElemFromTable } from "./db-amend";
 
 export class Database {
   user: string;
@@ -64,6 +64,11 @@ export class Database {
   //update $table with $field = $elem WHERE $whereField = $whereId
   async AmendOneElemFromTable(table: string, field: string, whereField: string, whereId: any , elem: any): Promise<QueryResult | null> {
 	return exec_AmendOneElemFromTable(this, table, field, whereField, whereId, elem);
+  }
+
+  //fields et elems doivent etre dans le meme sens
+  async AmendElemsFromTable(table: string, whereField: string, whereId: any, fields: string[], elems: any[]): Promise<QueryResult | null> {
+	return exec_AmendElemsFromTable(this, table, whereField, whereId, fields, elems);
   }
 
 

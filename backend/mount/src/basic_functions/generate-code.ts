@@ -1,4 +1,4 @@
-const ID_SIZE = 6;
+const ID_SIZE = 10;
 const ID_BASE = 36;
 const ID_MAX = ID_BASE ** ID_SIZE - 1;
 

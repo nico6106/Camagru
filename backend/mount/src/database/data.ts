@@ -5,6 +5,7 @@ export const TableUserQuery: string = `CREATE TABLE users (
 	last_name VARCHAR(50),
 	username VARCHAR(50) UNIQUE,
 	password text,
+	reset_pwd VARCHAR(50) DEFAULT '',
 	email VARCHAR(100) UNIQUE,
 	email_verified BOOLEAN DEFAULT FALSE,
 	email_confirm_id VARCHAR(50),
@@ -24,6 +25,7 @@ export type TableUser = {
 	last_name: string;
 	username: string;
 	password: string;
+	reset_pwd: string;
 	email: string;
 	email_verified: boolean;
 	email_confirm_id: string;
