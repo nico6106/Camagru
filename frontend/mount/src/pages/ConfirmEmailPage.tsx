@@ -2,11 +2,14 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { RetourType } from '../types/response';
+import TramePage from '../components/elems/TramePage';
+import TitleSmall from '../components/elems/TitleSmall';
+import TextPage from '../components/elems/TextPage';
 
 function ConfirmEmailPage() {
     const { idConfirm } = useParams();
     const [retour, setRetour] = useState<RetourType | null>(null);
-	const navigate = useNavigate();
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (idConfirm) {
@@ -26,26 +29,32 @@ function ConfirmEmailPage() {
                 },
             );
             setRetour(response.data);
-			console.log(response.data)
-            if (response.data.message === 'unknown link') 
-				navigate('/404')
-			return response.data;
+            console.log(response.data);
+            if (response.data.message === 'unknown link') navigate('/404');
+            return response.data;
         } catch (error) {
             setRetour(null);
         }
     }
 
-    return retour ? (
-        retour.message === 'success' ? (
-            <div>Link validated. Please log in</div>
-        ) : retour.message === 'already validated' ? (
-            <div>Link already validated.</div>
-        ) : (
-            <>rediction 404</>
-        )
-    ) : (
-        <div>Link not validated</div>
+    return (
+        <TramePage>
+            {retour && retour.message === 'success' && (
+                <>
+                    <TitleSmall text={'Congratulations'} />
+					<TextPage center={true}>Link validated. Please log in</TextPage>
+                    
+                </>
+            )}
+            {retour && retour.message === 'already validated' && (
+                <>
+                    <TitleSmall text={'Error..'} />
+					<TextPage center={true}>Link already validated.</TextPage>
+                </>
+            )}
+        </TramePage>
     );
+
 }
 
 export default ConfirmEmailPage;

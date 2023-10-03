@@ -12,6 +12,7 @@ import { UserProvider } from './context/UserContext';
 import SignInPage from './pages/SignInPage';
 import SignOutPage from './pages/SignOutPage';
 import SignUpPage from './pages/SignUpPage';
+import ConfirmUserCreationPage from './components/auth/ConfirmUserCreation';
 
 function App() {
     return (
@@ -24,9 +25,9 @@ function App() {
                         path="/confirm/:idConfirm"
                         element={<ConfirmEmailPage />}
                     />
-					<Route path="/signin" element={<SignInPage />} />
-					<Route path="/signup" element={<SignUpPage />} />
-					<Route path="/signout" element={<SignOutPage />} />
+                    <Route path="/signin" element={<SignInPage />} />
+                    <Route path="/signup" element={<SignUpPage />} />
+                    <Route path="/signout" element={<SignOutPage />} />
                     <Route path="/404" element={<Page404 />} />
                     <Route path="*" element={<Page404 />} />
                 </Routes>

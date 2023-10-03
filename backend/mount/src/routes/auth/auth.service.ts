@@ -5,7 +5,7 @@ import { TableUser, TableUsersName } from '../../database/data';
 import { PayloadJWTType } from './types';
 import { sendEmail } from './mail';
 import { generateId } from '../../basic_functions/generate-code';
-import { EmailNotVerified, InvalidPassword, UnknownUsername } from '../../shared/errors';
+import { EmailNotVerified, EmailTaken, InvalidPassword, UnknownUsername, UsernameTaken } from '../../shared/errors';
 
 // links: Record<string, number> = {};
 
@@ -15,10 +15,10 @@ export async function SignUp(db: Database, req: Request, res: Response) {
 
     //check user/email do not exists
     if (await db.testSelectEntryOneArg(TableUsersName, 'username', username))
-        return res.status(400).json({ message: 'username already exist' });
+        return res.status(200).json({ message: 'error', error: UsernameTaken });
 
     if (await db.testSelectEntryOneArg(TableUsersName, 'email', email))
-        return res.status(400).json({ message: 'email already used' });
+        return res.status(200).json({ message: 'error', error: EmailTaken });
 
     const hash = await hashPassword(password);
     const confirmID: string = generateId();
@@ -44,20 +44,11 @@ export async function SignUp(db: Database, req: Request, res: Response) {
             username,
         );
         console.log(user);
-        // if (!user)
-        // 	return res.status(400).json({ message: "error creating user" });
-
-        //manage sign in with cookie
-        // const payload: PayloadJWTType = {
-        // 	userId: user[0].id,
-        // 	login:user[0].username,
-        // }
-        // const token = await SignInWithCookie(payload, res);
         sendEmail(username, email, confirmID);
 
         return res.status(200).json({ message: 'success' });
     }
-    return res.status(400).json({ message: 'error creating user' });
+    return res.status(200).json({ message: 'error', error: 'error creating user' });
 }
 
 export async function hashPassword(password: string): Promise<string> {
