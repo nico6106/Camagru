@@ -5,6 +5,7 @@ import { TableUser, TableUsersName } from '../../database/data';
 import { PayloadJWTType } from './types';
 import { sendEmail } from './mail';
 import { generateId } from '../../basic_functions/generate-code';
+import { EmailNotVerified, InvalidPassword, UnknownUsername } from '../../shared/errors';
 
 // links: Record<string, number> = {};
 
@@ -95,23 +96,23 @@ export async function SignIn(db: Database, req: Request, res: Response) {
         username,
     );
     console.log(user)
-    if (!user) return res.status(200).json({ message: 'unknown user' });
+    if (!user) return res.status(200).json({ message: 'error', error: UnknownUsername });
     if (user.length !== 1)
-        return res.status(200).json({ message: 'error - multiples users' });
+        return res.status(200).json({ message: 'error', error: 'error - multiples users' });
 
     //check pwd
     try {
         if (await argon2.verify(user[0].password, password)) {
             // password match
         } else {
-            return res.status(200).json({ message: 'incorrect password' });
+            return res.status(200).json({ message: 'error', error: InvalidPassword });
         }
     } catch (err) {
-        return res.status(200).json({ message: 'internal error' });
+        return res.status(200).json({ message: 'error', error: 'internal error' });
     }
 
 	if (user[0].email_verified === false)
-	return res.status(200).json({ message: 'email not verified' });
+	return res.status(200).json({ message: 'error', error: EmailNotVerified });
 
     //manage sign in with cookie
     const payload: PayloadJWTType = {
@@ -123,8 +124,9 @@ export async function SignIn(db: Database, req: Request, res: Response) {
 }
 
 export async function SignOut(db: Database, req: Request, res: Response) {
-    if (process.env.JWT_ACCESS_TOKEN_COOKIE)
-        res.clearCookie(process.env.JWT_ACCESS_TOKEN_COOKIE);
+    if (process.env.JWT_ACCESS_TOKEN_COOKIE) {
+		res.clearCookie(process.env.JWT_ACCESS_TOKEN_COOKIE);
+	}
     return res.status(200).json({ message: 'success' });
 }
 

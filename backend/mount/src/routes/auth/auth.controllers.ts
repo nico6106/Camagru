@@ -21,7 +21,7 @@ router.post('/signin', validateSignInBody, (req: Request, res: Response) => {
 	return SignIn(db, req, res);
 })
 
-router.post('/signout', checkConnected, (req: Request, res: Response) => {
+router.get('/signout', checkConnected, (req: Request, res: Response) => {
 	return SignOut(db, req, res);
 })
 

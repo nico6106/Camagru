@@ -4,17 +4,35 @@ import { Link, useNavigate } from 'react-router-dom';
 import { ErrorField } from '../components/elems/ErrorFields';
 import Button from '../components/elems/Button';
 import { useUserContext } from '../context/UserContext';
+import { EmailNotVerified, InvalidPassword, UnknownUsername } from '../shared/errors';
+import ShowErrorMessage from '../components/auth/ShowErrorMessage';
+import UserAlreadySignedIn from '../components/auth/UserAlreadySignedIn';
 
 function SignInPage() {
     const [username, setUsername] = useState<string>('');
     const [password, setpassword] = useState<string>('');
-    const navigate = useNavigate();
+    const [error, setError] = useState<string>('');
+    const [styleErrorUsername, setStyleErrorUsername] =
+        useState<boolean>(false);
+    const [styleErrorPwd, setStyleErrorPwd] = useState<boolean>(false);
+    const [styleError, setStyleError] = useState<boolean>(false);
+	const navigate = useNavigate();
     const { user, loginUser } = useUserContext();
 
-    // if (user) {
-    // 	navigate('/');
-    // 	return null;
-    // }
+    useEffect(() => {
+        if (styleError === false) return;
+        if (error === '' || error === EmailNotVerified) {
+            setStyleErrorUsername(false);
+            setStyleErrorPwd(false);
+        } else if (error === UnknownUsername) {
+            setStyleErrorUsername(true);
+            setStyleErrorPwd(true);
+        } else if (error === InvalidPassword) {
+            setStyleErrorUsername(false);
+            setStyleErrorPwd(true);
+        }
+        setStyleError(false);
+    }, [error, styleError]);
 
     function handleOnChangeUsername(e: React.ChangeEvent<HTMLInputElement>) {
         setUsername(e.target.value);
@@ -42,28 +60,23 @@ function SignInPage() {
                 },
             );
             console.log(response.data);
-            if (response.data.message === 'success')
+            if (response.data.message === 'success') {
                 loginUser(response.data.user);
+                setError('');
+                setStyleError(false);
+				navigate('/');
+            } else {
+                setStyleError(true);
+                setError(response.data.error);
+            }
             return response.data;
         } catch (error) {
             loginUser(null);
-            // setRetour(null);
         }
     }
 
     return user ? (
-        <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
-            <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-                <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-                    You are already signed in
-                </h2>
-                <Link to="/">
-                    <p className="flex items-center justify-center px-3 mb:px-5 py-2 text-sm transition-colors duration-200 border rounded-lg gap-x-2 w-auto  bg-gray-900 text-gray-200 border-gray-700">
-                        Go back home
-                    </p>
-                </Link>
-            </div>
-        </div>
+        <UserAlreadySignedIn />
     ) : (
         <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
             <div className="sm:mx-auto sm:w-full sm:max-w-sm">
@@ -74,15 +87,20 @@ function SignInPage() {
 
             <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
                 <form className="space-y-6" action="#" onSubmit={handleSignIn}>
+                    <ShowErrorMessage error={error} message={'Impossible to log-in because '} />
                     <ErrorField
                         name="username"
                         title="Username"
                         onBlur={handleOnChangeUsername}
+                        styleError={styleErrorUsername}
+                        setStyleError={setStyleErrorUsername}
                     />
                     <ErrorField
                         name="password"
                         title="Password"
                         onBlur={handleOnChangePassword}
+                        styleError={styleErrorPwd}
+                        setStyleError={setStyleErrorPwd}
                     />
 
                     <div>
