@@ -5,7 +5,7 @@ export const InvalidPassword: string = 'invalid password';
 export const EmailNotVerified: string = 'email is not verified';
 
 export const MissingPwd: string = 'Missing password';
-export const MissingUsername: string = 'Missing password';
+export const MissingUsername: string = 'Missing username';
 
 //sign up
 export const InvalidUsername: string = 'invalid username format';
@@ -17,6 +17,9 @@ export const InvalidLastName: string = 'Wrong last name format';
 export const WrongEmailFormat: string = 'Wrong email format';
 export const InvalidDateBirth: string = 'Wrong date of birth';
 export const InvalidGender: string = 'Wrong gender';
+export const InvalidInterest: string = 'invalid tag';
+export const InvalidIPreference: string = 'invalid preference';
+export const InvalidBio: string = 'invalid bio';
 
 export const MissingEmail: string = 'Missing email';
 export const MissingFirstName: string = 'Missing first name';

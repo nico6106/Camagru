@@ -15,6 +15,7 @@ import SelectInput from "../components/elems/SelectInput";
 import { compute18Y, formatDateYYYYMMDD } from "../components/auth/ComputeAge";
 import { TextareaField } from "../components/elems/TextareaField";
 import { ShowTags } from "../components/profile/ShowTags";
+import axios from "axios";
 
 function SettingsPage() {
 	const [error, setError] = useState<string>('');
@@ -32,6 +33,7 @@ function SettingsPage() {
 	const [tagsAll, setTagsAll] = useState<string[]>([]);
 
 	const [maxAge, setMaxAge] = useState<string>('');
+	const [created, setCreated] = useState<boolean>(false);
 
 	useEffect(() => {
 		setMaxAge(compute18Y());
@@ -58,15 +60,43 @@ function SettingsPage() {
 		setEmail(userInfo.email);
 		setFirstname(userInfo.first_name);
 		setLastname(userInfo.last_name);
-		setEmail(userInfo.email);
 		setTagsUser(userInfo.interests);
+		setPreference(userInfo.preference);
+		setBio(userInfo.biography);
 		if (userInfo.date_birth)
 			setDatebirth(formatDateYYYYMMDD(userInfo.date_birth));
-		setGender(userInfo.gender)
+		setGender(userInfo.gender);
 	}
 
 	async function saveUserInfo() {
-		//todo
+		try {
+            const response = await axios.post(
+                `http://${process.env.REACT_APP_SERVER_ADDRESS}:3333/users/updatesettings`,
+                {
+                    email: email,
+                    lastname: lastname,
+                    firstname: firstname,
+                    datebirth: datebirth,
+                    gender: gender,
+					preference: preference,
+					biography: bio,
+					tags: tagsUser,
+                },
+                {
+                    withCredentials: true,
+                },
+            );
+            console.log(response.data);
+            if (response.data.message === 'success') {
+                setError('');
+                setCreated(true);
+            } else {
+                setError(response.data.error);
+            }
+            return response.data;
+        } catch (error) {
+            //to handle ?
+        }
 	}
 
     function handleOnChangeEmail(e: React.ChangeEvent<HTMLInputElement>) {

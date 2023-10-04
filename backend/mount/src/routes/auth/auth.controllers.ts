@@ -7,6 +7,7 @@ import { validateSignInBody } from './middlewares/signin.body.middleware';
 import { validateForgotPwdBody } from './middlewares/forgotpwd.middleware';
 import { validateConfirmIdParam } from './middlewares/confirm-is.body.middleware';
 import { validateResetPwdBody } from './middlewares/check-pwd.body.middleware';
+import { validatePwdBody } from './middlewares/check-pwd-signup.middleware';
 
 const express = require('express')
 const router = express.Router();
@@ -16,7 +17,7 @@ const db = new Database;
 db.connectDb();
 
 //routes
-router.post('/signup', validateSignUpBody, (req: Request, res: Response) => {
+router.post('/signup', validateSignUpBody, validateSignInBody, (req: Request, res: Response) => {
 	return SignUp(db, req, res);
 })
 

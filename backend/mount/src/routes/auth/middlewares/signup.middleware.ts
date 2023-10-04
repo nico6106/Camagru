@@ -14,34 +14,17 @@ import {
     MissingFirstName,
     MissingGender,
     MissingLastName,
-    MissingPwd,
     MissingUsername,
-	WeakPwd,
 } from '../../../shared/errors';
-import { isPassword } from '../../../basic_functions/check-password';
 import { isDate } from '../../../basic_functions/check-date';
 
 export function validateSignUpBody(req: Request, res: Response, next: any) {
-    const { username, email, password, lastname, firstname, datebirth, gender } = req.body;
-
-    if (!username) {
-        return res.status(200).json({
-            message: 'error',
-            error: MissingUsername,
-        });
-    }
+    const { email, lastname, firstname, datebirth, gender } = req.body;
 
     if (!email) {
         return res.status(200).json({
             message: 'error',
             error: MissingEmail,
-        });
-    }
-
-    if (!password) {
-        return res.status(200).json({
-            message: 'error',
-            error: MissingPwd,
         });
     }
 
@@ -73,18 +56,8 @@ export function validateSignUpBody(req: Request, res: Response, next: any) {
         });
     }
 
-	if (!isPassword(password)) {
-        return res.status(200).json({ message: 'error', error: WeakPwd });
-    }
-
     if (!isEmail(email)) {
         return res.status(200).json({ message: 'error', error: InvalidEmail });
-    }
-
-    if (!isUsername(username)) {
-        return res
-            .status(200)
-            .json({ message: 'error', error: InvalidUsername });
     }
 
     if (!isName(lastname)) {
