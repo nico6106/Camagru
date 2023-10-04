@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import OutsideClickHandler from 'react-outside-click-handler';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useUserContext } from '../context/UserContext';
 import Button from './elems/Button';
 
@@ -149,7 +149,7 @@ function LogoNavBar() {
         <div className="flex flex-shrink-0 items-center">
             <img
                 className="h-8 w-auto"
-                src="./logo-matcha-red.png"
+                src="/logo-matcha-red.png"
                 alt="Matcha"
             />
         </div>
@@ -209,6 +209,7 @@ function DropdownMenuLinks() {
         </div>
     );
 }
+
 function DropdownMenu() {
     const { user } = useUserContext();
     const navigate = useNavigate();
@@ -259,6 +260,14 @@ function DropdownMenu() {
 
 function NavBar() {
     const [showMenu, setShowMenu] = useState<boolean>(false);
+	const { verifUser } = useUserContext();
+	const location = useLocation();
+
+	useEffect(() => {
+		verifUser();
+		console.log('verif');
+	}, [location]);
+
     let outside: boolean = false;
     return (
         <nav className="bg-gray-800">

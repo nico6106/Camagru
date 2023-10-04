@@ -6,6 +6,7 @@ interface Prop {
     user: User | null;
     loginUser: (userData: User | null) => void;
     logoutUser: () => void;
+	verifUser: () => void;
     updateUser: (userData: Partial<User>) => void;
 }
 
@@ -13,6 +14,7 @@ export const UserContext = React.createContext<Prop>({
     user: null,
     loginUser: () => {},
     logoutUser: () => {},
+	verifUser:() => {},
     updateUser: () => {},
 });
 
@@ -33,6 +35,10 @@ export const UserProvider = ({ children }: any) => {
 		}
 	};
 
+	const verifUser = () => {
+        fetchUser();
+    };
+
     const loginUser = (userData: User | null) => {
         setUser(userData);
     };
@@ -52,7 +58,7 @@ export const UserProvider = ({ children }: any) => {
 
     return (
         <UserContext.Provider
-            value={{ user, loginUser, logoutUser, updateUser }}
+            value={{ user, loginUser, logoutUser, verifUser, updateUser }}
         >
             {children}
         </UserContext.Provider>
