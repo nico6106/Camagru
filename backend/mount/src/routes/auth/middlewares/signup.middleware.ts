@@ -12,7 +12,9 @@ import {
     MissingLastName,
     MissingPwd,
     MissingUsername,
+	WeakPwd,
 } from '../../../shared/errors';
+import { isPassword } from '../../../basic_functions/check-password';
 
 export function validateSignUpBody(req: Request, res: Response, next: any) {
     const { username, email, password, lastname, firstname } = req.body;
@@ -50,6 +52,10 @@ export function validateSignUpBody(req: Request, res: Response, next: any) {
             message: 'error',
             error: MissingLastName,
         });
+    }
+
+	if (!isPassword(password)) {
+        return res.status(200).json({ message: 'error', error: WeakPwd });
     }
 
     if (!isEmail(email)) {

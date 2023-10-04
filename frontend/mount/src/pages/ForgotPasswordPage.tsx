@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { useUserContext } from "../context/UserContext";
 import axios from "axios";
 import UserAlreadySignedIn from "../components/auth/UserAlreadySignedIn";
@@ -9,14 +8,15 @@ import ShowErrorMessage from "../components/auth/ShowErrorMessage";
 import { ErrorField } from "../components/elems/ErrorFields";
 import Button from "../components/elems/Button";
 import LinkText from "../components/elems/LinkText";
+import ConfirmMailConfirmationSent from "../components/auth/ConfirmMailRecoverySent";
 
 function ForgotPasswordPage() {
     const [email, setEmail] = useState<string>('');
     const [error, setError] = useState<string>('');
     const [styleErrorEmail, setStyleErrorEmail] = useState<boolean>(false);
     const [styleError, setStyleError] = useState<boolean>(false);
-    const navigate = useNavigate();
-    const { user, loginUser } = useUserContext();
+	const [created, setCreated] = useState<boolean>(false);
+    const { user } = useUserContext();
 
     useEffect(() => {
         if (styleError === false) return;
@@ -51,24 +51,24 @@ function ForgotPasswordPage() {
             );
             console.log(response.data);
             if (response.data.message === 'success') {
-                loginUser(response.data.user);
                 setError('');
                 setStyleError(false);
-                navigate('/');
+				setCreated(true);
             } else {
                 setStyleError(true);
                 setError(response.data.error);
+				setCreated(false);
             }
             return response.data;
         } catch (error) {
-            loginUser(null);
+			//
         }
     }
 
 	// ConfirmMailConfirmationSent
     return user ? (
         <UserAlreadySignedIn />
-    ) : (
+    ) : (created ? (<ConfirmMailConfirmationSent />) : 
 		<TramePage>
             <TitleSmall text={'Forgot your password?'} />
 

@@ -5,7 +5,7 @@ import { TableUser, TableUsersName } from '../../database/data';
 import { PayloadJWTType } from './types';
 import { sendEmail } from './mail';
 import { generateId } from '../../basic_functions/generate-code';
-import { EmailNotVerified, EmailTaken, InvalidPassword, UnknownUsername, UsernameTaken } from '../../shared/errors';
+import { EmailNotVerified, EmailTaken, InvalidId, InvalidPassword, UnknownUsername, UsernameTaken } from '../../shared/errors';
 
 // links: Record<string, number> = {};
 
@@ -314,25 +314,38 @@ export async function ConfirmForgotPwd(db: Database, req: Request, res: Response
     console.log(user);
 
     if (!user || user.length !== 1)
-        return res.status(200).json({ message: 'unknown link' });
+        return res.status(200).json({ message: 'error' , error: InvalidId });
 
     return res.status(200).json({ message: 'success', username: user[0].username });
 }
 
 export async function ResetPwd(db: Database, req: Request, res: Response) {
 	const confirmID = req.params.confirmId;
+	const { password } = req.body;
     console.log('confirm');
 
     //recuperer USER
-    const user: TableUser[] | null = await db.selectOneElemFromTable(
+    const users: TableUser[] | null = await db.selectOneElemFromTable(
         TableUsersName,
         'reset_pwd',
         confirmID,
     );
-    console.log(user);
+    console.log(users);
 
-    if (!user || user.length !== 1)
-        return res.status(200).json({ message: 'unknown link' });
+    if (!users || users.length !== 1)
+        return res.status(200).json({ message: 'error' , error: InvalidId });
+
+	const user: TableUser = users[0];
+	const hash = await hashPassword(password);
+
+	//amend user
+	db.AmendElemsFromTable(
+        TableUsersName,
+        'id',
+        user.id,
+		['reset_pwd', 'password'],
+        ['', hash],
+    );
 
     return res.status(200).json({ message: 'success' });
 }

@@ -8,6 +8,7 @@ import SignInPage from './pages/SignInPage';
 import SignOutPage from './pages/SignOutPage';
 import SignUpPage from './pages/SignUpPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
+import ResetPasswordPage from './pages/ResetPasswordPage';
 
 function App() {
     return (
@@ -23,6 +24,7 @@ function App() {
                     <Route path="/signin" element={<SignInPage />} />
                     <Route path="/signup" element={<SignUpPage />} />
                     <Route path="/signout" element={<SignOutPage />} />
+					<Route path="/forgot/:idConfirm" element={<ResetPasswordPage />} />
                     <Route path="/forgot" element={<ForgotPasswordPage />} />
                     <Route path="/404" element={<Page404 />} />
                     <Route path="*" element={<Page404 />} />
