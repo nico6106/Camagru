@@ -100,6 +100,7 @@ function SignInPage() {
                         onBlur={handleOnChangeUsername}
                         styleError={styleErrorUsername}
                         setStyleError={setStyleErrorUsername}
+						init={username}
                     />
                     <ErrorField
                         name="password"
@@ -107,6 +108,7 @@ function SignInPage() {
                         onBlur={handleOnChangePassword}
                         styleError={styleErrorPwd}
                         setStyleError={setStyleErrorPwd}
+						init={password}
                     />
 
                     <div>

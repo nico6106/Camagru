@@ -12,8 +12,8 @@ export const TableUserQuery: string = `CREATE TABLE users (
 	date_birth DATE,
 	inscription TIMESTAMP,
 	gender VARCHAR(50),
-	preference VARCHAR(50),
-	interests VARCHAR(100)[],
+	preference VARCHAR(50) DEFAULT 'bisexual',
+	interests VARCHAR(100)[] DEFAULT '{}'::VARCHAR(100)[],
 	biography TEXT,
 	pictures VARCHAR(100)[],
 	profilePicture VARCHAR(100)

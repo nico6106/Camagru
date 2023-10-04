@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import ShowErrorMessage from "../components/auth/ShowErrorMessage";
 import UserNotSignedIn from "../components/auth/UserNotSignedIn";
 import Button from "../components/elems/Button";
@@ -5,64 +6,166 @@ import { ErrorField } from "../components/elems/ErrorFields";
 import LinkText from "../components/elems/LinkText";
 import TitleSmall from "../components/elems/TitleSmall";
 import { useUserContext } from "../context/UserContext";
+import { RetourType } from "../types/response";
+import GetMe from "../components/backend/GetMe";
+import { User } from "../types/users";
+import MultiplesInputOneRow from "../components/elems/MultiplesInputOneRow";
+import { DateInputField } from "../components/elems/DateInputField";
+import SelectInput from "../components/elems/SelectInput";
+import { compute18Y, formatDateYYYYMMDD } from "../components/auth/ComputeAge";
+import { TextareaField } from "../components/elems/TextareaField";
+import { ShowTags } from "../components/profile/ShowTags";
 
 function SettingsPage() {
-	const { user } = useUserContext();
+	const [error, setError] = useState<string>('');
+	const [user, setUser] = useState<User | null>(null);
+	
+	//fields
+    const [email, setEmail] = useState<string>('');
+    const [firstname, setFirstname] = useState<string>('');
+    const [lastname, setLastname] = useState<string>('');
+	const [datebirth, setDatebirth] = useState<string>('');
+    const [gender, setGender] = useState<string>('female');
+	const [bio, setBio] = useState<string>('');
+	const [preference, setPreference] = useState<string>('bisexual');
+	const [tagsUser, setTagsUser] = useState<string[]>([]);
+	const [tagsAll, setTagsAll] = useState<string[]>([]);
+
+	const [maxAge, setMaxAge] = useState<string>('');
+
+	useEffect(() => {
+		setMaxAge(compute18Y());
+		getUserInfo();
+	}, [])
+
+	async function getUserInfo() {
+		const retour: RetourType | null = await GetMe();
+		if (!retour) {
+			setError('Error')
+			return ;
+		}
+		if (retour.message === 'success' && retour.user) {
+			setUser(retour.user);
+			setUserInfoForForm(retour.user);
+			if (retour.tags)
+				setTagsAll(retour.tags);
+		}
+		else
+			setUser(null);
+	}
+
+	function setUserInfoForForm(userInfo: User) {
+		setEmail(userInfo.email);
+		setFirstname(userInfo.first_name);
+		setLastname(userInfo.last_name);
+		setEmail(userInfo.email);
+		setTagsUser(userInfo.interests);
+		if (userInfo.date_birth)
+			setDatebirth(formatDateYYYYMMDD(userInfo.date_birth));
+		setGender(userInfo.gender)
+	}
+
+	async function saveUserInfo() {
+		//todo
+	}
+
+    function handleOnChangeEmail(e: React.ChangeEvent<HTMLInputElement>) {
+        setEmail(e.target.value);
+    }
+    function handleOnChangeFirstname(e: React.ChangeEvent<HTMLInputElement>) {
+        setFirstname(e.target.value);
+    }
+    function handleOnChangeLastname(e: React.ChangeEvent<HTMLInputElement>) {
+        setLastname(e.target.value);
+    }
+	function handleOnChangeDateBirth(e: React.ChangeEvent<HTMLInputElement>) {
+        setDatebirth(e.target.value);
+    }
+    function handleOnChangeGender(e: React.ChangeEvent<HTMLInputElement>) {
+        setGender(e.target.value);
+    }
+	function handleOnChangePreference(e: React.ChangeEvent<HTMLInputElement>) {
+        setPreference(e.target.value);
+    }
+	function handleOnChangeBio(e: React.ChangeEvent<HTMLInputElement>) {
+        setBio(e.target.value);
+    }
+
+	function handleSaveSettings(event: any) {
+        event.preventDefault();
+        saveUserInfo();
+    }
 
 	return !user ? (
         <UserNotSignedIn />
     ) : (
         <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
-            <TitleSmall text={'Become a member !'} />
+            <TitleSmall text={'Settings'} space="1" />
 
-            <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-                {/* <form className="space-y-4" action="#" onSubmit={handleSignUp}>
+            <div className="mt-5 sm:mx-auto sm:w-full sm:max-w-sm">
+                <form className="space-y-2" action="#" onSubmit={handleSaveSettings}>
                     <ShowErrorMessage
                         error={error}
                         message={'Impossible to sign up because '}
                     />
                     <ErrorField
-                        name="username"
-                        title="Username"
-                        onBlur={handleOnChangeUsername}
-                        styleError={styleErrorUsername}
-                        setStyleError={setStyleErrorUsername}
-                    />
-                    <ErrorField
                         name="email"
                         title="Email"
                         onBlur={handleOnChangeEmail}
-                        styleError={styleErrorEmail}
-                        setStyleError={setStyleErrorEmail}
+						init={email}
                     />
-                    <ErrorField
-                        name="password"
-                        title="Password"
-                        onBlur={handleOnChangePassword}
-                        styleError={styleErrorPwd}
-                        setStyleError={setStyleErrorPwd}
-                    />
-                    <ErrorField
-                        name="firstname"
-                        title="First name"
-                        onBlur={handleOnChangeFirstname}
-                        styleError={styleErrorFirstname}
-                        setStyleError={setStyleErrorFirstname}
-                    />
-                    <ErrorField
-                        name="lastname"
-                        title="Last name"
-                        onBlur={handleOnChangeLastname}
-                        styleError={styleErrorLastname}
-                        setStyleError={setStyleErrorLastname}
-                    />
+					<MultiplesInputOneRow nbInRow="2">
+						<ErrorField
+							name="firstname"
+							title="First name"
+							onBlur={handleOnChangeFirstname}
+							init={firstname}
+						/>
+						<ErrorField
+							name="lastname"
+							title="Last name"
+							onBlur={handleOnChangeLastname}
+							init={lastname}
+						/>
+					</MultiplesInputOneRow>
+
+					<DateInputField
+							title="Date of birth"
+							onBlur={handleOnChangeDateBirth}
+							max={maxAge}
+							init={datebirth}
+						/>
+
+					{/* <MultiplesInputOneRow nbInRow="2"> */}
+						
+						<SelectInput
+							title="Gender"
+							name="gender"
+							nameDefault="Select gender"
+							list={['female', 'male']}
+							onBlur={handleOnChangeGender}
+							init={gender}
+						/>
+						<SelectInput
+							title="Sexual preference"
+							name="preference"
+							nameDefault="Select sexual preference"
+							list={['female', 'male', 'bisexual']}
+							onBlur={handleOnChangePreference}
+							init={preference}
+						/>
+					{/* </MultiplesInputOneRow> */}
+
+					<TextareaField name='biography' title="Biography" description="Write something about you here" onBlur={handleOnChangeBio} init={bio} />
+
+					<ShowTags tagsUser={tagsUser} tagsPossible={tagsAll} setTagsUser={setTagsUser} />
 
                     <Button
-                        text="Sign Up"
+                        text="Amend your profile"
                         type="submit"
                         stylePerso="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                     />
-                </form> */}
+                </form>
 
                 <LinkText
                     firstText="Already a member?"
@@ -73,3 +176,5 @@ function SettingsPage() {
         </div>
 	);
 }
+
+export default SettingsPage;

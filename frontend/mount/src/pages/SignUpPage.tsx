@@ -13,13 +13,16 @@ import {
     MissingLastName,
     MissingPwd,
     MissingUsername,
-	UsernameTaken,
+    UsernameTaken,
 } from '../shared/errors';
 import axios from 'axios';
 import TitleSmall from '../components/elems/TitleSmall';
 import LinkText from '../components/elems/LinkText';
 import UserAlreadySignedIn from '../components/auth/UserAlreadySignedIn';
 import ConfirmUserCreation from '../components/auth/ConfirmUserCreation';
+import { DateInputField } from '../components/elems/DateInputField';
+import { compute18Y } from '../components/auth/ComputeAge';
+import SelectInput from '../components/elems/SelectInput';
 
 function SignUpPage() {
     const [username, setUsername] = useState<string>('');
@@ -27,6 +30,8 @@ function SignUpPage() {
     const [email, setemail] = useState<string>('');
     const [firstname, setfirstname] = useState<string>('');
     const [lastname, setlastname] = useState<string>('');
+    const [datebirth, setDatebirth] = useState<string>('');
+    const [gender, setGender] = useState<string>('female');
     const [error, setError] = useState<string>('');
     const [styleErrorUsername, setStyleErrorUsername] =
         useState<boolean>(false);
@@ -38,34 +43,41 @@ function SignUpPage() {
         useState<boolean>(false);
     const [styleError, setStyleError] = useState<boolean>(false);
     const { user } = useUserContext();
-	const [created, setCreated] = useState<boolean>(false);
-	
+    const [created, setCreated] = useState<boolean>(false);
 
-	function setFalseAll() {
-		setStyleErrorUsername(false);
-		setStyleErrorPwd(false);
-		setStyleErrorEmail(false);
-		setStyleErrorFirstname(false);
-		setStyleErrorLastname(false);
-	}
+    const [maxAge, setMaxAge] = useState<string>('');
+
+    useEffect(() => {
+        setMaxAge(compute18Y());
+    }, []);
+
+    function setFalseAll() {
+        setStyleErrorUsername(false);
+        setStyleErrorPwd(false);
+        setStyleErrorEmail(false);
+        setStyleErrorFirstname(false);
+        setStyleErrorLastname(false);
+    }
 
     useEffect(() => {
         if (styleError === false) return;
-        if (error === '') 
-			setFalseAll();
-		else {
-			setFalseAll();
-			if (error === InvalidUsername || error === MissingUsername || error === UsernameTaken)
-				setStyleErrorUsername(true);
-			else if (error === MissingPwd)
-				setStyleErrorPwd(true);
-			else if (error === EmailTaken || error === InvalidEmail)
-				setStyleErrorEmail(true);
-			else if (error === InvalidFirstName || error === MissingFirstName)
-				setStyleErrorFirstname(true);
-			else if (error === InvalidLastName || error === MissingLastName)
-			setStyleErrorLastname(true);
-		}
+        if (error === '') setFalseAll();
+        else {
+            setFalseAll();
+            if (
+                error === InvalidUsername ||
+                error === MissingUsername ||
+                error === UsernameTaken
+            )
+                setStyleErrorUsername(true);
+            else if (error === MissingPwd) setStyleErrorPwd(true);
+            else if (error === EmailTaken || error === InvalidEmail)
+                setStyleErrorEmail(true);
+            else if (error === InvalidFirstName || error === MissingFirstName)
+                setStyleErrorFirstname(true);
+            else if (error === InvalidLastName || error === MissingLastName)
+                setStyleErrorLastname(true);
+        }
         setStyleError(false);
     }, [error, styleError]);
 
@@ -84,10 +96,15 @@ function SignUpPage() {
     function handleOnChangeLastname(e: React.ChangeEvent<HTMLInputElement>) {
         setlastname(e.target.value);
     }
+    function handleOnChangeDateBirth(e: React.ChangeEvent<HTMLInputElement>) {
+        setDatebirth(e.target.value);
+    }
+    function handleOnChangeGender(e: React.ChangeEvent<HTMLInputElement>) {
+        setGender(e.target.value);
+    }
 
     function handleSignUp(event: any) {
         event.preventDefault();
-        console.log('username=' + username + ', pwd=' + password);
         signUpBackend();
     }
 
@@ -101,6 +118,8 @@ function SignUpPage() {
                     email: email,
                     lastname: lastname,
                     firstname: firstname,
+                    datebirth: datebirth,
+                    gender: gender,
                 },
                 {
                     withCredentials: true,
@@ -110,25 +129,27 @@ function SignUpPage() {
             if (response.data.message === 'success') {
                 setError('');
                 setStyleError(false);
-				setCreated(true);
+                setCreated(true);
             } else {
                 setStyleError(true);
                 setError(response.data.error);
             }
             return response.data;
         } catch (error) {
-			//to handle ?
+            //to handle ?
         }
     }
 
     return user ? (
         <UserAlreadySignedIn />
-    ) : (created ? (<ConfirmUserCreation />) : (
+    ) : created ? (
+        <ConfirmUserCreation />
+    ) : (
         <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
-            <TitleSmall text={'Become a member !'} />
+            <TitleSmall text={'Become a member !'} space="1" />
 
-            <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-                <form className="space-y-4" action="#" onSubmit={handleSignUp}>
+            <div className="mt-5 sm:mx-auto sm:w-full sm:max-w-sm">
+                <form className="space-y-2" action="#" onSubmit={handleSignUp}>
                     <ShowErrorMessage
                         error={error}
                         message={'Impossible to sign up because '}
@@ -139,6 +160,7 @@ function SignUpPage() {
                         onBlur={handleOnChangeUsername}
                         styleError={styleErrorUsername}
                         setStyleError={setStyleErrorUsername}
+                        init={username}
                     />
                     <ErrorField
                         name="email"
@@ -146,6 +168,7 @@ function SignUpPage() {
                         onBlur={handleOnChangeEmail}
                         styleError={styleErrorEmail}
                         setStyleError={setStyleErrorEmail}
+                        init={email}
                     />
                     <ErrorField
                         name="password"
@@ -153,6 +176,7 @@ function SignUpPage() {
                         onBlur={handleOnChangePassword}
                         styleError={styleErrorPwd}
                         setStyleError={setStyleErrorPwd}
+                        init={password}
                     />
                     <ErrorField
                         name="firstname"
@@ -160,6 +184,7 @@ function SignUpPage() {
                         onBlur={handleOnChangeFirstname}
                         styleError={styleErrorFirstname}
                         setStyleError={setStyleErrorFirstname}
+                        init={firstname}
                     />
                     <ErrorField
                         name="lastname"
@@ -167,13 +192,30 @@ function SignUpPage() {
                         onBlur={handleOnChangeLastname}
                         styleError={styleErrorLastname}
                         setStyleError={setStyleErrorLastname}
+                        init={lastname}
+                    />
+                    <DateInputField
+                        title="Date of birth"
+                        onBlur={handleOnChangeDateBirth}
+                        max={maxAge}
+                        init={datebirth}
+                    />
+                    <SelectInput
+                        title="Gender"
+                        name="gender"
+                        nameDefault="Select gender"
+                        list={['female', 'male']}
+                        onBlur={handleOnChangeGender}
+						init={gender}
                     />
 
-                    <Button
-                        text="Sign Up"
-                        type="submit"
-                        stylePerso="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                    />
+                    <div className="pt-5">
+                        <Button
+                            text="Sign Up"
+                            type="submit"
+                            stylePerso="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                        />
+                    </div>
                 </form>
 
                 <LinkText
@@ -183,7 +225,7 @@ function SignUpPage() {
                 />
             </div>
         </div>
-	));
+    );
 }
 
 export default SignUpPage;

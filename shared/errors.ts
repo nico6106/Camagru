@@ -15,10 +15,14 @@ export const InvalidEmail: string = 'invalid email';
 export const InvalidFirstName: string = 'Wrong first name format';
 export const InvalidLastName: string = 'Wrong last name format';
 export const WrongEmailFormat: string = 'Wrong email format';
+export const InvalidDateBirth: string = 'Wrong date of birth';
+export const InvalidGender: string = 'Wrong gender';
 
 export const MissingEmail: string = 'Missing email';
 export const MissingFirstName: string = 'Missing first name';
 export const MissingLastName: string = 'Missing last name';
+export const MissingDateBirth: string = 'Missing date of birth';
+export const MissingGender: string = 'Missing gender';
 
 export const WeakPwd: string = 'password too weak';
 

@@ -10,7 +10,7 @@ import { EmailNotVerified, EmailTaken, InvalidId, InvalidPassword, UnknownUserna
 // links: Record<string, number> = {};
 
 export async function SignUp(db: Database, req: Request, res: Response) {
-    const { username, email, password, lastname, firstname } = req.body;
+    const { username, email, password, lastname, firstname, datebirth, gender } = req.body;
     console.log(req.body);
 
     //check user/email do not exists
@@ -30,9 +30,11 @@ export async function SignUp(db: Database, req: Request, res: Response) {
         lastname,
         hash,
         confirmID,
+		datebirth,
+		gender,
     ];
     const fields: string =
-        'username, email, first_name, last_name, password, email_confirm_id';
+        'username, email, first_name, last_name, password, email_confirm_id, date_birth, gender';
 
     //add user to db
     retour = await db.insertToTable(TableUsersName, fields, values);
@@ -44,8 +46,8 @@ export async function SignUp(db: Database, req: Request, res: Response) {
             username,
         );
         console.log(user);
-		const emailBody: string = generateEmailBodyNewUser(username, confirmID);
-        sendEmail('Verify your account', email, emailBody);
+		// const emailBody: string = generateEmailBodyNewUser(username, confirmID);
+        // sendEmail('Verify your account', email, emailBody);
 
         return res.status(200).json({ message: 'success' });
     }

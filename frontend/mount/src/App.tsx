@@ -9,6 +9,7 @@ import SignOutPage from './pages/SignOutPage';
 import SignUpPage from './pages/SignUpPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import ResetPasswordPage from './pages/ResetPasswordPage';
+import SettingsPage from './pages/SettingsPage';
 
 function App() {
     return (
@@ -26,6 +27,7 @@ function App() {
                     <Route path="/signout" element={<SignOutPage />} />
 					<Route path="/forgot/:idConfirm" element={<ResetPasswordPage />} />
                     <Route path="/forgot" element={<ForgotPasswordPage />} />
+					<Route path="/settings" element={<SettingsPage />} />
                     <Route path="/404" element={<Page404 />} />
                     <Route path="*" element={<Page404 />} />
                 </Routes>

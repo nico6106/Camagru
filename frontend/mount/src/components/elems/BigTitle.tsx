@@ -3,8 +3,8 @@ type Prop = {
 	space?: string;
 };
 
-function TitleSmall({ text, space='10' }: Prop) {
-	const styleTitle: string = `mt-${space} text-center text-2xl font-bold leading-9 tracking-tight text-gray-900`
+function TitleBig({ text, space='10' }: Prop) {
+	const styleTitle: string = `mt-${space} text-center text-4xl font-bold leading-9 tracking-tight text-gray-900`
     return (
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
             <h2 className={styleTitle} >
@@ -14,4 +14,4 @@ function TitleSmall({ text, space='10' }: Prop) {
     );
 }
 
-export default TitleSmall;
+export default TitleBig;
