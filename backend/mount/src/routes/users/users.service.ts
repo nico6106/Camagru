@@ -4,7 +4,7 @@ import { Request, Response } from "express";
 import { PayloadJWTType } from "../auth/types";
 import { getUserFromRequest, verifyJWT } from "../auth/auth.service";
 import { AvailableTags } from "../../data/data-tags";
-import { EmptyPhoto, ErrorMsg, InvalidPhotoExtension, PhotoNbLimit, PhotoTooBig, SuccessMsg } from "../../shared/errors";
+import { EmptyPhoto, ErrorMsg, InvalidPhotoExtension, InvalidPhotoId, PhotoNbLimit, PhotoTooBig, SuccessMsg } from "../../shared/errors";
 import { extname } from 'path';
 
 
@@ -70,9 +70,15 @@ export async function dowloadImg(db: Database, req: Request, res: Response) {
 	const { filename } = req.params;
     const dirname = path.resolve();
     const fullfilepath = path.join(dirname, 'images/' + filename);
-    return res.sendFile(fullfilepath);
 
-	// return res.status(200).json({ message: SuccessMsg });
+	const fs = require('fs');
+	fs.stat(fullfilepath, (err: any, stats: any) => {
+		if (err) {
+		  return res.status(404).json({ message: ErrorMsg, error: InvalidPhotoId });
+		}
+	  
+		return res.sendFile(fullfilepath);
+	  });
 }
 
 export async function verifImgUser(db: Database, req: Request, res: Response): Promise<boolean> {

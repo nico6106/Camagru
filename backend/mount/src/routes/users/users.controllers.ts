@@ -6,6 +6,7 @@ import { dowloadImg, getMe, imageUpload, updateSettings, uploadImg, verifImgUser
 import { validateSignUpBody } from "../auth/middlewares/signup.middleware";
 import { validateSettings } from "./middlewares/check-settings.middleware";
 import { ErrorMsg, PhotoNbLimit } from "../../shared/errors";
+import { imageFileFilter } from "./middlewares/photo-middleware";
 
 const express = require('express')
 const router = express.Router();
@@ -40,7 +41,7 @@ router.post('/image', checkConnected, async (req: Request, res: Response) => {
 	  });
 });
 
-router.get('/image/:filename', (req: Request, res: Response) => {
+router.get('/image/:filename', checkConnected, imageFileFilter, (req: Request, res: Response) => {
 	return dowloadImg(db, req, res); 
 });
 
