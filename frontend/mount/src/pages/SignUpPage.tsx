@@ -13,6 +13,7 @@ import {
     MissingLastName,
     MissingPwd,
     MissingUsername,
+    SuccessMsg,
     UsernameTaken,
 } from '../shared/errors';
 import axios from 'axios';
@@ -126,7 +127,7 @@ function SignUpPage() {
                 },
             );
             console.log(response.data);
-            if (response.data.message === 'success') {
+            if (response.data.message === SuccessMsg) {
                 setError('');
                 setStyleError(false);
                 setCreated(true);

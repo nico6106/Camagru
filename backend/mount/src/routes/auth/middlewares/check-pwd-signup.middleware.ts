@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import {
+	ErrorMsg,
     MissingPwd,
 	WeakPwd,
 } from '../../../shared/errors';
@@ -10,13 +11,13 @@ export function validatePwdBody(req: Request, res: Response, next: any) {
 
     if (!password) {
         return res.status(200).json({
-            message: 'error',
+            message: ErrorMsg,
             error: MissingPwd,
         });
     }
 
 	if (!isPassword(password)) {
-        return res.status(200).json({ message: 'error', error: WeakPwd });
+        return res.status(200).json({ message: ErrorMsg, error: WeakPwd });
     }
 
     next();

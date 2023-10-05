@@ -16,6 +16,7 @@ import { compute18Y, formatDateYYYYMMDD } from "../components/auth/ComputeAge";
 import { TextareaField } from "../components/elems/TextareaField";
 import { ShowTags } from "../components/profile/ShowTags";
 import axios from "axios";
+import { SuccessMsg } from "../shared/errors";
 
 function SettingsPage() {
 	const [error, setError] = useState<string>('');
@@ -46,7 +47,7 @@ function SettingsPage() {
 			setError('Error')
 			return ;
 		}
-		if (retour.message === 'success' && retour.user) {
+		if (retour.message === SuccessMsg && retour.user) {
 			setUser(retour.user);
 			setUserInfoForForm(retour.user);
 			if (retour.tags)
@@ -87,7 +88,7 @@ function SettingsPage() {
                 },
             );
             console.log(response.data);
-            if (response.data.message === 'success') {
+            if (response.data.message === SuccessMsg) {
                 setError('');
                 setCreated(true);
             } else {

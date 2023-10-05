@@ -5,7 +5,7 @@ import { TableUser, TableUsersName } from '../../database/data';
 import { PayloadJWTType } from './types';
 import { sendEmail } from './mail';
 import { generateId } from '../../basic_functions/generate-code';
-import { EmailNotVerified, EmailTaken, InvalidId, InvalidPassword, UnknownUsername, UsernameTaken } from '../../shared/errors';
+import { EmailNotVerified, EmailTaken, ErrorMsg, InvalidId, InvalidPassword, SuccessMsg, UnknownUsername, UsernameTaken } from '../../shared/errors';
 
 // links: Record<string, number> = {};
 
@@ -15,10 +15,10 @@ export async function SignUp(db: Database, req: Request, res: Response) {
 
     //check user/email do not exists
     if (await db.testSelectEntryOneArg(TableUsersName, 'username', username))
-        return res.status(200).json({ message: 'error', error: UsernameTaken });
+        return res.status(200).json({ message: ErrorMsg, error: UsernameTaken });
 
     if (await db.testSelectEntryOneArg(TableUsersName, 'email', email))
-        return res.status(200).json({ message: 'error', error: EmailTaken });
+        return res.status(200).json({ message: ErrorMsg, error: EmailTaken });
 
     const hash = await hashPassword(password);
     const confirmID: string = generateId();
@@ -49,9 +49,9 @@ export async function SignUp(db: Database, req: Request, res: Response) {
 		// const emailBody: string = generateEmailBodyNewUser(username, confirmID);
         // sendEmail('Verify your account', email, emailBody);
 
-        return res.status(200).json({ message: 'success' });
+        return res.status(200).json({ message: SuccessMsg });
     }
-    return res.status(200).json({ message: 'error', error: 'error creating user' });
+    return res.status(200).json({ message: ErrorMsg, error: 'error creating user' });
 }
 
 function generateEmailBodyNewUser(username: string, confirmID: string): string {
@@ -97,23 +97,23 @@ export async function SignIn(db: Database, req: Request, res: Response) {
         username,
     );
     console.log(user)
-    if (!user) return res.status(200).json({ message: 'error', error: UnknownUsername });
+    if (!user) return res.status(200).json({ message: ErrorMsg, error: UnknownUsername });
     if (user.length !== 1)
-        return res.status(200).json({ message: 'error', error: 'error - multiples users' });
+        return res.status(200).json({ message: ErrorMsg, error: 'error - multiples users' });
 
     //check pwd
     try {
         if (await argon2.verify(user[0].password, password)) {
             // password match
         } else {
-            return res.status(200).json({ message: 'error', error: InvalidPassword });
+            return res.status(200).json({ message: ErrorMsg, error: InvalidPassword });
         }
     } catch (err) {
-        return res.status(200).json({ message: 'error', error: 'internal error' });
+        return res.status(200).json({ message: ErrorMsg, error: 'internal error' });
     }
 
 	if (user[0].email_verified === false)
-	return res.status(200).json({ message: 'error', error: EmailNotVerified });
+	return res.status(200).json({ message: ErrorMsg, error: EmailNotVerified });
 
     //manage sign in with cookie
     const payload: PayloadJWTType = {
@@ -121,14 +121,14 @@ export async function SignIn(db: Database, req: Request, res: Response) {
         login: user[0].username,
     };
     const token = await SignInWithCookie(payload, res);
-    return res.status(200).json({ message: 'success', user: user[0] });
+    return res.status(200).json({ message: SuccessMsg, user: user[0] });
 }
 
 export async function SignOut(db: Database, req: Request, res: Response) {
     if (process.env.JWT_ACCESS_TOKEN_COOKIE) {
 		res.clearCookie(process.env.JWT_ACCESS_TOKEN_COOKIE);
 	}
-    return res.status(200).json({ message: 'success' });
+    return res.status(200).json({ message: SuccessMsg });
 }
 
 export async function ConfirmEmail(db: Database, req: Request, res: Response) {
@@ -155,7 +155,7 @@ export async function ConfirmEmail(db: Database, req: Request, res: Response) {
         true,
     );
 
-    return res.status(200).json({ message: 'success' });
+    return res.status(200).json({ message: SuccessMsg });
 }
 
 //return cookie jwt decoded with user info
@@ -256,7 +256,7 @@ export async function ForgotPwd(db: Database, req: Request, res: Response) {
         email,
     );
 	if (!users || users.length !== 1)
-        return res.status(200).json({ message: 'error' , error: UnknownUsername });
+        return res.status(200).json({ message: ErrorMsg , error: UnknownUsername });
 	const user: TableUser = users[0];
 
 	//generate a link to reset pwd
@@ -274,7 +274,7 @@ export async function ForgotPwd(db: Database, req: Request, res: Response) {
 	// const emailBody: string = generateEmailBodyForgotPwd(user.username, confirmID);
 	// sendEmail('Reset your password', email, emailBody);
 
-    return res.status(200).json({ message: 'success' });
+    return res.status(200).json({ message: SuccessMsg });
 }
 
 function generateEmailBodyForgotPwd(username: string, confirmID: string): string {
@@ -295,12 +295,12 @@ export async function TmpShowUserByEmail(db: Database, req: Request, res: Respon
         email,
     );
 	if (!users || users.length !== 1)
-        return res.status(200).json({ message: 'error' , error: UnknownUsername });
+        return res.status(200).json({ message: ErrorMsg , error: UnknownUsername });
 	const user: TableUser = users[0];
 	console.log('------USER------');
 	console.log(user)
 
-    return res.status(200).json({ message: 'success' });
+    return res.status(200).json({ message: SuccessMsg });
 }
 
 export async function ConfirmForgotPwd(db: Database, req: Request, res: Response) {
@@ -316,9 +316,9 @@ export async function ConfirmForgotPwd(db: Database, req: Request, res: Response
     console.log(user);
 
     if (!user || user.length !== 1)
-        return res.status(200).json({ message: 'error' , error: InvalidId });
+        return res.status(200).json({ message: ErrorMsg , error: InvalidId });
 
-    return res.status(200).json({ message: 'success', username: user[0].username });
+    return res.status(200).json({ message: SuccessMsg, username: user[0].username });
 }
 
 export async function ResetPwd(db: Database, req: Request, res: Response) {
@@ -335,7 +335,7 @@ export async function ResetPwd(db: Database, req: Request, res: Response) {
     console.log(users);
 
     if (!users || users.length !== 1)
-        return res.status(200).json({ message: 'error' , error: InvalidId });
+        return res.status(200).json({ message: ErrorMsg , error: InvalidId });
 
 	const user: TableUser = users[0];
 	const hash = await hashPassword(password);
@@ -349,5 +349,5 @@ export async function ResetPwd(db: Database, req: Request, res: Response) {
         ['', hash],
     );
 
-    return res.status(200).json({ message: 'success' });
+    return res.status(200).json({ message: SuccessMsg });
 }

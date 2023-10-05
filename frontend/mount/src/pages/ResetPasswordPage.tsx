@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { RetourType } from '../types/response';
 import axios from 'axios';
-import { InvalidId } from '../shared/errors';
+import { InvalidId, SuccessMsg } from '../shared/errors';
 import PageTitleOneText from '../components/elems/PageTitleOneText';
 import TramePage from '../components/elems/TramePage';
 import TitleSmall from '../components/elems/TitleSmall';
@@ -56,7 +56,7 @@ function ResetPasswordPage() {
                 },
             );
             console.log(response.data);
-            if (response.data.message === 'success') {
+            if (response.data.message === SuccessMsg) {
                 setError('');
                 setStyleErrorPassword(false);
                 setCreated(true);
@@ -80,7 +80,7 @@ function ResetPasswordPage() {
         resetPasswordBackend();
     }
 
-    return retour && retour.message === 'success' ? (
+    return retour && retour.message === SuccessMsg ? (
         created ? (
             <PageTitleOneText
                 title="Password changed"

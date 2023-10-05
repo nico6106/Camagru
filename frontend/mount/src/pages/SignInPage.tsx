@@ -7,6 +7,7 @@ import { useUserContext } from '../context/UserContext';
 import {
     EmailNotVerified,
     InvalidPassword,
+    SuccessMsg,
     UnknownUsername,
 } from '../shared/errors';
 import ShowErrorMessage from '../components/auth/ShowErrorMessage';
@@ -67,7 +68,7 @@ function SignInPage() {
                 },
             );
             console.log(response.data);
-            if (response.data.message === 'success') {
+            if (response.data.message === SuccessMsg) {
                 loginUser(response.data.user);
                 setError('');
                 setStyleError(false);

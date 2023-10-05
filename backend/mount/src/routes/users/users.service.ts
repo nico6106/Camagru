@@ -4,6 +4,8 @@ import { Request, Response } from "express";
 import { PayloadJWTType } from "../auth/types";
 import { getUserFromRequest, verifyJWT } from "../auth/auth.service";
 import { AvailableTags } from "../../data/data-tags";
+import { InvalidPhotoExtension, PhotoTooBig, SuccessMsg } from "../../shared/errors";
+import { extname } from 'path';
 
 
 export async function getMe(db: Database, req: Request, res: Response) {
@@ -34,12 +36,56 @@ export async function updateSettings(db: Database, req: Request, res: Response) 
         [email, lastname, firstname, datebirth, gender, preference, tags, biography],
     );
 
-    return res.status(200).json({ message: 'success' });
+    return res.status(200).json({ message: SuccessMsg });
 }
 
+
 export async function uploadImg(db: Database, req: Request, res: Response) {
-	// console.log(req.file);
-	console.log('done?')
-	return res.status(200).json({ message: 'success' });
-	
+	const file: Express.Multer.File | undefined = req.file;
+	console.log(file);
+	return res.status(200).json({ message: SuccessMsg });
 }
+
+export async function dowloadImg(db: Database, req: Request, res: Response) {
+	const path = require('path');
+	const { filename } = req.params;
+    const dirname = path.resolve();
+    const fullfilepath = path.join(dirname, 'images/' + filename);
+    return res.sendFile(fullfilepath);
+
+	// return res.status(200).json({ message: SuccessMsg });
+}
+
+//handling photo
+const multer = require('multer');
+export const imageUpload = multer({
+	storage: multer.diskStorage(
+		{
+			destination: function (req: any, file: any, cb: any) {
+				cb(null, 'images/');
+			},
+			filename: function (req: any, file: any, cb: any) {
+				const name1 = file.originalname.split('.')[0];
+				const name = name1.split(' ').join('_');
+				const fileExtName = extname(file.originalname);
+				cb(
+					null,
+					new Date().valueOf() + 
+					'_' +
+					name + fileExtName
+				);
+			},	
+		}
+	),
+	fileFilter: function (req: any, file: any, cb: any) {
+		if (file.size > 1024 * 1024) {
+			return cb(new Error(PhotoTooBig));
+		}
+	
+		if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/i)) {
+			return cb(new Error(InvalidPhotoExtension));
+		}
+
+		cb(null, true);
+	},
+});

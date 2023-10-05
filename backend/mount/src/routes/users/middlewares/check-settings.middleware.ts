@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { InvalidBio, InvalidIPreference, InvalidInterest } from '../../../shared/errors';
+import { ErrorMsg, InvalidBio, InvalidIPreference, InvalidInterest } from '../../../shared/errors';
 import { AvailableTags } from '../../../data/data-tags';
 
 export function validateSettings(req: Request, res: Response, next: any) {
@@ -8,19 +8,19 @@ export function validateSettings(req: Request, res: Response, next: any) {
     if (!(preference === 'male' || preference === 'female' || preference === 'bisexual')) {
         return res
             .status(200)
-            .json({ message: 'error', error: InvalidIPreference });
+            .json({ message: ErrorMsg, error: InvalidIPreference });
     }
 
 	if (!validateTags(tags)) {
         return res
             .status(200)
-            .json({ message: 'error', error: InvalidInterest });
+            .json({ message: ErrorMsg, error: InvalidInterest });
     }
 
 	if (!validateBio(biography)) {
         return res
             .status(200)
-            .json({ message: 'error', error: InvalidBio });
+            .json({ message: ErrorMsg, error: InvalidBio });
     }
 
     next();

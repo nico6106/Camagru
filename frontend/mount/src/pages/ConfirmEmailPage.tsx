@@ -5,6 +5,7 @@ import { RetourType } from '../types/response';
 import TramePage from '../components/elems/TramePage';
 import TitleSmall from '../components/elems/TitleSmall';
 import TextPage from '../components/elems/TextPage';
+import { SuccessMsg } from '../shared/errors';
 
 function ConfirmEmailPage() {
     const { idConfirm } = useParams();
@@ -39,7 +40,7 @@ function ConfirmEmailPage() {
 
     return (
         <TramePage>
-            {retour && retour.message === 'success' && (
+            {retour && retour.message === SuccessMsg && (
                 <>
                     <TitleSmall text={'Congratulations'} />
 					<TextPage center={true}>Link validated. Please log in</TextPage>

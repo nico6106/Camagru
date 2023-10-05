@@ -9,6 +9,7 @@ import { ErrorField } from "../components/elems/ErrorFields";
 import Button from "../components/elems/Button";
 import LinkText from "../components/elems/LinkText";
 import ConfirmMailConfirmationSent from "../components/auth/ConfirmMailRecoverySent";
+import { SuccessMsg } from "../shared/errors";
 
 function ForgotPasswordPage() {
     const [email, setEmail] = useState<string>('');
@@ -50,7 +51,7 @@ function ForgotPasswordPage() {
                 },
             );
             console.log(response.data);
-            if (response.data.message === 'success') {
+            if (response.data.message === SuccessMsg) {
                 setError('');
                 setStyleError(false);
 				setCreated(true);

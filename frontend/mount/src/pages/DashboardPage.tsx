@@ -13,3 +13,4 @@ function DashboardPage() {
 }
 
 export default DashboardPage;
+'success'

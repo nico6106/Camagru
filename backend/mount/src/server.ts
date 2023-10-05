@@ -15,8 +15,8 @@ const bodyParser = require('body-parser');
 app.use(bodyParser.json()); // Pour les données de requête JSON
 app.use(bodyParser.urlencoded({ extended: true })); // Pour les données de formulaire
 
-const morgan = require('morgan');
-app.use(morgan('dev'));
+// const morgan = require('morgan');
+// app.use(morgan('dev'));
 
 //cors
 var cors = require('cors');

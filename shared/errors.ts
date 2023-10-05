@@ -1,4 +1,8 @@
 
+//message
+export const ErrorMsg: string = 'error';
+export const SuccessMsg: string = 'success';
+
 //sign in
 export const UnknownUsername: string = 'unknown user';
 export const InvalidPassword: string = 'invalid password';
@@ -31,3 +35,9 @@ export const WeakPwd: string = 'password too weak';
 
 //
 export const InvalidId: string = 'Invalid Id';
+
+//images
+export const InvalidPhotoExtension: string = 'Invalid photo extension';
+export const EmptyPhoto: string = 'empty photo';
+export const PhotoTooBig: string = 'size too big for picture';
+export const PhotoResolution: string = 'incorrect resolution for picture';
