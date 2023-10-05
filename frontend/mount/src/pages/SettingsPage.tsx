@@ -35,6 +35,8 @@ function SettingsPage() {
 	const [tagsUser, setTagsUser] = useState<string[]>([]);
 	const [tagsAll, setTagsAll] = useState<string[]>([]);
 	const [pictures, setPictures] = useState<string[]>([]);
+	const [mainPicture, setMainPicture] = useState<string>('');
+	
 
 	const [maxAge, setMaxAge] = useState<string>('');
 	const [created, setCreated] = useState<boolean>(false);
@@ -68,6 +70,7 @@ function SettingsPage() {
 		setPreference(userInfo.preference);
 		setBio(userInfo.biography);
 		setPictures(userInfo.pictures);
+		setMainPicture(userInfo.profilePicture);
 		if (userInfo.date_birth)
 			setDatebirth(formatDateYYYYMMDD(userInfo.date_birth));
 		setGender(userInfo.gender);
@@ -195,7 +198,7 @@ function SettingsPage() {
 
 					<ShowTags tagsUser={tagsUser} tagsPossible={tagsAll} setTagsUser={setTagsUser} />
 
-					<ShowPictures pictures={pictures} />
+					<ShowPictures pictures={pictures} mainPicture={mainPicture} setPictures={setPictures} setMainPicture={setMainPicture} />
 
 					<PhotoUploader />
 
