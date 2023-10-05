@@ -54,6 +54,8 @@ export async function uploadImg(db: Database, req: Request, res: Response) {
 	console.log('now pictures')
 	console.log(picturesUser)
 
+	let profilePicture: string = user.profile_picture;
+
 	if (user.pictures.length === 0 || user.profile_picture === '') {
 		db.AmendElemsFromTable(
 			TableUsersName,
@@ -62,6 +64,7 @@ export async function uploadImg(db: Database, req: Request, res: Response) {
 			['pictures', 'profile_picture'],
 			[picturesUser, file.filename],
 		);
+		profilePicture = file.filename;
 	}
 	else {
 		db.AmendElemsFromTable(
@@ -72,7 +75,7 @@ export async function uploadImg(db: Database, req: Request, res: Response) {
 			[picturesUser],
 		);
 	}
-	return res.status(200).json({ message: SuccessMsg, info: file.filename });
+	return res.status(200).json({ message: SuccessMsg, info: file.filename, infobis: profilePicture });
 }
 
 export async function dowloadImg(db: Database, req: Request, res: Response) {
@@ -110,8 +113,12 @@ export async function deleteImg(db: Database, req: Request, res: Response) {
 		return res.status(200).json({ message: ErrorMsg, error: InvalidPhotoId });
 
 	//update bdd
+	let profilePicture: string = user.profile_picture;
 	const newListImgUser: string[] = picturesUser.filter((elem) => elem !== filename);
 	if (user.profile_picture === filename) {
+		let newProfilePicture: string = '';
+		if (newListImgUser.length > 0)
+			newProfilePicture = newListImgUser[0];
 		db.AmendElemsFromTable(
 			TableUsersName,
 			'id',
@@ -119,6 +126,7 @@ export async function deleteImg(db: Database, req: Request, res: Response) {
 			['pictures', 'profile_picture'],
 			[newListImgUser, ''],
 		);
+		profilePicture = newProfilePicture;
 	}
 	else {
 		db.AmendElemsFromTable(
@@ -136,7 +144,7 @@ export async function deleteImg(db: Database, req: Request, res: Response) {
 			return res.status(200).json({ message: ErrorMsg, error: InvalidPhotoId });
 		}
 	  
-		return res.status(200).json({ message: SuccessMsg });
+		return res.status(200).json({ message: SuccessMsg, info: profilePicture });
 	});
 
 }
@@ -183,3 +191,28 @@ export const imageUpload = multer({
 		cb(null, true);
 	},
 });
+
+export async function setNewProfileImg(db: Database, req: Request, res: Response) {
+	const { filename } = req.params;
+
+	const user: TableUser | null = await getUserFromRequest(db, req);
+	if (!user)
+		return res.status(200).json({ message: ErrorMsg, error: "not connected" });
+	
+	const picturesUser: string[] = user.pictures;
+	//verifie si la photo est bien notre photo
+	if (!picturesUser.includes(filename))
+		return res.status(200).json({ message: ErrorMsg, error: InvalidPhotoId });
+
+	//update bdd
+	if (user.profile_picture === filename) {
+		db.AmendElemsFromTable(
+			TableUsersName,
+			'id',
+			user.id,
+			['profile_picture'],
+			[filename],
+		);
+	}
+	return res.status(200).json({ message: SuccessMsg, info: filename });
+}

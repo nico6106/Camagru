@@ -2,7 +2,7 @@ import { Database } from "../../database/db"
 import { Request, Response } from 'express';
 import { Multer } from 'multer';
 import { checkConnected } from "../auth/middlewares/check-connection.middleware";
-import { deleteImg, dowloadImg, getMe, imageUpload, updateSettings, uploadImg, verifImgUser } from "./users.service";
+import { deleteImg, dowloadImg, getMe, imageUpload, setNewProfileImg, updateSettings, uploadImg, verifImgUser } from "./users.service";
 import { validateSignUpBody } from "../auth/middlewares/signup.middleware";
 import { validateSettings } from "./middlewares/check-settings.middleware";
 import { ErrorMsg, PhotoNbLimit } from "../../shared/errors";
@@ -43,6 +43,10 @@ router.post('/image', checkConnected, async (req: Request, res: Response) => {
 
 router.get('/image/:filename', checkConnected, imageFileFilter, (req: Request, res: Response) => {
 	return dowloadImg(db, req, res); 
+});
+
+router.patch('/image/:filename', checkConnected, imageFileFilter, (req: Request, res: Response) => {
+	return setNewProfileImg(db, req, res); 
 });
 
 router.delete('/image/:filename', checkConnected, imageFileFilter, (req: Request, res: Response) => {

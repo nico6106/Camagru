@@ -200,7 +200,7 @@ function SettingsPage() {
 
 					<ShowPictures pictures={pictures} mainPicture={mainPicture} setPictures={setPictures} setMainPicture={setMainPicture} />
 
-					<PhotoUploader pictures={pictures} mainPicture={mainPicture} setPictures={setPictures} setMainPicture={setMainPicture} setError={setError} />
+					<PhotoUploader pictures={pictures} setPictures={setPictures} setMainPicture={setMainPicture} setError={setError} />
 
                     <Button
                         text="Amend your profile"

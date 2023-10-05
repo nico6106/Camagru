@@ -22,7 +22,27 @@ function ShowImg({ picture, pictures, mainPicture, setPictures, setMainPicture }
             );
             console.log(response.data);
             if (response.data.message === SuccessMsg) {
-                //ok
+                setMainPicture(response.data.info)
+            } else {
+                //false
+            }
+            return response.data;
+        } catch (error) {
+            //to handle ?
+        }
+	}
+
+	async function changeProfilePictureBackend() {
+		try {
+            const response = await axios.delete(
+                `http://${process.env.REACT_APP_SERVER_ADDRESS}:3333/users/image/${picture}`,
+                {
+                    withCredentials: true,
+                },
+            );
+            console.log(response.data);
+            if (response.data.message === SuccessMsg) {
+                setMainPicture(response.data.info)
             } else {
                 //false
             }
@@ -34,6 +54,7 @@ function ShowImg({ picture, pictures, mainPicture, setPictures, setMainPicture }
 
 	function handleOnSetMain(event: any) {
         event.preventDefault();
+		changeProfilePictureBackend();
     }
 	function handleOnDeleteImg(event: any) {
         event.preventDefault();

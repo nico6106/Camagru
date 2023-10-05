@@ -5,13 +5,12 @@ import { SuccessMsg } from '../../shared/errors';
 
 type Prop = {
     pictures: string[];
-	mainPicture: string;
 	setPictures: any;
 	setMainPicture: any;
 	setError: any;
 };
 
-function PhotoUploader({ pictures, mainPicture, setPictures, setMainPicture, setError }: Prop) {
+function PhotoUploader({ pictures, setPictures, setMainPicture, setError }: Prop) {
     const [imageUpdate, setImageUpdate] = useState<string | null>(null);
     const { user, updateUser } = useUserContext();
 
@@ -39,6 +38,7 @@ function PhotoUploader({ pictures, mainPicture, setPictures, setMainPicture, set
 				if (response.data.message === SuccessMsg) {
 					const newListImg = [...pictures, response.data.info];
 					setPictures(newListImg);
+					setMainPicture(response.data.infobis);
 					setError('')
 				}
 				else {
