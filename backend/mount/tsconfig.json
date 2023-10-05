@@ -18,11 +18,11 @@
     "sourceMap": true,
     "declaration": true,
     "removeComments": false, // Modification : vous pouvez conserver les commentaires si vous le souhaitez
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
 	},
 	"include": [
 	  "src/**/*.ts"
-	],
+, "custom.d.ts"	],
 	"exclude": [
 	  "node_modules",
 	  "dist"

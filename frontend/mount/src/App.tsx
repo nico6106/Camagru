@@ -10,6 +10,8 @@ import SignUpPage from './pages/SignUpPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import ResetPasswordPage from './pages/ResetPasswordPage';
 import SettingsPage from './pages/SettingsPage';
+import Footer from './components/Footer';
+import DashboardPage from './pages/DashboardPage';
 
 function App() {
     return (
@@ -28,9 +30,11 @@ function App() {
 					<Route path="/forgot/:idConfirm" element={<ResetPasswordPage />} />
                     <Route path="/forgot" element={<ForgotPasswordPage />} />
 					<Route path="/settings" element={<SettingsPage />} />
+					<Route path="/dashboard" element={<DashboardPage />} />
                     <Route path="/404" element={<Page404 />} />
                     <Route path="*" element={<Page404 />} />
                 </Routes>
+				<Footer />
             </Router>
         </UserProvider>
     );

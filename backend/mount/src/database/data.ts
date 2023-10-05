@@ -10,13 +10,13 @@ export const TableUserQuery: string = `CREATE TABLE users (
 	email_verified BOOLEAN DEFAULT FALSE,
 	email_confirm_id VARCHAR(50),
 	date_birth DATE,
-	inscription TIMESTAMP,
+	inscription TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	gender VARCHAR(50),
 	preference VARCHAR(50) DEFAULT 'bisexual',
 	interests VARCHAR(100)[] DEFAULT '{}'::VARCHAR(100)[],
-	biography TEXT,
-	pictures VARCHAR(100)[],
-	profilePicture VARCHAR(100)
+	biography TEXT DEFAULT '',
+	pictures VARCHAR(100)[] DEFAULT '{}'::VARCHAR(100)[],
+	profilePicture VARCHAR(100) DEFAULT ''
 	)`;
 
 export type TableUser = {
