@@ -54,14 +54,25 @@ export async function uploadImg(db: Database, req: Request, res: Response) {
 	console.log('now pictures')
 	console.log(picturesUser)
 
-	db.AmendElemsFromTable(
-        TableUsersName,
-        'id',
-        user.id,
-		['pictures'],
-        [picturesUser],
-    );
-	return res.status(200).json({ message: SuccessMsg });
+	if (user.pictures.length === 0 || user.profile_picture === '') {
+		db.AmendElemsFromTable(
+			TableUsersName,
+			'id',
+			user.id,
+			['pictures', 'profile_picture'],
+			[picturesUser, file.filename],
+		);
+	}
+	else {
+		db.AmendElemsFromTable(
+			TableUsersName,
+			'id',
+			user.id,
+			['pictures'],
+			[picturesUser],
+		);
+	}
+	return res.status(200).json({ message: SuccessMsg, info: file.filename });
 }
 
 export async function dowloadImg(db: Database, req: Request, res: Response) {
@@ -100,13 +111,24 @@ export async function deleteImg(db: Database, req: Request, res: Response) {
 
 	//update bdd
 	const newListImgUser: string[] = picturesUser.filter((elem) => elem !== filename);
-	db.AmendElemsFromTable(
-        TableUsersName,
-        'id',
-        user.id,
-		['pictures'],
-        [newListImgUser],
-    );
+	if (user.profile_picture === filename) {
+		db.AmendElemsFromTable(
+			TableUsersName,
+			'id',
+			user.id,
+			['pictures', 'profile_picture'],
+			[newListImgUser, ''],
+		);
+	}
+	else {
+		db.AmendElemsFromTable(
+			TableUsersName,
+			'id',
+			user.id,
+			['pictures'],
+			[newListImgUser],
+		);
+	}
 
 	const fs = require('fs');
 	fs.unlink(fullfilepath, (err: any) => {

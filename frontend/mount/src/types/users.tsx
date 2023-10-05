@@ -14,5 +14,5 @@ export type User = {
 	interests: string[];
 	biography: string;
 	pictures: string[];
-	profilePicture: string;
+	profile_picture: string;
 }

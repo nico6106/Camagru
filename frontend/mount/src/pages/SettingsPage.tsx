@@ -70,7 +70,7 @@ function SettingsPage() {
 		setPreference(userInfo.preference);
 		setBio(userInfo.biography);
 		setPictures(userInfo.pictures);
-		setMainPicture(userInfo.profilePicture);
+		setMainPicture(userInfo.profile_picture);
 		if (userInfo.date_birth)
 			setDatebirth(formatDateYYYYMMDD(userInfo.date_birth));
 		setGender(userInfo.gender);
@@ -200,7 +200,7 @@ function SettingsPage() {
 
 					<ShowPictures pictures={pictures} mainPicture={mainPicture} setPictures={setPictures} setMainPicture={setMainPicture} />
 
-					<PhotoUploader />
+					<PhotoUploader pictures={pictures} mainPicture={mainPicture} setPictures={setPictures} setMainPicture={setMainPicture} setError={setError} />
 
                     <Button
                         text="Amend your profile"

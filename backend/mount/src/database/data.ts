@@ -16,7 +16,7 @@ export const TableUserQuery: string = `CREATE TABLE users (
 	interests VARCHAR(100)[] DEFAULT '{}'::VARCHAR(100)[],
 	biography TEXT DEFAULT '',
 	pictures VARCHAR(100)[] DEFAULT '{}'::VARCHAR(100)[],
-	profilePicture VARCHAR(100) DEFAULT ''
+	profile_picture VARCHAR(100) DEFAULT ''
 	)`;
 
 export type TableUser = {
@@ -36,5 +36,5 @@ export type TableUser = {
 	interests: string[];
 	biography: string;
 	pictures: string[];
-	profilePicture: string;
+	profile_picture: string;
 }

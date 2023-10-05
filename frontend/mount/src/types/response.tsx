@@ -6,4 +6,5 @@ export type RetourType = {
 	error?: string;
 	username?: string;
 	tags?: string[];
+	info?: string;
 }

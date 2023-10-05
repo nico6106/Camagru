@@ -1,39 +1,22 @@
 import React, { useState, ChangeEvent, useEffect } from 'react';
 import axios from 'axios';
 import { useUserContext } from '../../context/UserContext';
+import { SuccessMsg } from '../../shared/errors';
 
-function PhotoUploader() {
+type Prop = {
+    pictures: string[];
+	mainPicture: string;
+	setPictures: any;
+	setMainPicture: any;
+	setError: any;
+};
+
+function PhotoUploader({ pictures, mainPicture, setPictures, setMainPicture, setError }: Prop) {
     const [imageUpdate, setImageUpdate] = useState<string | null>(null);
-    // const [img, setImg] = useState<string | null>();
     const { user, updateUser } = useUserContext();
-
-    // useEffect(() => {
-    //     const fetchImg = async () => {
-    //         if (!user) return;
-    //         try {
-    //             const response = await axios.get(
-    //                 `http://${process.env.REACT_APP_SERVER_ADDRESS}:3333/users/img/${user?.id}`,
-    //                 {
-    //                     params: { id: user?.id },
-    //                     responseType: 'arraybuffer',
-    //                     withCredentials: true,
-    //                 },
-    //             );
-    //             const base64Image = btoa(
-    //                 new Uint8Array(response.data).reduce(
-    //                     (data, byte) => data + String.fromCharCode(byte),
-    //                     '',
-    //                 ),
-    //             );
-    //             setImg(base64Image);
-    //         } catch {}
-    //     };
-    //     fetchImg();
-    // }, [user]);
 
     async function handleImageChange(e: ChangeEvent<HTMLInputElement>) {
         const selectedImage = e.target.files?.[0];
-        // updateUser({ updateAvatar: false });
         if (selectedImage) {
             const reader = new FileReader();
             reader.onload = () => {
@@ -48,30 +31,26 @@ function PhotoUploader() {
             formData.append('image', selectedImage);
 
             try {
-                await axios.post(
+                const response = await axios.post(
                     `http://${process.env.REACT_APP_SERVER_ADDRESS}:3333/users/image`,
                     formData,
                     { withCredentials: true },
                 );
-                // updateUser({ updateAvatar: true });
+				if (response.data.message === SuccessMsg) {
+					const newListImg = [...pictures, response.data.info];
+					setPictures(newListImg);
+					setError('')
+				}
+				else {
+					setError(response.data.error)
+				}
+				// info
             } catch {}
         }
     };
 
     return (
         <div className="relative w-32">
-            {/* {img && (
-                <img
-                    className="h-32 rounded"
-                    src={
-                        imageUpdate
-                            ? imageUpdate
-                            : `data:image/png;base64,${img}`
-                    }
-                    alt="avatar"
-                />
-            )} */}
-			{/* block text-sm font-semibold py-1 text-gray-900 dark:text-white absolute bottom-0 left-0 w-full text-center bg-white bg-opacity-60 cursor-pointer */}
             <label className="">
                 Update avatar
                
