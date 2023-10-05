@@ -1,7 +1,6 @@
 import { TableUser, TableUsersName } from "../../database/data";
 import { Database } from "../../database/db"
 import { Request, Response } from "express";
-import { PayloadJWTType } from "../auth/types";
 import { getUserFromRequest, verifyJWT } from "../auth/auth.service";
 import { AvailableTags } from "../../data/data-tags";
 import { EmptyPhoto, ErrorMsg, InvalidPhotoExtension, InvalidPhotoId, PhotoNbLimit, PhotoTooBig, SuccessMsg } from "../../shared/errors";
@@ -66,19 +65,58 @@ export async function uploadImg(db: Database, req: Request, res: Response) {
 }
 
 export async function dowloadImg(db: Database, req: Request, res: Response) {
-	const path = require('path');
 	const { filename } = req.params;
-    const dirname = path.resolve();
-    const fullfilepath = path.join(dirname, 'images/' + filename);
+	const fullfilepath = givePathImage(filename);
 
 	const fs = require('fs');
 	fs.stat(fullfilepath, (err: any, stats: any) => {
 		if (err) {
-		  return res.status(404).json({ message: ErrorMsg, error: InvalidPhotoId });
+		  return res.status(200).json({ message: ErrorMsg, error: InvalidPhotoId });
 		}
 	  
 		return res.sendFile(fullfilepath);
 	  });
+}
+
+export function givePathImage(filename: string): string {
+	const path = require('path');
+    const dirname = path.resolve();
+    const fullfilepath = path.join(dirname, 'images/' + filename);
+	return fullfilepath;
+}
+
+export async function deleteImg(db: Database, req: Request, res: Response) {
+	const { filename } = req.params;
+	const fullfilepath = givePathImage(filename);
+
+	const user: TableUser | null = await getUserFromRequest(db, req);
+	if (!user)
+		return res.status(200).json({ message: ErrorMsg, error: "not connected" });
+	
+	const picturesUser: string[] = user.pictures;
+	//verifie si la photo est bien notre photo
+	if (!picturesUser.includes(filename))
+		return res.status(200).json({ message: ErrorMsg, error: InvalidPhotoId });
+
+	//update bdd
+	const newListImgUser: string[] = picturesUser.filter((elem) => elem !== filename);
+	db.AmendElemsFromTable(
+        TableUsersName,
+        'id',
+        user.id,
+		['pictures'],
+        [newListImgUser],
+    );
+
+	const fs = require('fs');
+	fs.unlink(fullfilepath, (err: any) => {
+		if (err) {
+			return res.status(200).json({ message: ErrorMsg, error: InvalidPhotoId });
+		}
+	  
+		return res.status(200).json({ message: SuccessMsg });
+	});
+
 }
 
 export async function verifImgUser(db: Database, req: Request, res: Response): Promise<boolean> {

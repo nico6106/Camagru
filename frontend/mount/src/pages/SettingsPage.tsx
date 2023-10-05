@@ -17,6 +17,8 @@ import { TextareaField } from "../components/elems/TextareaField";
 import { ShowTags } from "../components/profile/ShowTags";
 import axios from "axios";
 import { SuccessMsg } from "../shared/errors";
+import PhotoUploader from "../components/profile/PhotoUpload";
+import ShowPictures from "../components/profile/ShowPictures";
 
 function SettingsPage() {
 	const [error, setError] = useState<string>('');
@@ -32,6 +34,7 @@ function SettingsPage() {
 	const [preference, setPreference] = useState<string>('bisexual');
 	const [tagsUser, setTagsUser] = useState<string[]>([]);
 	const [tagsAll, setTagsAll] = useState<string[]>([]);
+	const [pictures, setPictures] = useState<string[]>([]);
 
 	const [maxAge, setMaxAge] = useState<string>('');
 	const [created, setCreated] = useState<boolean>(false);
@@ -64,6 +67,7 @@ function SettingsPage() {
 		setTagsUser(userInfo.interests);
 		setPreference(userInfo.preference);
 		setBio(userInfo.biography);
+		setPictures(userInfo.pictures);
 		if (userInfo.date_birth)
 			setDatebirth(formatDateYYYYMMDD(userInfo.date_birth));
 		setGender(userInfo.gender);
@@ -190,6 +194,10 @@ function SettingsPage() {
 					<TextareaField name='biography' title="Biography" description="Write something about you here" onBlur={handleOnChangeBio} init={bio} />
 
 					<ShowTags tagsUser={tagsUser} tagsPossible={tagsAll} setTagsUser={setTagsUser} />
+
+					<ShowPictures pictures={pictures} />
+
+					<PhotoUploader />
 
                     <Button
                         text="Amend your profile"

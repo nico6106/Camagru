@@ -94,10 +94,3 @@ function handleChangeCheckbox(
     console.log(newList);
     setTagsUser(newList);
 }
-
-// console.log('todo');
-// console.log(newList);
-// console.log(tagsUser);
-// setTagsUser(newList);
-// console.log(tagsUser);
-// console.log('done');

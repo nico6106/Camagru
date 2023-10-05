@@ -4,34 +4,34 @@ import { useUserContext } from '../../context/UserContext';
 
 function PhotoUploader() {
     const [imageUpdate, setImageUpdate] = useState<string | null>(null);
-    const [img, setImg] = useState<string | null>();
+    // const [img, setImg] = useState<string | null>();
     const { user, updateUser } = useUserContext();
 
-    useEffect(() => {
-        const fetchImg = async () => {
-            if (!user) return;
-            try {
-                const response = await axios.get(
-                    `http://${process.env.REACT_APP_SERVER_ADDRESS}:3333/users/img/${user?.id}`,
-                    {
-                        params: { id: user?.id },
-                        responseType: 'arraybuffer',
-                        withCredentials: true,
-                    },
-                );
-                const base64Image = btoa(
-                    new Uint8Array(response.data).reduce(
-                        (data, byte) => data + String.fromCharCode(byte),
-                        '',
-                    ),
-                );
-                setImg(base64Image);
-            } catch {}
-        };
-        fetchImg();
-    }, [user]);
+    // useEffect(() => {
+    //     const fetchImg = async () => {
+    //         if (!user) return;
+    //         try {
+    //             const response = await axios.get(
+    //                 `http://${process.env.REACT_APP_SERVER_ADDRESS}:3333/users/img/${user?.id}`,
+    //                 {
+    //                     params: { id: user?.id },
+    //                     responseType: 'arraybuffer',
+    //                     withCredentials: true,
+    //                 },
+    //             );
+    //             const base64Image = btoa(
+    //                 new Uint8Array(response.data).reduce(
+    //                     (data, byte) => data + String.fromCharCode(byte),
+    //                     '',
+    //                 ),
+    //             );
+    //             setImg(base64Image);
+    //         } catch {}
+    //     };
+    //     fetchImg();
+    // }, [user]);
 
-    const handleImageChange = async (e: ChangeEvent<HTMLInputElement>) => {
+    async function handleImageChange(e: ChangeEvent<HTMLInputElement>) {
         const selectedImage = e.target.files?.[0];
         // updateUser({ updateAvatar: false });
         if (selectedImage) {
@@ -49,7 +49,7 @@ function PhotoUploader() {
 
             try {
                 await axios.post(
-                    `http://${process.env.REACT_APP_SERVER_ADDRESS}:3333/users/photo`,
+                    `http://${process.env.REACT_APP_SERVER_ADDRESS}:3333/users/image`,
                     formData,
                     { withCredentials: true },
                 );
@@ -60,7 +60,7 @@ function PhotoUploader() {
 
     return (
         <div className="relative w-32">
-            {img && (
+            {/* {img && (
                 <img
                     className="h-32 rounded"
                     src={
@@ -70,16 +70,18 @@ function PhotoUploader() {
                     }
                     alt="avatar"
                 />
-            )}
-            <label className="block text-sm font-semibold py-1 text-gray-900 dark:text-white absolute bottom-0 left-0 w-full text-center bg-white bg-opacity-60 cursor-pointer">
+            )} */}
+			{/* block text-sm font-semibold py-1 text-gray-900 dark:text-white absolute bottom-0 left-0 w-full text-center bg-white bg-opacity-60 cursor-pointer */}
+            <label className="">
                 Update avatar
-                <input
+               
+            </label>
+			<input
                     type="file"
                     accept="image/*"
-                    className="hidden"
+                    className=""
                     onChange={handleImageChange}
                 />
-            </label>
         </div>
     );
 }
