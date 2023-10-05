@@ -40,4 +40,5 @@ export const InvalidId: string = 'Invalid Id';
 export const InvalidPhotoExtension: string = 'Invalid photo extension';
 export const EmptyPhoto: string = 'empty photo';
 export const PhotoTooBig: string = 'size too big for picture';
+export const PhotoNbLimit: string = 'too many pictures in your profile';
 export const PhotoResolution: string = 'incorrect resolution for picture';

@@ -4,7 +4,7 @@ import { Request, Response } from "express";
 import { PayloadJWTType } from "../auth/types";
 import { getUserFromRequest, verifyJWT } from "../auth/auth.service";
 import { AvailableTags } from "../../data/data-tags";
-import { InvalidPhotoExtension, PhotoTooBig, SuccessMsg } from "../../shared/errors";
+import { EmptyPhoto, ErrorMsg, InvalidPhotoExtension, PhotoNbLimit, PhotoTooBig, SuccessMsg } from "../../shared/errors";
 import { extname } from 'path';
 
 
@@ -23,7 +23,7 @@ export async function updateSettings(db: Database, req: Request, res: Response) 
     //recuperer USER
     const user: TableUser | null = await getUserFromRequest(db, req);
 	if (!user)
-		return res.status(200).json({ message: "error", error: "not connected", user: null });
+		return res.status(200).json({ message: ErrorMsg, error: "not connected", user: null });
 
     console.log(user);
 
@@ -43,6 +43,25 @@ export async function updateSettings(db: Database, req: Request, res: Response) 
 export async function uploadImg(db: Database, req: Request, res: Response) {
 	const file: Express.Multer.File | undefined = req.file;
 	console.log(file);
+
+	const user: TableUser | null = await getUserFromRequest(db, req);
+	if (!user)
+		return res.status(200).json({ message: ErrorMsg, error: "not connected" });
+	if (!file)
+		return res.status(200).json({ message: ErrorMsg, error: EmptyPhoto });
+	
+	const picturesUser: string[] = [...user.pictures, file.filename];
+
+	console.log('now pictures')
+	console.log(picturesUser)
+
+	db.AmendElemsFromTable(
+        TableUsersName,
+        'id',
+        user.id,
+		['pictures'],
+        [picturesUser],
+    );
 	return res.status(200).json({ message: SuccessMsg });
 }
 
@@ -54,6 +73,15 @@ export async function dowloadImg(db: Database, req: Request, res: Response) {
     return res.sendFile(fullfilepath);
 
 	// return res.status(200).json({ message: SuccessMsg });
+}
+
+export async function verifImgUser(db: Database, req: Request, res: Response): Promise<boolean> {
+	const user: TableUser | null = await getUserFromRequest(db, req);
+	if (!user)
+		return false;
+	if (user.pictures.length >= 5)
+		return false;
+	return true;
 }
 
 //handling photo
