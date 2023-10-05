@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-
+	"types": ["custom"],
 	"module": "commonjs",
     "target": "ES2021",
     "outDir": "./dist",
