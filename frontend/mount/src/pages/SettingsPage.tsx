@@ -14,11 +14,11 @@ import { DateInputField } from "../components/elems/DateInputField";
 import SelectInput from "../components/elems/SelectInput";
 import { compute18Y, formatDateYYYYMMDD } from "../components/auth/ComputeAge";
 import { TextareaField } from "../components/elems/TextareaField";
-import { ShowTags } from "../components/profile/ShowTags";
+import { ShowTags } from "../components/settings/ShowTags";
 import axios from "axios";
 import { SuccessMsg } from "../shared/errors";
-import PhotoUploader from "../components/profile/PhotoUpload";
-import ShowPictures from "../components/profile/ShowPictures";
+import PhotoUploader from "../components/settings/PhotoUpload";
+import ShowPictures from "../components/settings/ShowPictures";
 
 function SettingsPage() {
 	const [error, setError] = useState<string>('');

@@ -1,0 +1,26 @@
+export type UserExport = {
+    id: number;
+    first_name: string;
+    last_name: string;
+    username: string;
+    date_birth: Date;
+	age: number;
+    inscription: number;
+    gender: 'male' | 'female' | 'other';
+    preference: 'male' | 'female' | 'bisexual';
+    interests: string[];
+    biography: string;
+    pictures: string[];
+    profile_picture: string;
+    blocked_user: number[];
+    viewed: { id: number; date: Date }[];
+    viewed_by: { id: number; date: Date }[];
+    likes: { id: number; date: Date }[];
+    liked_by: { id: number; date: Date }[];
+    position: { longitude: number; latitude: number };
+	city: string;
+    fame_rating: number;
+    fake_account: number;
+    connected: boolean;
+    last_connection: number;
+};

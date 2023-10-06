@@ -1,10 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import { User } from '../types/users';
+import { UserExport } from '../shared/userExport';
 
 interface Prop {
-    user: User | null;
-    loginUser: (userData: User | null) => void;
+    user: UserExport | null;
+    loginUser: (userData: UserExport | null) => void;
     logoutUser: () => void;
 	verifUser: () => void;
     updateUser: (userData: Partial<User>) => void;
@@ -19,7 +20,7 @@ export const UserContext = React.createContext<Prop>({
 });
 
 export const UserProvider = ({ children }: any) => {
-    const [user, setUser] = useState<User | null>(null);
+    const [user, setUser] = useState<UserExport | null>(null);
 
     useEffect(() => {
         fetchUser();
@@ -39,7 +40,7 @@ export const UserProvider = ({ children }: any) => {
         fetchUser();
     };
 
-    const loginUser = (userData: User | null) => {
+    const loginUser = (userData: UserExport | null) => {
         setUser(userData);
     };
 

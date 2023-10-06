@@ -5,6 +5,7 @@ import { getUserFromRequest, verifyJWT } from "../auth/auth.service";
 import { AvailableTags } from "../../data/data-tags";
 import { EmptyPhoto, ErrorMsg, InvalidPhotoExtension, InvalidPhotoId, PhotoNbLimit, PhotoTooBig, SuccessMsg } from "../../shared/errors";
 import { extname } from 'path';
+import { UserExport } from "../../shared/userExport";
 
 
 export async function getMe(db: Database, req: Request, res: Response) {
@@ -13,6 +14,52 @@ export async function getMe(db: Database, req: Request, res: Response) {
 	if (!user)
 		return res.status(200).json({ message: "error", error: "not connected", user: null });
 	return res.status(200).json({ message: "success", user: user, tags: AvailableTags });
+}
+
+export async function getUserById(db: Database, req: Request, res: Response) {
+	const { id } = req.params;
+	const idNb = parseInt(id);
+	const users: TableUser[] | null = await db.selectOneElemFromTable(
+        TableUsersName,
+        'id',
+        idNb,
+    );
+    if (!(users && users.length === 1)) 
+		return res.status(200).json({ message: "error", error: "not connected", user: null });
+	const user: UserExport = transformUserDbInUserExport(users[0]);
+	return res.status(200).json({ message: "success", userM: user });
+}
+
+export function transformUserDbInUserExport(userDB: TableUser): UserExport {
+	// const bio: string = userDB.biography.replace(/\n/g, '<br/>')
+	// console.log(bio)
+	const user: UserExport = {
+		id: userDB.id,
+		first_name: userDB.first_name,
+		last_name: userDB.last_name,
+		username: userDB.username,
+		date_birth: userDB.date_birth,
+		inscription: userDB.inscription,
+		gender: userDB.gender,
+		preference: userDB.preference,
+		interests: userDB.interests,
+		biography: userDB.biography,
+		pictures: userDB.pictures,
+		profile_picture: userDB.profile_picture,
+		blocked_user: userDB.blocked_user,
+		viewed: userDB.viewed,
+		viewed_by: userDB.viewed_by,
+		likes: userDB.likes,
+		liked_by: userDB.liked_by,
+		position: userDB.position,
+		fame_rating: userDB.fame_rating,
+		fake_account: userDB.fake_account,
+		connected: userDB.connected,
+		last_connection: userDB.last_connection,
+		city: 'Paris',
+		age: 30,
+	}
+	return user;
 }
 
 export async function updateSettings(db: Database, req: Request, res: Response) {

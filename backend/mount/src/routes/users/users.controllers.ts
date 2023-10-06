@@ -2,11 +2,12 @@ import { Database } from "../../database/db"
 import { Request, Response } from 'express';
 import { Multer } from 'multer';
 import { checkConnected } from "../auth/middlewares/check-connection.middleware";
-import { deleteImg, dowloadImg, getMe, imageUpload, setNewProfileImg, updateSettings, uploadImg, verifImgUser } from "./users.service";
+import { deleteImg, dowloadImg, getMe, getUserById, imageUpload, setNewProfileImg, updateSettings, uploadImg, verifImgUser } from "./users.service";
 import { validateSignUpBody } from "../auth/middlewares/signup.middleware";
 import { validateSettings } from "./middlewares/check-settings.middleware";
 import { ErrorMsg, PhotoNbLimit } from "../../shared/errors";
 import { imageFileFilter } from "./middlewares/photo-middleware";
+import { validateUserIdFormat } from "./middlewares/check-userId.midleware";
 
 const express = require('express')
 const router = express.Router();
@@ -19,6 +20,10 @@ db.connectDb();
 //routes
 router.get('/me', checkConnected, (req: Request, res: Response) => {
 	return getMe(db, req, res);
+})
+
+router.get('/:id', checkConnected, validateUserIdFormat, (req: Request, res: Response) => {
+	return getUserById(db, req, res);
 })
 
 router.post('/updatesettings', checkConnected, validateSignUpBody, validateSettings, (req: Request, res: Response) => {

@@ -56,7 +56,7 @@ export class Database {
   }
 
   //select one elem from Table
-  async selectOneElemFromTable(table: string, field: string, elem: string): Promise<TableUser[] | null> {
+  async selectOneElemFromTable(table: string, field: string, elem: any): Promise<TableUser[] | null> {
 	return exec_SelectOneElemFromTable(this, table, field, elem);
   }
 

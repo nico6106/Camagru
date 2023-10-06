@@ -53,8 +53,8 @@ function MobileMenu({ showMenu }: { showMenu: boolean }) {
                 <div className="space-y-1 px-2 pb-3 pt-2">
                     {/* <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" --> */}
                     <ButtonLinkNavBar
-                        text="Dashboard"
-                        page="/dashboard"
+                        text="Profile"
+                        page="/profile"
                         selected={true}
                         block={true}
                     />
@@ -116,8 +116,8 @@ function LinkNavBar() {
         <div className="hidden sm:ml-6 sm:block">
             <div className="flex space-x-4">
                 <ButtonLinkNavBar
-                    text="Dashboard"
-                    page="/dashboard"
+                    text="Profile"
+                    page="/profile"
                     selected={true}
                     block={false}
                 />
@@ -203,7 +203,7 @@ function DropdownMenuLinks() {
             aria-labelledby="user-menu-button"
         >
             {/* <!-- Active: "bg-gray-100", Not Active: "" --> */}
-            <ButtonDropdownMenu text="Your Profile" page="/dashboard" />
+            <ButtonDropdownMenu text="Your Profile" page="/profile" />
             <ButtonDropdownMenu text="Settings" page="/settings" />
             <ButtonDropdownMenu text="Sign out" page="/signout" />
         </div>
