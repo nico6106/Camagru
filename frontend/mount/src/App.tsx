@@ -13,6 +13,7 @@ import SettingsPage from './pages/SettingsPage';
 import Footer from './components/Footer';
 import ProfilePage from './pages/ProfilePage';
 import ViewImage from './pages/ViewOneImage';
+import DetailsUserListsPage from './pages/DetailsUserListsPage';
 
 function App() {
     return (
@@ -32,6 +33,7 @@ function App() {
                     <Route path="/forgot" element={<ForgotPasswordPage />} />
 					<Route path="/settings" element={<SettingsPage />} />
 					<Route path="/profile/image/:id" element={<ViewImage />} />
+					<Route path="/profile/option/:option" element={<DetailsUserListsPage />} />
 					<Route path="/profile/:id" element={<ProfilePage />} />
 					<Route path="/profile" element={<ProfilePage />} />
                     <Route path="/404" element={<Page404 />} />

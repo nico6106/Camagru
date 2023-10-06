@@ -14,20 +14,18 @@ function UserInfo({ user }: Prop) {
                 {user.city}
             </p>
             <p className="text-gray-500 dark:text-gray-400" dangerouslySetInnerHTML={htmlText}></p>
+			<UserTags tags={user.interests} />
         </div>
     );
 }
 
 export default UserInfo;
 
-{/* <ShowBio bio={user.biography} /> */}
-function ShowBio({bio}: {bio: string}) {
-	const formattedText = bio.replace(/\n/g, '<br>');
-  
-	// Créez un objet avec la clé __html pour rendre le HTML en toute sécurité
-	const htmlText = { __html: formattedText };
-	console.log(htmlText)
-  
-	return <p dangerouslySetInnerHTML={htmlText} />;
-  
+function UserTags({ tags }: {tags: string[]}) {
+	return (<><br />
+		<p className="text-gray-500 dark:text-gray-400">Interests: 
+		{tags.map((elem) => <span key={elem} className="bg-gray-100 text-gray-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-gray-300">{elem}</span>)}
+		</p>
+		</>
+	)
 }

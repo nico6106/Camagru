@@ -2,7 +2,7 @@ import { Database } from "../../database/db"
 import { Request, Response } from 'express';
 import { Multer } from 'multer';
 import { checkConnected } from "../auth/middlewares/check-connection.middleware";
-import { deleteImg, dowloadImg, getMe, getUserById, imageUpload, setNewProfileImg, updateSettings, uploadImg, verifImgUser } from "./users.service";
+import { deleteImg, dowloadImg, getListByTypeAndById, getMe, getUserById, imageUpload, setNewProfileImg, updateSettings, uploadImg, verifImgUser } from "./users.service";
 import { validateSignUpBody } from "../auth/middlewares/signup.middleware";
 import { validateSettings } from "./middlewares/check-settings.middleware";
 import { ErrorMsg, PhotoNbLimit } from "../../shared/errors";
@@ -57,5 +57,10 @@ router.get('/setimage/:filename', checkConnected, imageFileFilter, (req: Request
 router.delete('/image/:filename', checkConnected, imageFileFilter, (req: Request, res: Response) => {
 	return deleteImg(db, req, res); 
 });
+
+//check viewed/viewed_by/likes/liked_by
+router.get('/:option/:id',  validateUserIdFormat, (req: Request, res: Response) => {
+	return getListByTypeAndById(db, req, res);
+})
 
 module.exports = router

@@ -13,10 +13,10 @@ export type UserExport = {
     pictures: string[];
     profile_picture: string;
     blocked_user: number[];
-    viewed: { id: number; date: Date }[];
-    viewed_by: { id: number; date: Date }[];
-    likes: { id: number; date: Date }[];
-    liked_by: { id: number; date: Date }[];
+    viewed: UserShort[];
+    viewed_by: UserShort[];
+    likes: UserShort[];
+    liked_by: UserShort[];
     position: { longitude: number; latitude: number };
 	city: string;
     fame_rating: number;
@@ -24,3 +24,13 @@ export type UserExport = {
     connected: boolean;
     last_connection: number;
 };
+
+export type UserShort = {
+	first_name: string;
+    last_name: string;
+    username: string;
+	age: number;
+	profile_picture: string;
+	connected: boolean;
+	date: Date;
+}

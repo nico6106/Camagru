@@ -5,34 +5,104 @@ import { getUserFromRequest, verifyJWT } from "../auth/auth.service";
 import { AvailableTags } from "../../data/data-tags";
 import { EmptyPhoto, ErrorMsg, InvalidPhotoExtension, InvalidPhotoId, PhotoNbLimit, PhotoTooBig, SuccessMsg } from "../../shared/errors";
 import { extname } from 'path';
-import { UserExport } from "../../shared/userExport";
+import { UserExport, UserShort } from "../../shared/userExport";
 
+type UserLinkFromDB = {
+	id: number;
+	date: number;
+}
 
 export async function getMe(db: Database, req: Request, res: Response) {
 	
 	const user: TableUser | null = await getUserFromRequest(db, req);
 	if (!user)
-		return res.status(200).json({ message: "error", error: "not connected", user: null });
+		return res.status(200).json({ message: ErrorMsg, error: "not connected", user: null });
 	return res.status(200).json({ message: "success", user: user, tags: AvailableTags });
 }
 
 export async function getUserById(db: Database, req: Request, res: Response) {
 	const { id } = req.params;
 	const idNb = parseInt(id);
+	const meUser: TableUser | null = await getUserFromRequest(db, req);
+	const now = Date.now();
+	if (!meUser)
+		return res.status(200).json({ message: ErrorMsg, error: "not connected" });
+
 	const users: TableUser[] | null = await db.selectOneElemFromTable(
         TableUsersName,
         'id',
         idNb,
     );
     if (!(users && users.length === 1)) 
-		return res.status(200).json({ message: "error", error: "not connected", user: null });
-	const user: UserExport = transformUserDbInUserExport(users[0]);
+		return res.status(200).json({ message: ErrorMsg, error: "not connected", user: null });
+	const user: UserExport = await transformUserDbInUserExport(db, users[0]);
+
+	// reset
+	// await db.executeQueryNoArg("UPDATE users SET viewed = '[]'::JSONB WHERE id = 1;")
+	// await db.executeQueryNoArg("UPDATE users SET viewed = '[]'::JSONB WHERE id = 2;")
+	// await db.executeQueryNoArg("UPDATE users SET viewed_by = '[]'::JSONB WHERE id = 1;")
+	// await db.executeQueryNoArg("UPDATE users SET viewed_by = '[]'::JSONB WHERE id = 2;")
+
+	//handle visit profile (I visit a profile + profile i see get visited)
+	if (meUser.id !== user.id) {
+		console.log(meUser.id+' visited '+users[0].id)
+		await addElemToJSONData(db, meUser.viewed, {id: users[0].id, date: now}, meUser.id, 'viewed');
+		await addElemToJSONData(db, users[0].viewed_by, {id: meUser.id, date: now}, users[0].id, 'viewed_by')
+	}
+	
 	return res.status(200).json({ message: "success", userM: user });
 }
 
-export function transformUserDbInUserExport(userDB: TableUser): UserExport {
+export async function getListByTypeAndById(db: Database, req: Request, res: Response) {
+	const { option, id } = req.params;
+	const idNb = parseInt(id);
+
+	const users: TableUser[] | null = await db.selectOneElemFromTable(
+        TableUsersName,
+        'id',
+        idNb,
+    );
+
+    if (!(users && users.length === 1)) 
+		return res.status(200).json({ message: ErrorMsg, error: "user not found connected" });
+	
+	const allUsers: TableUser[] | null = await db.selectAllElemFromTable(TableUsersName);
+	let userShort: UserShort[] | null = [];
+
+	if (option === 'viewed')
+		userShort = transformListConnexionInUserShort(allUsers, users[0].viewed);
+	else if (option === 'viewed_by')
+		userShort = transformListConnexionInUserShort(allUsers, users[0].viewed_by);
+	else if (option === 'likes')
+		userShort = transformListConnexionInUserShort(allUsers, users[0].likes);
+	else if (option === 'liked_by')
+		userShort = transformListConnexionInUserShort(allUsers, users[0].liked_by);
+	
+	return res.status(200).json({ message: "success", userShort: userShort });
+}
+
+
+async function addElemToJSONData(db: Database, data: UserLinkFromDB[], newData: UserLinkFromDB, userId: number, field: string) {
+	// const dataParsed = JSON.parse(data);
+	console.log('json data field='+field+', user='+userId)
+	console.log(data);
+	
+	const newViewed: UserLinkFromDB[] = [...data, newData];
+	const newViewedJson = JSON.stringify(newViewed)
+	await db.AmendElemsFromTable(
+		TableUsersName,
+		'id',
+		userId,
+		[field],
+		[newViewedJson],
+	);
+}
+
+export async function transformUserDbInUserExport(db: Database, userDB: TableUser): Promise<UserExport> {
 	// const bio: string = userDB.biography.replace(/\n/g, '<br/>')
 	// console.log(bio)
+	const allUsers: TableUser[] | null = await db.selectAllElemFromTable(TableUsersName);
+
 	const user: UserExport = {
 		id: userDB.id,
 		first_name: userDB.first_name,
@@ -47,19 +117,50 @@ export function transformUserDbInUserExport(userDB: TableUser): UserExport {
 		pictures: userDB.pictures,
 		profile_picture: userDB.profile_picture,
 		blocked_user: userDB.blocked_user,
-		viewed: userDB.viewed,
-		viewed_by: userDB.viewed_by,
-		likes: userDB.likes,
-		liked_by: userDB.liked_by,
+		viewed: transformListConnexionInUserShort(allUsers, userDB.viewed),
+		viewed_by: transformListConnexionInUserShort(allUsers, userDB.viewed_by),
+		likes: transformListConnexionInUserShort(allUsers, userDB.likes),
+		liked_by: transformListConnexionInUserShort(allUsers, userDB.liked_by),
 		position: userDB.position,
 		fame_rating: userDB.fame_rating,
 		fake_account: userDB.fake_account,
 		connected: userDB.connected,
 		last_connection: userDB.last_connection,
 		city: 'Paris',
-		age: 30,
+		age: computeAgeUser(userDB.date_birth),
 	}
 	return user;
+}
+
+function transformListConnexionInUserShort(data: TableUser[] | null, userList: UserLinkFromDB[]): UserShort[] {
+	let newList: UserShort[] = [];
+	if (!data)
+		return newList;
+	for (let i = 0; i < userList.length; i++) {
+		const indexData: number = data.findIndex((elem) => elem.id === userList[i].id);
+		if (indexData !== -1) {
+			const newUserShort: UserShort = {
+				first_name: data[indexData].first_name,
+				last_name: data[indexData].last_name,
+				username: data[indexData].username,
+				age: computeAgeUser(data[indexData].date_birth),
+				profile_picture: data[indexData].profile_picture,
+				connected: data[indexData].connected,
+				date: new Date(userList[i].date),
+			}
+			newList.push(newUserShort);
+		}
+	}
+	return newList;
+}
+
+function computeAgeUser(dateBirth: Date): number {
+	const x = new Date();
+	const y = dateBirth;
+	const diff = x.getTime() - y.getTime();
+	const days = diff / (1000 * 60 * 60 * 24);
+	const age = days / 365;
+	return Math.trunc(age);
 }
 
 export async function updateSettings(db: Database, req: Request, res: Response) {
@@ -128,6 +229,7 @@ export async function uploadImg(db: Database, req: Request, res: Response) {
 export async function dowloadImg(db: Database, req: Request, res: Response) {
 	const { filename } = req.params;
 	const fullfilepath = givePathImage(filename);
+	console.log('here ?')
 
 	const fs = require('fs');
 	fs.stat(fullfilepath, (err: any, stats: any) => {
@@ -217,9 +319,13 @@ export const imageUpload = multer({
 				const name1 = file.originalname.split('.')[0];
 				const name = name1.split(' ').join('_');
 				const fileExtName = extname(file.originalname);
+				const randomName = Array(8)
+					.fill(null)
+					.map(() => Math.round(Math.random() * 10).toString(10))
+					.join('');
 				cb(
 					null,
-					new Date().valueOf() + 
+					randomName + 
 					'_' +
 					name + fileExtName
 				);

@@ -6,22 +6,30 @@ import ImageCarrousel from '../components/profile/ImageCarrousel';
 import { useUserContext } from '../context/UserContext';
 import { useEffect, useState } from 'react';
 import { RetourType } from '../types/response';
-import { UserExport } from '../shared/userExport';
+import { UserExport, UserShort } from '../shared/userExport';
 import PageTitleOneText from '../components/elems/PageTitleOneText';
 import GetUser from '../components/backend/GetUser';
 import { SuccessMsg } from '../shared/errors';
 import UserInfo from '../components/profile/UserInfo';
 import UserOptionProfile from '../components/profile/UserOptionsProfile';
+import GetListUsers from '../components/backend/GetListUsers';
+import ShowListUsers from '../components/profile/ShowUserList';
 
-function ProfilePage() {
+function DetailsUserListsPage() {
     const { user } = useUserContext();
-	const { id } = useParams();
+	const { option } = useParams();
 	const [retour, setRetour] = useState<RetourType | null>(null);
-	const [userM, setUserM] = useState<UserExport | null>(null);
+	const [userShort, setUserShort] = useState<UserShort[] | null>(null);
 	const [idUser, setIdUser] = useState<number>(-1)
-	
+	const [optionOk, setOptionOk] = useState<string>('');
+	const dataCheck: string[] = ['viewed', 'viewed_by', 'likes', 'liked_by'];
+
 	useEffect(() => {
 		setId();
+		if (!option || !dataCheck.includes(option))
+			return ;
+		else
+			setOptionOk(option);
 	}, [])
 
 	useEffect(() => {
@@ -30,18 +38,22 @@ function ProfilePage() {
 
 	useEffect(() => {
 		setId();
-	}, [id])
+		if (!option || !dataCheck.includes(option))
+			return ;
+		else
+			setOptionOk(option);
+	}, [option])
 
 	useEffect(() => {
 		getUserInfo();
 	}, [idUser])
 
 	function setId() {
-		if (user && id) {
-			const newId = parseInt(id)
-			if (!isNaN(newId) && newId > 0) {
-				setIdUser(newId)
-			}
+		if (user && 1) {
+			// const newId = parseInt(id)
+			// if (!isNaN(newId) && newId > 0) {
+				setIdUser(user.id)
+			// }
 		}
 		else if (user) {
 			setIdUser(user.id)
@@ -50,38 +62,24 @@ function ProfilePage() {
 
 	async function getUserInfo() {
 		if (!(idUser > 0)) return ;
-		const retour: RetourType | null = await GetUser(idUser);
+		const retour: RetourType | null = await GetListUsers(idUser, optionOk);
 		console.log(retour)
 		if (!retour) {
-			setUserM(null)
+			setUserShort(null)
 			return ;
 		}
-		if (retour.message === SuccessMsg && retour.userM) {
-			setUserM(retour.userM);
-			console.log(retour.userM)
+		if (retour.message === SuccessMsg && retour.userShort) {
+			setUserShort(retour.userShort);
+			console.log(retour.userShort)
 		}
 		else
-			setUserM(null);
+			setUserShort(null);
 	}
 
-    return user ? (userM ? (
+    return user ? (userShort ? (
 		<TramePage>
 			
-            <TitleSmall text="Profile" space='1' />
-
-			<div className="grid grid-rows-3 grid-cols-4 gap-1 border">
-				<div className="row-start-1 row-end-4 col-span-3 border">
-					<ImageCarrousel pictures={userM.pictures} />
-				</div>
-				<div className="row-start-1 row-end-4 col-span-1 border">
-					<UserOptionProfile userM={userM} />
-				</div>
-				<div className="row-start-4 row-end-6 col-span-3 border">
-					<UserInfo user={userM} />
-			</div>
-			</div>
-			
-			
+			<ShowListUsers option={optionOk} userShort={userShort} />
 			
         </TramePage>
 	) : (<PageTitleOneText
@@ -91,4 +89,4 @@ function ProfilePage() {
     ) : (<UserNotSignedIn />);
 }
 
-export default ProfilePage;
+export default DetailsUserListsPage;

@@ -49,10 +49,10 @@ export type TableUser = {
 	pictures: string[];
 	profile_picture: string;
 	blocked_user: number[];
-	viewed: { id: number; date: Date }[];
-	viewed_by: { id: number; date: Date }[];
-	likes: { id: number; date: Date }[];
-	liked_by: { id: number; date: Date }[];
+	viewed: { id: number; date: number }[];
+	viewed_by: { id: number; date: number }[];
+	likes: { id: number; date: number }[];
+	liked_by: { id: number; date: number }[];
 	position: { longitude: number; latitude: number};
 	fame_rating: number;
 	fame_evol: number;

@@ -17,3 +17,17 @@ export async function exec_SelectOneElemFromTable(db: Database, table: string, f
 		return null;
 	}
 }
+
+/*select all values in the table*/
+export async function exec_SelectAllElemFromTable(db: Database, table: string): Promise<TableUser[] | null> {
+	const query: string = `SELECT * FROM ${table}`;
+	try {
+		const retour = await db.executeQueryNoArg(query)
+		if (retour && retour.rowCount !== 0) {
+			return retour.rows;
+		}
+		return null;
+	} catch (err) {
+		return null;
+	}
+}
