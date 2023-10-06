@@ -16,7 +16,18 @@ export const TableUserQuery: string = `CREATE TABLE users (
 	interests VARCHAR(100)[] DEFAULT '{}'::VARCHAR(100)[],
 	biography TEXT DEFAULT '',
 	pictures VARCHAR(100)[] DEFAULT '{}'::VARCHAR(100)[],
-	profile_picture VARCHAR(100) DEFAULT ''
+	profile_picture VARCHAR(100) DEFAULT '',
+	blocked_user INT[] DEFAULT '{}'::INT[],
+	viewed JSONB DEFAULT '[]'::JSONB,
+	viewed_by JSONB DEFAULT '[]'::JSONB,
+	likes JSONB DEFAULT '[]'::JSONB,
+	liked_by JSONB DEFAULT '[]'::JSONB,
+	position JSON DEFAULT '{}'::JSON,
+	fame_rating INT DEFAULT 0,
+	fame_evol INT DEFAULT 0,
+	fake_account INT DEFAULT 0,
+	connected BOOLEAN DEFAULT FALSE,
+	last_connection TIMESTAMP
 	)`;
 
 export type TableUser = {
@@ -37,4 +48,15 @@ export type TableUser = {
 	biography: string;
 	pictures: string[];
 	profile_picture: string;
+	blocked_user: number[];
+	viewed: { id: number; date: Date }[];
+	viewed_by: { id: number; date: Date }[];
+	likes: { id: number; date: Date }[];
+	liked_by: { id: number; date: Date }[];
+	position: { longitude: number; latitude: number};
+	fame_rating: number;
+	fame_evol: number;
+	fake_account: number;
+	connected: boolean;
+	last_connection: number;
 }

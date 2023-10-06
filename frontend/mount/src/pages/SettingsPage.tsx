@@ -198,7 +198,7 @@ function SettingsPage() {
 
 					<ShowTags tagsUser={tagsUser} tagsPossible={tagsAll} setTagsUser={setTagsUser} />
 
-					<ShowPictures pictures={pictures} mainPicture={mainPicture} setPictures={setPictures} setMainPicture={setMainPicture} />
+					<ShowPictures pictures={pictures} mainPicture={mainPicture} setPictures={setPictures} setMainPicture={setMainPicture} setError={setError} />
 
 					<PhotoUploader pictures={pictures} setPictures={setPictures} setMainPicture={setMainPicture} setError={setError} />
 

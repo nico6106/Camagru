@@ -205,7 +205,7 @@ export async function setNewProfileImg(db: Database, req: Request, res: Response
 		return res.status(200).json({ message: ErrorMsg, error: InvalidPhotoId });
 
 	//update bdd
-	if (user.profile_picture === filename) {
+	if (user.profile_picture !== filename) {
 		db.AmendElemsFromTable(
 			TableUsersName,
 			'id',

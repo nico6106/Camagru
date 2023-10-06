@@ -7,9 +7,10 @@ type Prop = {
     mainPicture: string; //main picture
 	setPictures: any; 
 	setMainPicture: any;
+	setError: any;
 };
 
-function ShowImg({ picture, pictures, mainPicture, setPictures, setMainPicture }: Prop) {
+function ShowImg({ picture, pictures, mainPicture, setPictures, setMainPicture, setError }: Prop) {
     const link: string = `http://${process.env.REACT_APP_SERVER_ADDRESS}:3333/users/image/${picture}`;
 
 	async function deletePictureBackend() {
@@ -23,7 +24,9 @@ function ShowImg({ picture, pictures, mainPicture, setPictures, setMainPicture }
             console.log(response.data);
             if (response.data.message === SuccessMsg) {
                 setMainPicture(response.data.info)
+				setError('');
             } else {
+				setError(response.data.error);
                 //false
             }
             return response.data;
@@ -34,17 +37,18 @@ function ShowImg({ picture, pictures, mainPicture, setPictures, setMainPicture }
 
 	async function changeProfilePictureBackend() {
 		try {
-            const response = await axios.delete(
-                `http://${process.env.REACT_APP_SERVER_ADDRESS}:3333/users/image/${picture}`,
+            const response = await axios.get(
+                `http://${process.env.REACT_APP_SERVER_ADDRESS}:3333/users/setimage/${picture}`,
                 {
                     withCredentials: true,
                 },
             );
             console.log(response.data);
             if (response.data.message === SuccessMsg) {
-                setMainPicture(response.data.info)
+                setMainPicture(response.data.info);
+				setError('');
             } else {
-                //false
+				setError(response.data.error);
             }
             return response.data;
         } catch (error) {
@@ -73,7 +77,7 @@ function ShowImg({ picture, pictures, mainPicture, setPictures, setMainPicture }
                 {picture !== mainPicture && (
                     <label className="block text-sm font-semibold py-1 text-gray-900 dark:text-white w-full text-center bg-white bg-opacity-60 cursor-pointer">
                         Set main
-                        <button className="hidden"></button>
+                        <button className="hidden" onClick={handleOnSetMain}></button>
                     </label>
                 )}
                 <label className="block text-sm font-semibold py-1 text-gray-900 dark:text-white absolute bottom-0 left-0 w-full text-center bg-white bg-opacity-60 cursor-pointer">

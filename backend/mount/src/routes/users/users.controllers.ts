@@ -45,7 +45,7 @@ router.get('/image/:filename', checkConnected, imageFileFilter, (req: Request, r
 	return dowloadImg(db, req, res); 
 });
 
-router.patch('/image/:filename', checkConnected, imageFileFilter, (req: Request, res: Response) => {
+router.get('/setimage/:filename', checkConnected, imageFileFilter, (req: Request, res: Response) => {
 	return setNewProfileImg(db, req, res); 
 });
 

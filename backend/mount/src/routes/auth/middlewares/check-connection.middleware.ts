@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { verifyJWT } from "../auth.service";
+import { ErrorMsg } from "../../../shared/errors";
 
 export async function checkConnected(req: Request, res: Response, next: any) {
 	const token = req.cookies.signin_matcha;
@@ -11,10 +12,10 @@ export async function checkConnected(req: Request, res: Response, next: any) {
 				return ;
 			}
 			else
-				return res.status(200).json({ error: "Not connected" });
+				return res.status(200).json({ message: ErrorMsg, error: "Not connected" });
 		} catch (err) {
-			return res.status(200).json({ error: "Not connected" });
+			return res.status(200).json({ message: ErrorMsg, error: "Not connected" });
 		}
 	}
-	return res.status(200).json({ error: "Not connected" });
+	return res.status(200).json({ message: ErrorMsg, error: "Not connected" });
 }
