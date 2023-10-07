@@ -140,6 +140,7 @@ function transformListConnexionInUserShort(data: TableUser[] | null, userList: U
 		const indexData: number = data.findIndex((elem) => elem.id === userList[i].id);
 		if (indexData !== -1) {
 			const newUserShort: UserShort = {
+				id: data[indexData].id,
 				first_name: data[indexData].first_name,
 				last_name: data[indexData].last_name,
 				username: data[indexData].username,
