@@ -6,8 +6,10 @@ import { AvailableTags } from "../../data/data-tags";
 import { EmptyPhoto, ErrorMsg, InvalidPhotoExtension, InvalidPhotoId, PhotoNbLimit, PhotoTooBig, SuccessMsg } from "../../shared/errors";
 import { extname } from 'path';
 import { UserExport, UserShort } from "../../shared/userExport";
+import { computeFame } from "./users.fame.service";
+import { checkAlreadyLiked } from "./users.likes.service";
 
-type UserLinkFromDB = {
+export type UserLinkFromDB = {
 	id: number;
 	date: number;
 }
@@ -25,6 +27,9 @@ export async function getUserById(db: Database, req: Request, res: Response) {
 	const idNb = parseInt(id);
 	const meUser: TableUser | null = await getUserFromRequest(db, req);
 	const now = Date.now();
+	let userLiked: boolean = false;
+	let userMatched: boolean = false;
+
 	if (!meUser)
 		return res.status(200).json({ message: ErrorMsg, error: "not connected" });
 
@@ -37,20 +42,35 @@ export async function getUserById(db: Database, req: Request, res: Response) {
 		return res.status(200).json({ message: ErrorMsg, error: "not connected", user: null });
 	const user: UserExport = await transformUserDbInUserExport(db, users[0]);
 
-	// reset
-	// await db.executeQueryNoArg("UPDATE users SET viewed = '[]'::JSONB WHERE id = 1;")
-	// await db.executeQueryNoArg("UPDATE users SET viewed = '[]'::JSONB WHERE id = 2;")
-	// await db.executeQueryNoArg("UPDATE users SET viewed_by = '[]'::JSONB WHERE id = 1;")
-	// await db.executeQueryNoArg("UPDATE users SET viewed_by = '[]'::JSONB WHERE id = 2;")
-
 	//handle visit profile (I visit a profile + profile i see get visited)
 	if (meUser.id !== user.id) {
 		console.log(meUser.id+' visited '+users[0].id)
 		await addElemToJSONData(db, meUser.viewed, {id: users[0].id, date: now}, meUser.id, 'viewed');
-		await addElemToJSONData(db, users[0].viewed_by, {id: meUser.id, date: now}, users[0].id, 'viewed_by')
+		await addElemToJSONData(db, users[0].viewed_by, {id: meUser.id, date: now}, users[0].id, 'viewed_by');
+
+		//compute fame evol
+		await computeFame(db, 'viewed', users[0]);
+
+		//check if liked and matched
+		if (checkAlreadyLiked(meUser.likes, users[0].id))
+			userLiked = true;
+		if (userLiked && checkAlreadyLiked(users[0].likes, meUser.id))
+			userMatched = true;
 	}
 	
-	return res.status(200).json({ message: "success", userM: user });
+	return res.status(200).json({ message: "success", userM: user, userLiked: userLiked, userMatched: false });
+}
+
+export async function addElemToJSONData(db: Database, data: UserLinkFromDB[], newData: UserLinkFromDB, userId: number, field: string) {
+	const newViewed: UserLinkFromDB[] = [...data, newData];
+	const newViewedJson = JSON.stringify(newViewed)
+	await db.AmendElemsFromTable(
+		TableUsersName,
+		'id',
+		userId,
+		[field],
+		[newViewedJson],
+	);
 }
 
 export async function getListByTypeAndById(db: Database, req: Request, res: Response) {
@@ -81,26 +101,7 @@ export async function getListByTypeAndById(db: Database, req: Request, res: Resp
 	return res.status(200).json({ message: "success", userShort: userShort });
 }
 
-
-async function addElemToJSONData(db: Database, data: UserLinkFromDB[], newData: UserLinkFromDB, userId: number, field: string) {
-	// const dataParsed = JSON.parse(data);
-	console.log('json data field='+field+', user='+userId)
-	console.log(data);
-	
-	const newViewed: UserLinkFromDB[] = [...data, newData];
-	const newViewedJson = JSON.stringify(newViewed)
-	await db.AmendElemsFromTable(
-		TableUsersName,
-		'id',
-		userId,
-		[field],
-		[newViewedJson],
-	);
-}
-
 export async function transformUserDbInUserExport(db: Database, userDB: TableUser): Promise<UserExport> {
-	// const bio: string = userDB.biography.replace(/\n/g, '<br/>')
-	// console.log(bio)
 	const allUsers: TableUser[] | null = await db.selectAllElemFromTable(TableUsersName);
 
 	const user: UserExport = {
@@ -238,6 +239,7 @@ export async function dowloadImg(db: Database, req: Request, res: Response) {
 		  return res.status(200).json({ message: ErrorMsg, error: InvalidPhotoId });
 		}
 	  
+		console.log('sending picture')
 		return res.sendFile(fullfilepath);
 	  });
 }

@@ -19,6 +19,9 @@ function ProfilePage() {
 	const [retour, setRetour] = useState<RetourType | null>(null);
 	const [userM, setUserM] = useState<UserExport | null>(null);
 	const [idUser, setIdUser] = useState<number>(-1)
+	const [liked, setLiked] = useState<boolean>(false);
+	const [visible, setVisible] = useState<string>('carousel-2.svg')
+	// const [reloadPage, setRealoadPage] = useState<boolean>(false);
 	
 	useEffect(() => {
 		setId();
@@ -29,7 +32,9 @@ function ProfilePage() {
 	}, [user])
 
 	useEffect(() => {
+		
 		setId();
+		console.log('changement id='+id)
 	}, [id])
 
 	useEffect(() => {
@@ -40,11 +45,13 @@ function ProfilePage() {
 		if (user && id) {
 			const newId = parseInt(id)
 			if (!isNaN(newId) && newId > 0) {
-				setIdUser(newId)
+				setIdUser(newId);
+				// setRealoadPage(true);
 			}
 		}
 		else if (user) {
 			setIdUser(user.id)
+			// setRealoadPage(true);
 		}
 	}
 
@@ -52,16 +59,17 @@ function ProfilePage() {
 		if (!(idUser > 0)) return ;
 		const retour: RetourType | null = await GetUser(idUser);
 		console.log(retour)
-		if (!retour) {
-			setUserM(null)
-			return ;
-		}
-		if (retour.message === SuccessMsg && retour.userM) {
+		if (retour && retour.message === SuccessMsg && retour.userM) {
 			setUserM(retour.userM);
+			setVisible(retour.userM.profile_picture);
+			if (retour.userLiked)
+				setLiked(retour.userLiked);
 			console.log(retour.userM)
 		}
-		else
+		else {
 			setUserM(null);
+			setLiked(false);
+		}
 	}
 
     return user ? (userM ? (
@@ -71,10 +79,10 @@ function ProfilePage() {
 
 			<div className="grid grid-rows-3 grid-cols-4 gap-1 border">
 				<div className="row-start-1 row-end-4 col-span-3 border">
-					<ImageCarrousel pictures={userM.pictures} />
+					<ImageCarrousel pictures={userM.pictures} visible={visible} setVisible={setVisible} />
 				</div>
 				<div className="row-start-1 row-end-4 col-span-1 border">
-					<UserOptionProfile userM={userM} />
+					<UserOptionProfile userM={userM} liked={liked} setLiked={setLiked} />
 				</div>
 				<div className="row-start-4 row-end-6 col-span-3 border">
 					<UserInfo user={userM} />

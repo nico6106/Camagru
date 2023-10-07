@@ -10,4 +10,6 @@ export type RetourType = {
 	username?: string;
 	tags?: string[];
 	info?: string;
+	userLiked?: boolean, 
+	userMatched?: boolean,
 }

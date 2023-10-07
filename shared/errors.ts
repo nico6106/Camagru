@@ -2,6 +2,8 @@
 //message
 export const ErrorMsg: string = 'error';
 export const SuccessMsg: string = 'success';
+export const NotConnected: string = 'not connected';
+
 
 //sign in
 export const UnknownUsername: string = 'unknown user';
@@ -45,3 +47,9 @@ export const PhotoResolution: string = 'incorrect resolution for picture';
 //request image
 export const EmptyPhotoId: string = 'empty filename';
 export const InvalidPhotoId: string = 'invalid filename';
+
+//likes
+export const CannotLikeOtherPhotoEmpty: string = 'user does not have a profile picture';
+export const CannotLikeYourPhotoEmpty: string = 'you do not have a profile picture';
+export const ProfileAlreadyLiked: string = 'already in your like';
+export const ProfileNotLiked: string = 'cannot unlike because is not in your likes';

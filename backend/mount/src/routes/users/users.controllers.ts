@@ -8,6 +8,7 @@ import { validateSettings } from "./middlewares/check-settings.middleware";
 import { ErrorMsg, PhotoNbLimit } from "../../shared/errors";
 import { imageFileFilter } from "./middlewares/photo-middleware";
 import { validateUserIdFormat } from "./middlewares/check-userId.midleware";
+import { likeUser, unlikeUser } from "./users.likes.service";
 
 const express = require('express')
 const router = express.Router();
@@ -30,10 +31,6 @@ router.post('/updatesettings', checkConnected, validateSignUpBody, validateSetti
 	return updateSettings(db, req, res);
 })
 
-router.post('/photo', checkConnected, (req: Request, res: Response) => {
-	return getMe(db, req, res);
-})
-
 router.post('/image', checkConnected, async (req: Request, res: Response) => { 
 	const retour = await verifImgUser(db, req, res); 
 	if (!retour)
@@ -44,6 +41,14 @@ router.post('/image', checkConnected, async (req: Request, res: Response) => {
 		}
 		return uploadImg(db, req, res);
 	  });
+});
+
+router.get('/like/:id', checkConnected, validateUserIdFormat, (req: Request, res: Response) => {
+	return likeUser(db, req, res); 
+});
+
+router.get('/unlike/:id', checkConnected, validateUserIdFormat, (req: Request, res: Response) => {
+	return unlikeUser(db, req, res); 
 });
 
 router.get('/image/:filename', checkConnected, imageFileFilter, (req: Request, res: Response) => {

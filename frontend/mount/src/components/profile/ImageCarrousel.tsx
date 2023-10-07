@@ -3,16 +3,18 @@ import { useNavigate } from "react-router-dom";
 
 type Prop = {
 	pictures: string[];
+	visible: string;
+	setVisible: any;
 }
 
-function ImageCarrousel({ pictures }: Prop) {
+function ImageCarrousel({ pictures, visible, setVisible }: Prop) {
 	const [position, setPosition] = useState<number>(0);
-	const [visible, setVisible] = useState<string>('carousel-2.svg')
 
 	useEffect(() => {
 		if (pictures.length > 0)
 			setVisible(pictures[0]);
 	}, []);
+
 
 	function handleNext(event: any) {
 		event.preventDefault();
@@ -76,6 +78,7 @@ function ShowImgCarrousel({ picture, visible }: PropShowImg) {
 	const link: string = picture ? `http://${process.env.REACT_APP_SERVER_ADDRESS}:3333/users/image/${picture}` : '/carousel-2.svg';
 	const classDiv: string = `${(!picture || (picture === visible)) ? '' : 'hidden'} duration-700 ease-in-out`;
 	const navigate = useNavigate();
+
 	function onClickImg() {
 		navigate(`/profile/image/${picture}`);
 	}

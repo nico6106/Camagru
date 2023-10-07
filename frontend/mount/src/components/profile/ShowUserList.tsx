@@ -12,7 +12,7 @@ function ShowListUsers({ option, userShort }: Prop) {
 	const [nbStart, setNbStart] = useState<number>(1);
 	const [nbEnd, setNbEnd] = useState<number>(1);
 
-	const nbPerPage: number = 10;
+	const nbPerPage: number = 12;
 	const nbTotal: number = userShort.length;
 
 	useEffect(() => {
@@ -109,13 +109,13 @@ function ShowDate(dateUser: Date) {
 	return (<>
 		{dateShow.getFullYear()}
 		-
-		{dateShow.getMonth() + 1}
+		{dateShow.getMonth() + 1 < 10 && '0'}{dateShow.getMonth() + 1}
 		-
-		{dateShow.getDate() <= 10 && '0'}{dateShow.getDate()}
+		{dateShow.getDate() < 10 && '0'}{dateShow.getDate()}
 		{' at '} 
-		{dateShow.getHours()}
+		{dateShow.getHours() < 10 && '0'}{dateShow.getHours()}
 		:
-		{dateShow.getMinutes()}
+		{dateShow.getMinutes() < 10 && '0'}{dateShow.getMinutes()}
 		</>)
 }
 

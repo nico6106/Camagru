@@ -23,7 +23,7 @@ export const TableUserQuery: string = `CREATE TABLE users (
 	likes JSONB DEFAULT '[]'::JSONB,
 	liked_by JSONB DEFAULT '[]'::JSONB,
 	position JSON DEFAULT '{}'::JSON,
-	fame_rating INT DEFAULT 0,
+	fame_rating INT DEFAULT 4,
 	fame_evol INT DEFAULT 0,
 	fake_account INT DEFAULT 0,
 	connected BOOLEAN DEFAULT FALSE,

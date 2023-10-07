@@ -46,6 +46,8 @@ function MobileMenuBoutton({
 }
 
 function MobileMenu({ showMenu }: { showMenu: boolean }) {
+	const { user } = useUserContext();
+	const profileLink: string = `/profile/${user?.id}`;
     return showMenu ? (
         <>
             {/* <!-- Mobile menu, show/hide based on menu state. --> */}
@@ -54,7 +56,7 @@ function MobileMenu({ showMenu }: { showMenu: boolean }) {
                     {/* <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" --> */}
                     <ButtonLinkNavBar
                         text="Profile"
-                        page="/profile"
+                        page={profileLink}
                         selected={true}
                         block={true}
                     />
@@ -112,12 +114,14 @@ function ButtonLinkNavBar({
 }
 
 function LinkNavBar() {
+	const { user } = useUserContext();
+	const profileLink: string = `/profile/${user?.id}`;
     return (
         <div className="hidden sm:ml-6 sm:block">
             <div className="flex space-x-4">
                 <ButtonLinkNavBar
                     text="Profile"
-                    page="/profile"
+                    page={profileLink}
                     selected={true}
                     block={false}
                 />
@@ -195,6 +199,8 @@ function ButtonDropdownMenu({ text, page }: { text: string; page: string }) {
 }
 
 function DropdownMenuLinks() {
+	const { user } = useUserContext();
+	const profileLink: string = `/profile/${user?.id}`;
     return (
         <div
             className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
@@ -203,7 +209,7 @@ function DropdownMenuLinks() {
             aria-labelledby="user-menu-button"
         >
             {/* <!-- Active: "bg-gray-100", Not Active: "" --> */}
-            <ButtonDropdownMenu text="Your Profile" page="/profile" />
+            <ButtonDropdownMenu text="Your Profile" page={profileLink} />
             <ButtonDropdownMenu text="Settings" page="/settings" />
             <ButtonDropdownMenu text="Sign out" page="/signout" />
         </div>
