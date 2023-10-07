@@ -8,7 +8,7 @@ import { validateSettings } from "./middlewares/check-settings.middleware";
 import { ErrorMsg, PhotoNbLimit } from "../../shared/errors";
 import { imageFileFilter } from "./middlewares/photo-middleware";
 import { validateUserIdFormat } from "./middlewares/check-userId.midleware";
-import { likeUser, unlikeUser } from "./users.likes.service";
+import { likeUser, reportUser, unlikeUser } from "./users.likes.service";
 
 const express = require('express')
 const router = express.Router();
@@ -49,6 +49,10 @@ router.get('/like/:id', checkConnected, validateUserIdFormat, (req: Request, res
 
 router.get('/unlike/:id', checkConnected, validateUserIdFormat, (req: Request, res: Response) => {
 	return unlikeUser(db, req, res); 
+});
+
+router.get('/report/:id', checkConnected, validateUserIdFormat, (req: Request, res: Response) => {
+	return reportUser(db, req, res); 
 });
 
 router.get('/image/:filename', checkConnected, imageFileFilter, (req: Request, res: Response) => {

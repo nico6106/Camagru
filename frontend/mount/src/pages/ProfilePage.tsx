@@ -16,12 +16,11 @@ import UserOptionProfile from '../components/profile/UserOptionsProfile';
 function ProfilePage() {
     const { user } = useUserContext();
 	const { id } = useParams();
-	const [retour, setRetour] = useState<RetourType | null>(null);
 	const [userM, setUserM] = useState<UserExport | null>(null);
 	const [idUser, setIdUser] = useState<number>(-1)
 	const [liked, setLiked] = useState<boolean>(false);
+	const [showReported, setShowReported] = useState<boolean>(true);
 	const [visible, setVisible] = useState<string>('carousel-2.svg')
-	// const [reloadPage, setRealoadPage] = useState<boolean>(false);
 	
 	useEffect(() => {
 		setId();
@@ -32,9 +31,7 @@ function ProfilePage() {
 	}, [user])
 
 	useEffect(() => {
-		
 		setId();
-		console.log('changement id='+id)
 	}, [id])
 
 	useEffect(() => {
@@ -46,12 +43,10 @@ function ProfilePage() {
 			const newId = parseInt(id)
 			if (!isNaN(newId) && newId > 0) {
 				setIdUser(newId);
-				// setRealoadPage(true);
 			}
 		}
 		else if (user) {
 			setIdUser(user.id)
-			// setRealoadPage(true);
 		}
 	}
 
@@ -62,9 +57,10 @@ function ProfilePage() {
 		if (retour && retour.message === SuccessMsg && retour.userM) {
 			setUserM(retour.userM);
 			setVisible(retour.userM.profile_picture);
+			if (retour.userReported)
+				setShowReported(!retour.userReported);
 			if (retour.userLiked)
 				setLiked(retour.userLiked);
-			console.log(retour.userM)
 		}
 		else {
 			setUserM(null);
@@ -82,14 +78,12 @@ function ProfilePage() {
 					<ImageCarrousel pictures={userM.pictures} visible={visible} setVisible={setVisible} />
 				</div>
 				<div className="row-start-1 row-end-4 col-span-1 border">
-					<UserOptionProfile userM={userM} liked={liked} setLiked={setLiked} />
+					<UserOptionProfile userM={userM} liked={liked} setLiked={setLiked} showReported={showReported} setShowReported={setShowReported} />
 				</div>
 				<div className="row-start-4 row-end-6 col-span-3 border">
 					<UserInfo user={userM} />
 			</div>
 			</div>
-			
-			
 			
         </TramePage>
 	) : (<PageTitleOneText

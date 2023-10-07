@@ -29,14 +29,14 @@ function ShowListUsers({ option, userShort }: Prop) {
         'viewed_by',
         'likes',
         'liked_by',
-        'match',
+        'matches',
     ];
 	const typeEvent: string[] = [
         'viewed',
         'viewed by',
         'likes',
         'liked by',
-        'match',
+        'matches',
     ];
     const title: string[] = [
         'Profiles you viewed',
@@ -53,6 +53,8 @@ function ShowListUsers({ option, userShort }: Prop) {
         'You do not have any match yet',
     ];
     const dataIndex: number = dataCheck.findIndex((elem) => elem === option);
+
+	console.log('hrer')
 
     return (
         <>

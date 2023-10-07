@@ -3,7 +3,7 @@ import { RetourType } from '../../types/response';
 
 //get list of users 
 async function GetListUsers(id: number, param: string): Promise<RetourType | null> {
-    const dataCheck: string[] = ['viewed', 'viewed_by', 'likes', 'liked_by'];
+    const dataCheck: string[] = ['viewed', 'viewed_by', 'likes', 'liked_by', 'matches'];
 	if (!dataCheck.includes(param))
 		return null;
 	try {

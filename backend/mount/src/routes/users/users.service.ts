@@ -29,6 +29,7 @@ export async function getUserById(db: Database, req: Request, res: Response) {
 	const now = Date.now();
 	let userLiked: boolean = false;
 	let userMatched: boolean = false;
+	let userReported: boolean = false;
 
 	if (!meUser)
 		return res.status(200).json({ message: ErrorMsg, error: "not connected" });
@@ -56,9 +57,13 @@ export async function getUserById(db: Database, req: Request, res: Response) {
 			userLiked = true;
 		if (userLiked && checkAlreadyLiked(users[0].likes, meUser.id))
 			userMatched = true;
+
+		//check if reported
+		if (checkAlreadyLiked(users[0].fake_account, meUser.id))
+			userReported = true;
 	}
 	
-	return res.status(200).json({ message: "success", userM: user, userLiked: userLiked, userMatched: false });
+	return res.status(200).json({ message: "success", userM: user, userLiked: userLiked, userMatched: false, userReported: userReported });
 }
 
 export async function addElemToJSONData(db: Database, data: UserLinkFromDB[], newData: UserLinkFromDB, userId: number, field: string) {
@@ -97,8 +102,27 @@ export async function getListByTypeAndById(db: Database, req: Request, res: Resp
 		userShort = transformListConnexionInUserShort(allUsers, users[0].likes);
 	else if (option === 'liked_by')
 		userShort = transformListConnexionInUserShort(allUsers, users[0].liked_by);
+	else if (option === 'matches') {
+		const matchedUsers: UserLinkFromDB[] = identifyMatches(users[0].likes, users[0].liked_by);
+		userShort = transformListConnexionInUserShort(allUsers, matchedUsers);
+	}
 	
 	return res.status(200).json({ message: "success", userShort: userShort });
+}
+
+function identifyMatches(userLikes: UserLinkFromDB[], userLikedBy: UserLinkFromDB[]): UserLinkFromDB[] {
+	let matchedUsers: UserLinkFromDB[] = [];
+	const idMatched: number[] = userLikes.map((elem) => elem.id);
+	for (let i = 0; i < userLikedBy.length; i++) {
+		if (idMatched.includes(userLikedBy[i].id)) {
+			const newElem: UserLinkFromDB = {
+				id: userLikedBy[i].id,
+				date: userLikedBy[i].date,
+			}
+			matchedUsers.push(newElem);
+		}
+	}
+	return matchedUsers;
 }
 
 export async function transformUserDbInUserExport(db: Database, userDB: TableUser): Promise<UserExport> {
@@ -124,7 +148,7 @@ export async function transformUserDbInUserExport(db: Database, userDB: TableUse
 		liked_by: transformListConnexionInUserShort(allUsers, userDB.liked_by),
 		position: userDB.position,
 		fame_rating: userDB.fame_rating,
-		fake_account: userDB.fake_account,
+		fake_account: userDB.fake_account.length,
 		connected: userDB.connected,
 		last_connection: userDB.last_connection,
 		city: 'Paris',

@@ -2,7 +2,7 @@ import { TableUser, TableUsersName } from "../../database/data";
 import { Database } from "../../database/db";
 import { Request, Response } from "express";
 import { getUserFromRequest } from "../auth/auth.service";
-import { ErrorMsg, NotConnected, ProfileAlreadyLiked, ProfileNotLiked, SuccessMsg, UnknownUsername } from "../../shared/errors";
+import { CannotLikeOtherPhotoEmpty, CannotLikeYourPhotoEmpty, ErrorMsg, NotConnected, ProfileAlreadyLiked, ProfileNotLiked, SuccessMsg, UnknownUsername } from "../../shared/errors";
 import { UserLinkFromDB, addElemToJSONData } from "./users.service";
 import { computeFame } from "./users.fame.service";
 
@@ -26,6 +26,11 @@ export async function likeUser(db: Database, req: Request, res: Response) {
 		console.log(meUser.id+' likes '+users[0].id);
 		if (checkAlreadyLiked(meUser.likes, users[0].id))
 			return res.status(200).json({ message: ErrorMsg, error: ProfileAlreadyLiked });
+
+		if (users[0].pictures.length === 0)
+			return res.status(200).json({ message: ErrorMsg, error: CannotLikeOtherPhotoEmpty });
+		if (meUser.pictures.length === 0)
+			return res.status(200).json({ message: ErrorMsg, error: CannotLikeYourPhotoEmpty });
 
 		await addElemToJSONData(db, meUser.likes, {id: users[0].id, date: now}, meUser.id, 'likes');
 		await addElemToJSONData(db, users[0].liked_by, {id: meUser.id, date: now}, users[0].id, 'liked_by');
@@ -87,4 +92,33 @@ export async function deleteElemToJSONData(db: Database, data: UserLinkFromDB[],
 		[field],
 		[newViewedJson],
 	);
+}
+
+export async function reportUser(db: Database, req: Request, res: Response) {
+	const { id } = req.params;
+	const idNb = parseInt(id);
+	const meUser: TableUser | null = await getUserFromRequest(db, req);
+	const now = Date.now();
+	if (!meUser)
+		return res.status(200).json({ message: ErrorMsg, error: NotConnected });
+
+	const users: TableUser[] | null = await db.selectOneElemFromTable(
+        TableUsersName,
+        'id',
+        idNb,
+    );
+    if (!(users && users.length === 1)) 
+		return res.status(200).json({ message: ErrorMsg, error: UnknownUsername });
+
+	if (meUser.id !== users[0].id) {
+		console.log(meUser.id+' report user '+users[0].id);
+		if (checkAlreadyLiked(users[0].fake_account, meUser.id))
+			return res.status(200).json({ message: ErrorMsg, error: 'profile already reported' });
+		
+		await addElemToJSONData(db, users[0].fake_account, {id: meUser.id, date: now}, users[0].id, 'fake_account');
+
+		//compute fame evol
+		await computeFame(db, 'fake', users[0]);
+	}
+	return res.status(200).json({ message: SuccessMsg });
 }

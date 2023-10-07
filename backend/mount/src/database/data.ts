@@ -25,7 +25,7 @@ export const TableUserQuery: string = `CREATE TABLE users (
 	position JSON DEFAULT '{}'::JSON,
 	fame_rating INT DEFAULT 4,
 	fame_evol INT DEFAULT 0,
-	fake_account INT DEFAULT 0,
+	fake_account JSONB DEFAULT '[]'::JSONB,
 	connected BOOLEAN DEFAULT FALSE,
 	last_connection TIMESTAMP
 	)`;
@@ -56,7 +56,7 @@ export type TableUser = {
 	position: { longitude: number; latitude: number};
 	fame_rating: number;
 	fame_evol: number;
-	fake_account: number;
+	fake_account: { id: number; date: number }[];
 	connected: boolean;
 	last_connection: number;
 }

@@ -22,7 +22,7 @@ function DetailsUserListsPage() {
 	const [userShort, setUserShort] = useState<UserShort[] | null>(null);
 	const [idUser, setIdUser] = useState<number>(-1)
 	const [optionOk, setOptionOk] = useState<string>('');
-	const dataCheck: string[] = ['viewed', 'viewed_by', 'likes', 'liked_by'];
+	const dataCheck: string[] = ['viewed', 'viewed_by', 'likes', 'liked_by', 'matches'];
 
 	useEffect(() => {
 		setId();
@@ -76,6 +76,7 @@ function DetailsUserListsPage() {
 			setUserShort(null);
 	}
 
+	
     return user ? (userShort ? (
 		<TramePage>
 			
