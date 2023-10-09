@@ -45,7 +45,7 @@ function TrackingOnline() {
                 idConnection: socket.id,
             }
             socket.emit('ping', userObja);
-        }, 500);
+        }, 1000);
 
         return () => {
             socket.off('ping');

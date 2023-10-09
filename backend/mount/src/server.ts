@@ -1,5 +1,6 @@
 import { Database } from "./database/db"
 import { Request, Response } from 'express';
+import { handlingSocket } from "./routes/socket/socket.controller";
 
 const cookieParser = require('cookie-parser')
 
@@ -15,9 +16,6 @@ const bodyParser = require('body-parser');
 app.use(bodyParser.json()); // Pour les données de requête JSON
 app.use(bodyParser.urlencoded({ extended: true })); // Pour les données de formulaire
 
-// const morgan = require('morgan');
-// app.use(morgan('dev'));
-
 //cors
 var cors = require('cors');
 app.use(cors({
@@ -25,13 +23,18 @@ app.use(cors({
 	methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
+	optionsSuccessStatus: 204,
 }));
-
 
 //DB
 const db = new Database;
 db.initConnectionDb();
 
+//socket-io
+const http = require('http');
+const server = http.createServer(app);
+handlingSocket(server);
+  
 //Routes
 const authRouter = require('./routes/auth/auth.controllers')
 app.use('/auth', authRouter)
@@ -48,4 +51,5 @@ function logger(req: Request, res: Response, next: any) {
 	next()
 }
 
-app.listen(3333)
+server.listen(3333, () => {
+});
