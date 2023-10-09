@@ -30,6 +30,7 @@ export async function getUserById(db: Database, req: Request, res: Response) {
 	let userLiked: boolean = false;
 	let userMatched: boolean = false;
 	let userReported: boolean = false;
+	let userBlocked: boolean  = false;
 
 	if (!meUser)
 		return res.status(200).json({ message: ErrorMsg, error: "not connected" });
@@ -61,9 +62,12 @@ export async function getUserById(db: Database, req: Request, res: Response) {
 		//check if reported
 		if (checkAlreadyLiked(users[0].fake_account, meUser.id))
 			userReported = true;
+
+		//check if blocked
+		userBlocked =  meUser.blocked_user.includes(users[0].id);
 	}
 	
-	return res.status(200).json({ message: "success", userM: user, userLiked: userLiked, userMatched: false, userReported: userReported });
+	return res.status(200).json({ message: "success", userM: user, userLiked: userLiked, userMatched: false, userReported: userReported, userBlocked: userBlocked });
 }
 
 export async function addElemToJSONData(db: Database, data: UserLinkFromDB[], newData: UserLinkFromDB, userId: number, field: string) {

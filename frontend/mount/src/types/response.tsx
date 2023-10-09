@@ -13,4 +13,5 @@ export type RetourType = {
 	userLiked?: boolean, 
 	userMatched?: boolean,
 	userReported?: boolean,
+	userBlocked?: boolean,
 }

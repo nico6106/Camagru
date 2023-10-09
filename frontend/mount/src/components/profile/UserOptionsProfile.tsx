@@ -4,7 +4,7 @@ import { useUserContext } from "../../context/UserContext";
 import axios from "axios";
 import { SuccessMsg } from "../../shared/errors";
 import ShowAlert from "../elems/ShowAlert";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ShowFameUser from "./ShowFameUser";
 import Button from "../elems/Button";
 
@@ -14,13 +14,19 @@ type Prop = {
 	setLiked: any;
 	showReported: boolean;
 	setShowReported: any
+	blocked: boolean;
+	setBlocked: any;
 }
 
-function UserOptionProfile({ userM, liked, setLiked, showReported, setShowReported }: Prop) {
+function UserOptionProfile({ userM, liked, setLiked, showReported, setShowReported, blocked, setBlocked }: Prop) {
 	const { user } = useUserContext();
 	const [alertMsg, setAlertMsg] = useState<string>('');
+	const [blockedMsg, setBlockedMsg] = useState<string>('Block user');
 	const [showAlert, setShowAlert] = useState<boolean>(true);
 	
+	useEffect(() => {
+		blocked && setBlockedMsg('Unblock user');
+	}, []);
 
 	function handleOnClick(event: any) {
 		event.preventDefault();
@@ -31,6 +37,12 @@ function UserOptionProfile({ userM, liked, setLiked, showReported, setShowReport
 		event.preventDefault();
 		execBackendReportUser();
 		setShowReported(false);
+	}
+
+	function handleOnBlockUser(event: any) {
+		event.preventDefault();
+		execBackendBlockUser();
+		setBlocked(!blocked);
 	}
 
 	async function execBackend() {
@@ -48,6 +60,37 @@ function UserOptionProfile({ userM, liked, setLiked, showReported, setShowReport
 					setLiked(false);
 				else
 					setLiked(true);
+				setShowAlert(false);
+			}
+			else {
+				setAlertMsg(response.data.error);
+				setShowAlert(true);
+			}
+		} catch (error) {
+			//to handle ?
+			return null;
+		}
+	}
+
+	async function execBackendBlockUser() {
+		try {
+			const blockedRequest: string = blocked ? 'unblock' : 'block'
+			const response = await axios.get(
+				`http://${process.env.REACT_APP_SERVER_ADDRESS}:3333/users/${blockedRequest}/${userM.id}`,
+				{
+					withCredentials: true,
+				},
+			);
+			console.log(response.data);
+			if (response.data.message === SuccessMsg) {
+				if (blocked) {
+					setBlockedMsg('Block user')
+					setBlocked(false);
+				}
+				else {
+					setBlockedMsg('Unblock user')
+					setBlocked(true);
+				}
 				setShowAlert(false);
 			}
 			else {
@@ -97,6 +140,7 @@ function UserOptionProfile({ userM, liked, setLiked, showReported, setShowReport
 		{userM.id !== user.id && (<>
 			<div><ButtonLike liked={liked} handleOnClick={handleOnClick} /></div>
 			{showReported &&<div><Button text='Report user' onClick={handleOnReportUser} /></div>}
+			<div><Button text={blockedMsg} onClick={handleOnBlockUser} /></div>
 			</>)}
 	</div></>)
 }

@@ -10,8 +10,11 @@ function UserInfo({ user }: Prop) {
     return (
         <div>
             <h5 className="text-xl font-bold dark:text-white">{user.first_name} {user.last_name}, {user.age}</h5>
-            <p className="mb-3 text-lg text-gray-500 md:text-xl dark:text-gray-400">
+            <p className="mb-0 text-lg text-gray-500 md:text-xl dark:text-gray-400">
                 {user.city}
+            </p>
+			<p className="mb-3 text-lg text-gray-500 md:text-xl dark:text-gray-400">
+                Gender: {user.gender}, interested in: {user.preference}
             </p>
             <p className="text-gray-500 dark:text-gray-400" dangerouslySetInnerHTML={htmlText}></p>
 			<UserTags tags={user.interests} />

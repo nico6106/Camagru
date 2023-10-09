@@ -9,6 +9,7 @@ import { ErrorMsg, PhotoNbLimit } from "../../shared/errors";
 import { imageFileFilter } from "./middlewares/photo-middleware";
 import { validateUserIdFormat } from "./middlewares/check-userId.midleware";
 import { likeUser, reportUser, unlikeUser } from "./users.likes.service";
+import { blockUser, unblockUser } from "./users.block.service";
 
 const express = require('express')
 const router = express.Router();
@@ -49,6 +50,14 @@ router.get('/like/:id', checkConnected, validateUserIdFormat, (req: Request, res
 
 router.get('/unlike/:id', checkConnected, validateUserIdFormat, (req: Request, res: Response) => {
 	return unlikeUser(db, req, res); 
+});
+
+router.get('/block/:id', checkConnected, validateUserIdFormat, (req: Request, res: Response) => {
+	return blockUser(db, req, res); 
+});
+
+router.get('/unblock/:id', checkConnected, validateUserIdFormat, (req: Request, res: Response) => {
+	return unblockUser(db, req, res); 
 });
 
 router.get('/report/:id', checkConnected, validateUserIdFormat, (req: Request, res: Response) => {

@@ -53,3 +53,7 @@ export const CannotLikeOtherPhotoEmpty: string = 'user does not have a profile p
 export const CannotLikeYourPhotoEmpty: string = 'you do not have a profile picture';
 export const ProfileAlreadyLiked: string = 'already in your like';
 export const ProfileNotLiked: string = 'cannot unlike because is not in your likes';
+
+//block
+export const AlreadyBlocked: string = 'profile already blocked';
+export const ProfileNotBlocked: string = 'cannot unblock because profile not blocked';

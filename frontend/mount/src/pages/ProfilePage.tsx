@@ -19,6 +19,7 @@ function ProfilePage() {
 	const [userM, setUserM] = useState<UserExport | null>(null);
 	const [idUser, setIdUser] = useState<number>(-1)
 	const [liked, setLiked] = useState<boolean>(false);
+	const [blocked, setBlocked] = useState<boolean>(false);
 	const [showReported, setShowReported] = useState<boolean>(true);
 	const [visible, setVisible] = useState<string>('carousel-2.svg')
 	
@@ -61,6 +62,8 @@ function ProfilePage() {
 				setShowReported(!retour.userReported);
 			if (retour.userLiked)
 				setLiked(retour.userLiked);
+			if (retour.userBlocked)
+				setBlocked(retour.userBlocked);
 		}
 		else {
 			setUserM(null);
@@ -78,7 +81,14 @@ function ProfilePage() {
 					<ImageCarrousel pictures={userM.pictures} visible={visible} setVisible={setVisible} />
 				</div>
 				<div className="row-start-1 row-end-4 col-span-1 border">
-					<UserOptionProfile userM={userM} liked={liked} setLiked={setLiked} showReported={showReported} setShowReported={setShowReported} />
+					<UserOptionProfile 
+						userM={userM} 
+						liked={liked} 
+						setLiked={setLiked} 
+						showReported={showReported} 
+						setShowReported={setShowReported}
+						blocked={blocked}
+						setBlocked={setBlocked} />
 				</div>
 				<div className="row-start-4 row-end-6 col-span-3 border">
 					<UserInfo user={userM} />
