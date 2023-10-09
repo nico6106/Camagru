@@ -1,6 +1,5 @@
 import { useContext, useEffect, useState } from "react";
 import { WebsocketContext } from "../../context/WebsocketContext";
-import { ShowDate } from "./ShowUserList";
 
 type Prop = {
 	userId: number;
@@ -42,9 +41,10 @@ function ShowIsOnline({ userId, initStatus, lastSeen }: Prop) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-	return isConnected ? (<>Online</>) : (<>last seen: {ShowDate1(lastSeenU)}</>);
+	return isConnected ? (<>Online</>) : (<>last seen: {ShowDate(lastSeenU)}</>);
 }
-function ShowDate1(dateUser: number) {
+
+function ShowDate(dateUser: number) {
 	const dateShow: Date = new Date(dateUser);
 	return (<>
 		{dateShow.getFullYear()}
