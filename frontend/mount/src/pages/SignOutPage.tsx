@@ -10,7 +10,6 @@ function SignOutPage() {
 	useEffect(() => {
 		signOutBackend();
 		logoutUser();
-		navigate('/');
 	}, [])
 	async function signOutBackend() {
         try {
@@ -21,6 +20,7 @@ function SignOutPage() {
                 },
             );
             console.log(response.data);
+			navigate('/');
             return response.data;
         } catch (error) {
             // setRetour(null);
