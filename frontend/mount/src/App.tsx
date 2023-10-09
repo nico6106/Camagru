@@ -14,11 +14,13 @@ import Footer from './components/Footer';
 import ProfilePage from './pages/ProfilePage';
 import ViewImage from './pages/ViewOneImage';
 import DetailsUserListsPage from './pages/DetailsUserListsPage';
+import TrackingOnline from './components/auth/TrackingOnline';
 
 function App() {
     return (
         <UserProvider>
             <Router>
+				<TrackingOnline />
                 <NavBar />
                 <Routes>
                     <Route path="/" element={<HomePage />} />
