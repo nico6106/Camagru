@@ -5,7 +5,7 @@ export const socket = io(
     `http://${process.env.REACT_APP_SERVER_ADDRESS}:3333/`, {
 		withCredentials: true,
 		extraHeaders: {
-			'Authorization': 'Bearer YourAuthToken', // Si vous avez besoin d'envoyer un token d'authentification
+			'Authorization': 'Bearer YourAuthToken',
 		},
 		
 	}

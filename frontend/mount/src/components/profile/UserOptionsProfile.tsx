@@ -7,6 +7,7 @@ import ShowAlert from "../elems/ShowAlert";
 import { useEffect, useState } from "react";
 import ShowFameUser from "./ShowFameUser";
 import Button from "../elems/Button";
+import ShowIsOnline from "./ShowIsOnline";
 
 type Prop = {
 	userM: UserExport;
@@ -138,6 +139,7 @@ function UserOptionProfile({ userM, liked, setLiked, showReported, setShowReport
 			<div><Link to='/profile/option/likes'>Who you like</Link></div>
 			</>)}
 		{userM.id !== user.id && (<>
+			<div><ShowIsOnline userId={userM.id} initStatus={userM.connected} lastSeen={userM.last_connection} /> </div>
 			<div><ButtonLike liked={liked} handleOnClick={handleOnClick} /></div>
 			{showReported &&<div><Button text='Report user' onClick={handleOnReportUser} /></div>}
 			<div><Button text={blockedMsg} onClick={handleOnBlockUser} /></div>

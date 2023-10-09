@@ -259,7 +259,6 @@ export async function uploadImg(db: Database, req: Request, res: Response) {
 export async function dowloadImg(db: Database, req: Request, res: Response) {
 	const { filename } = req.params;
 	const fullfilepath = givePathImage(filename);
-	console.log('here ?')
 
 	const fs = require('fs');
 	fs.stat(fullfilepath, (err: any, stats: any) => {
@@ -267,7 +266,6 @@ export async function dowloadImg(db: Database, req: Request, res: Response) {
 		  return res.status(200).json({ message: ErrorMsg, error: InvalidPhotoId });
 		}
 	  
-		console.log('sending picture')
 		return res.sendFile(fullfilepath);
 	  });
 }

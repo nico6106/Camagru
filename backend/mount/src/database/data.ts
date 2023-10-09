@@ -22,6 +22,7 @@ export const TableUserQuery: string = `CREATE TABLE users (
 	viewed_by JSONB DEFAULT '[]'::JSONB,
 	likes JSONB DEFAULT '[]'::JSONB,
 	liked_by JSONB DEFAULT '[]'::JSONB,
+	matches INT[] DEFAULT '{}'::INT[],
 	position JSON DEFAULT '{}'::JSON,
 	fame_rating INT DEFAULT 4,
 	fame_evol INT DEFAULT 0,
@@ -53,6 +54,7 @@ export type TableUser = {
 	viewed_by: { id: number; date: number }[];
 	likes: { id: number; date: number }[];
 	liked_by: { id: number; date: number }[];
+	matches: number[];
 	position: { longitude: number; latitude: number};
 	fame_rating: number;
 	fame_evol: number;

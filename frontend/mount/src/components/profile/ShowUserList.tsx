@@ -106,7 +106,7 @@ function IndivUser({ userShort }: PropIndivUser) {
     );
 }
 
-function ShowDate(dateUser: Date) {
+export function ShowDate(dateUser: Date) {
 	const dateShow: Date = new Date(dateUser);
 	return (<>
 		{dateShow.getFullYear()}

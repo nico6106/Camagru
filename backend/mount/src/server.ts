@@ -33,7 +33,7 @@ db.initConnectionDb();
 //socket-io
 const http = require('http');
 const server = http.createServer(app);
-handlingSocket(server);
+handlingSocket(server, db);
   
 //Routes
 const authRouter = require('./routes/auth/auth.controllers')

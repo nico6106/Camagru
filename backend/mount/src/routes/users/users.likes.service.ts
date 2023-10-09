@@ -37,6 +37,14 @@ export async function likeUser(db: Database, req: Request, res: Response) {
 
 		//compute fame evol
 		await computeFame(db, 'liked', users[0]);
+
+		//check match
+		if (users[0].likes.findIndex((elem) => elem.id === meUser.id) !== -1) {
+			if (!meUser.matches.includes(users[0].id)) 
+				await db.AmendElemsFromTable(TableUsersName, 'id', meUser.id, ['matches'], [[...meUser.matches, users[0].id]]);
+			if (!users[0].matches.includes(meUser.id))
+				await db.AmendElemsFromTable(TableUsersName, 'id', users[0].id, ['matches'], [[...users[0].matches, meUser.id]]);
+		}
 	}
 	return res.status(200).json({ message: SuccessMsg });
 }
@@ -78,6 +86,16 @@ export async function unlikeUser(db: Database, req: Request, res: Response) {
 
 		//compute fame evol
 		await computeFame(db, 'unliked', users[0]);
+
+		//handle unmatch
+		if (meUser.matches.includes(users[0].id)) {
+			const newListMacthesMe: number[] = meUser.matches.filter((elem) => elem !== users[0].id);
+			await db.AmendElemsFromTable(TableUsersName, 'id', meUser.id, ['matches'], [newListMacthesMe]);
+		}
+		if (users[0].matches.includes(meUser.id)) {
+			const newListMacthesHim: number[] = users[0].matches.filter((elem) => elem !== meUser.id);
+			await db.AmendElemsFromTable(TableUsersName, 'id', users[0].id, ['matches'], [newListMacthesHim]);
+		}
 	}
 	return res.status(200).json({ message: SuccessMsg });
 }
