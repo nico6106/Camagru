@@ -163,6 +163,51 @@ function LogoNavBar() {
     );
 }
 
+function ButtonChat() {
+	const navigate = useNavigate();
+	function handleClickNotif(event: any) {
+		event.preventDefault();
+		navigate('/chat')
+	}
+	return (<button
+            type="button"
+            className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+			onClick={handleClickNotif}
+		>
+            <span className="absolute -inset-1.5"></span>
+            <span className="sr-only">View notifications</span>
+            <svg
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 20 18"
+                strokeWidth="1.5"
+                stroke="currentColor"
+                aria-hidden="true"
+            >
+                <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M5 5h9M5 9h5m8-8H2a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h4l3.5 4 3.5-4h5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1Z"
+                />
+            </svg>
+			<NbNotif />
+
+        </button>);
+}
+
+{/* <button
+            type="button"
+            className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+			onClick={handleClickNotif}
+		>
+            <span className="absolute -inset-2.5"></span>
+			<span className="sr-only">View notifications</span>
+            <svg className="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 18">
+    			<path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 5h9M5 9h5m8-8H2a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h4l3.5 4 3.5-4h5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1Z"/>
+			</svg>
+
+        </button> */}
+
 function ButtonNotifications() {
 	const navigate = useNavigate();
 	function handleClickNotif(event: any) {
@@ -305,6 +350,7 @@ function NavBar() {
                         <LinkNavBar />
                     </div>
                     <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+						{user && <ButtonChat />}
                         {user && <ButtonNotifications />}
                         <DropdownMenu />
                     </div>
