@@ -42,11 +42,11 @@ export async function getNotifs(db: Database, req: Request, res: Response) {
 			let text: string = '';
 			if (elem.notif === 'viewed')
 				text = `${allUsers[indexUserTmp].first_name} viewed your profile`;
-			else if (elem.notif === 'viewed')
+			else if (elem.notif === 'like')
 				text = `${allUsers[indexUserTmp].first_name} liked your profile`;
-			else if (elem.notif === 'viewed')
+			else if (elem.notif === 'unlike')
 				text = `${allUsers[indexUserTmp].first_name} unliked your profile`;
-			else if (elem.notif === 'viewed')
+			else if (elem.notif === 'match')
 				text = `You just matched with ${allUsers[indexUserTmp].first_name}`;
 
 			const newElem: FormatNotif = {
@@ -60,7 +60,7 @@ export async function getNotifs(db: Database, req: Request, res: Response) {
 		}
 	}
 
-	//remet a zero les unread notifs
+	//remet a zero les unread notifs 
 	await db.AmendElemsFromTable(
 		TableUsersName,
 		'id',

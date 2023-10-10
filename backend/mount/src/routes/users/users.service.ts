@@ -70,6 +70,10 @@ export async function getUserById(db: Database, req: Request, res: Response) {
 
 		//handle notif
 		handleNotificationCreation(db, res, 'viewed', users[0], meUser.id);
+
+		//add user to viewer (so that user can see if this user disconnect/connect)
+		const connectedUsers: OnlineUsers = res.locals.users;
+		connectedUsers.addViewerToUser(users[0].id, meUser.id);
 	}
 
 	return res.status(200).json({ message: "success", userM: user, userLiked: userLiked, userMatched: false, userReported: userReported, userBlocked: userBlocked });

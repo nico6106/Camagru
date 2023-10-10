@@ -125,9 +125,7 @@ export class OnlineUsers {
 		if (this.users[index].connected === false) return ; //not connected
 		if (this.users[index].sockets.length === 0) return ; //not connected
 		for (let i = 0; i < this.users[index].sockets.length; i++) {
-			this.io.to(this.users[index].sockets[i]).emit(title, body, (error: any) => { 
-				console.log('perso msg')
-				console.log(error)});
+			this.io.to(this.users[index].sockets[i]).emit(title, body);
 			console.log('send msg to '+toId+':'+this.users[index].sockets[i]+', say:'+title+'='+body.idUser+'-'+body.type);
 		}
 	}
@@ -172,5 +170,14 @@ export class OnlineUsers {
 				}
 			}
 		}
+	}
+
+	addViewerToUser(idUserViewed: number, idUserViewer: number) {
+		const indexViewer: number = this.users.findIndex((elem) => elem.idUser === idUserViewer)
+		const indexViewed: number = this.users.findIndex((elem) => elem.idUser === idUserViewed)
+		if (indexViewer === -1 || indexViewed === -1) return ;
+		const findIndex: number = this.users[indexViewed].matches.findIndex((elem) => elem === idUserViewer);
+		if (findIndex !== -1) return ;
+		this.users[indexViewed].matches.push(idUserViewer);
 	}
 } 
