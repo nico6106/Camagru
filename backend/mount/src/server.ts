@@ -1,6 +1,8 @@
 import { Database } from "./database/db"
 import { Request, Response } from 'express';
 import { handlingSocket } from "./routes/socket/socket.controller";
+import { Server } from "socket.io";
+import { OnlineUsers } from "./routes/socket/socket.users";
 
 const cookieParser = require('cookie-parser')
 
@@ -33,8 +35,26 @@ db.initConnectionDb();
 //socket-io
 const http = require('http');
 const server = http.createServer(app);
-handlingSocket(server, db);
-  
+const io = new Server(server, {
+	cors: {
+		origin: `http://${process.env.REACT_APP_SERVER_ADDRESS}:3000`,
+		methods: ['GET', 'POST'],
+		allowedHeaders: ['Content-Type', 'Authorization'],
+		credentials: true,
+	},
+});
+//creation users
+const users: OnlineUsers = new OnlineUsers(db, io);
+//managing socket
+handlingSocket(server, db, io, users);
+
+//ajout de users a toutes nos requetes
+app.use((req: Request, res: Response, next: any) => {
+	res.locals.users = users;
+	res.locals.serverIo = io;
+	next();
+});
+
 //Routes
 const authRouter = require('./routes/auth/auth.controllers')
 app.use('/auth', authRouter)
@@ -44,6 +64,7 @@ app.use('/users', usersRouter)
 
 app.get('/', (req: Request, res: Response) => {
 	res.send('Hiii')
+	console.log('ouou')
 })
 
 function logger(req: Request, res: Response, next: any) {

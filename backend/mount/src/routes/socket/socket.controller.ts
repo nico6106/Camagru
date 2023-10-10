@@ -4,18 +4,8 @@ import { OnlineUsers } from './socket.users';
 import { Database } from '../../database/db';
 import { DataSocketPing } from './socket.type';
 
-export async function handlingSocket(server: http.Server, db: Database) {
-	const io = new Server(server, {
-		cors: {
-			origin: `http://${process.env.REACT_APP_SERVER_ADDRESS}:3000`,
-			methods: ['GET', 'POST'],
-			allowedHeaders: ['Content-Type', 'Authorization'],
-			credentials: true,
-		},
-	});
+export async function handlingSocket(server: http.Server, db: Database, io: Server, users: OnlineUsers) {
 
-	const users: OnlineUsers = new OnlineUsers(db, io);
-	
 	io.on('connection', (socket: Socket) => {
 		listenOnSocket(socket, users);
 	});

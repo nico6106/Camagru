@@ -76,11 +76,11 @@ function ProfilePage() {
 			
             <TitleSmall text="Profile" space='1' />
 
-			<div className="grid grid-rows-3 grid-cols-4 gap-1 border">
-				<div className="row-start-1 row-end-4 col-span-3 border">
+			<div className="grid grid-rows-3 grid-cols-4 gap-1 lg:grid-rows-3 lg:grid-cols-4 lg:gap-1 sm:grid-rows-3 sm:grid-cols-1 sm:gap-4">
+				<div className="row-start-1 row-end-4 col-span-3 lg:row-start-1 lg:row-end-4 lg:col-span-3 md:row-start-1 md:row-end-4">
 					<ImageCarrousel pictures={userM.pictures} visible={visible} setVisible={setVisible} />
 				</div>
-				<div className="row-start-1 row-end-4 col-span-1 border">
+				<div className="row-start-4 row-end-8 col-span-3 lg:row-start-1 lg:row-end-4 md:row-start-1 md:row-end-4">
 					<UserOptionProfile 
 						userM={userM} 
 						liked={liked} 
@@ -90,9 +90,9 @@ function ProfilePage() {
 						blocked={blocked}
 						setBlocked={setBlocked} />
 				</div>
-				<div className="row-start-4 row-end-6 col-span-3 border">
+				<div className="row-start-8 row-end-10 col-span-3 lg:row-start-6 lg:row-end-8 md:row-start-6 md:row-end-8">
 					<UserInfo user={userM} />
-			</div>
+				</div>
 			</div>
 			
         </TramePage>

@@ -10,6 +10,7 @@ import { imageFileFilter } from "./middlewares/photo-middleware";
 import { validateUserIdFormat } from "./middlewares/check-userId.midleware";
 import { likeUser, reportUser, unlikeUser } from "./users.likes.service";
 import { blockUser, unblockUser } from "./users.block.service";
+import { getNbNotifs, getNotifs } from "./users.notifications.service";
 
 const express = require('express')
 const router = express.Router();
@@ -22,6 +23,14 @@ db.connectDb();
 //routes
 router.get('/me', checkConnected, (req: Request, res: Response) => {
 	return getMe(db, req, res);
+})
+
+router.get('/nbnotif', checkConnected, (req: Request, res: Response) => {
+	return getNbNotifs(db, req, res);
+})
+
+router.get('/notif', checkConnected, (req: Request, res: Response) => {
+	return getNotifs(db, req, res);
 })
 
 router.get('/:id', checkConnected, validateUserIdFormat, (req: Request, res: Response) => {

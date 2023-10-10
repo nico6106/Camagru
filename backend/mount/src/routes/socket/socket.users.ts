@@ -125,9 +125,24 @@ export class OnlineUsers {
 		if (this.users[index].connected === false) return ; //not connected
 		if (this.users[index].sockets.length === 0) return ; //not connected
 		for (let i = 0; i < this.users[index].sockets.length; i++) {
-			this.io.to(this.users[index].sockets[i]).emit(title, body);
-			console.log('send msg to '+toId+'-'+this.users[index].sockets[i]+', say:'+title+'='+body.id+'-'+body.type)
+			this.io.to(this.users[index].sockets[i]).emit(title, body, (error: any) => { 
+				console.log('perso msg')
+				console.log(error)});
+			console.log('send msg to '+toId+':'+this.users[index].sockets[i]+', say:'+title+'='+body.idUser+'-'+body.type);
 		}
+	}
+
+	tbd() {
+		console.log('ok so we get here');
+		console.log('nb users='+this.users.length);
+		console.log('user[0]: '+this.users[0].idUser+', connected:' +this.users[0].connected);
+		console.log(this.users[0].sockets);
+		// this.io.emit("hello", "world", (error: any) => { 
+		// 	console.log('hello world')
+		// 	console.log(error)});
+		// this.io.to(this.users[0].sockets[0]).emit("hello", "world 1", (error: any) => { 
+		// 	console.log('hello world1')
+		// 	console.log(error)})
 	}
 
 	//check if user is connected. If yes, return nb>0, else -1

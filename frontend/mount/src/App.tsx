@@ -15,12 +15,15 @@ import ProfilePage from './pages/ProfilePage';
 import ViewImage from './pages/ViewOneImage';
 import DetailsUserListsPage from './pages/DetailsUserListsPage';
 import TrackingOnline from './components/auth/TrackingOnline';
+import TrackeurTest from './components/profile/TrackerTest';
+import NotificationsPage from './pages/NotificationsPage';
 
 function App() {
     return (
         <UserProvider>
             <Router>
 				<TrackingOnline />
+				<TrackeurTest />
                 <NavBar />
                 <Routes>
                     <Route path="/" element={<HomePage />} />
@@ -38,6 +41,7 @@ function App() {
 					<Route path="/profile/option/:option" element={<DetailsUserListsPage />} />
 					<Route path="/profile/:id" element={<ProfilePage />} />
 					<Route path="/profile" element={<ProfilePage />} />
+					<Route path="/notifications" element={<NotificationsPage />} />
                     <Route path="/404" element={<Page404 />} />
                     <Route path="*" element={<Page404 />} />
                 </Routes>

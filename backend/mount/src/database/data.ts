@@ -28,7 +28,9 @@ export const TableUserQuery: string = `CREATE TABLE users (
 	fame_evol INT DEFAULT 0,
 	fake_account JSONB DEFAULT '[]'::JSONB,
 	connected BOOLEAN DEFAULT FALSE,
-	last_connection TIMESTAMP
+	last_connection TIMESTAMP,
+	notifications JSONB DEFAULT '[]'::JSONB,
+	unread_notif INT DEFAULT 0
 	)`;
 
 export type TableUser = {
@@ -61,4 +63,6 @@ export type TableUser = {
 	fake_account: { id: number; date: number }[];
 	connected: boolean;
 	last_connection: number;
+	notifications: { id: number; date: number, notif: string }[];
+	unread_notif: number;
 }

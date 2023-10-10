@@ -85,7 +85,7 @@ function IndivUser({ userShort }: PropIndivUser) {
                     <img
                         className="w-8 h-8 rounded-full"
                         src={link}
-                        alt="Neil image"
+                        alt="profile picture"
                     />
                 </div>
                 <div className="flex-1 min-w-0">

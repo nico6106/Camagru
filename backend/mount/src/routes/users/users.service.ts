@@ -8,6 +8,8 @@ import { extname } from 'path';
 import { UserExport, UserShort } from "../../shared/userExport";
 import { computeFame } from "./users.fame.service";
 import { checkAlreadyLiked } from "./users.likes.service";
+import { OnlineUsers } from "../socket/socket.users";
+import { TypeNotif, handleNotificationCreation } from "./users.notifications.service";
 
 export type UserLinkFromDB = {
 	id: number;
@@ -65,8 +67,11 @@ export async function getUserById(db: Database, req: Request, res: Response) {
 
 		//check if blocked
 		userBlocked =  meUser.blocked_user.includes(users[0].id);
+
+		//handle notif
+		handleNotificationCreation(db, res, 'viewed', users[0], meUser.id);
 	}
-	
+
 	return res.status(200).json({ message: "success", userM: user, userLiked: userLiked, userMatched: false, userReported: userReported, userBlocked: userBlocked });
 }
 

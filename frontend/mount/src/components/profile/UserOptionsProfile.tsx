@@ -128,23 +128,89 @@ function UserOptionProfile({ userM, liked, setLiked, showReported, setShowReport
 
 	return user && (<>
 	{alertMsg !== '' && showAlert && <ShowAlert textAlert={alertMsg} show={showAlert} setShow={setShowAlert} />}
-	<div className="grid grid-rows-6 grid-flow-col gap-5">
-		<div>Fame: <ShowFameUser userM={userM} /></div>
-		{userM.fake_account > 0 && userM.id !== user.id && <div className="italic">User reported</div>}
+	<div className="grid grid-rows-6 grid-flow-col gap-5 overflow-y-auto bg-gray-50"> 
+		<div><><ShowFameUser userM={userM} /></> </div>
+		{userM.fake_account > 0 && userM.id !== user.id && (
+			<div><ShowUserReported /></div>
+		)}
 		{userM.id === user.id && (<>
-			<div><Link to='/profile/option/viewed_by/'>Your visitors</Link></div>
-			<div><Link to='/profile/option/viewed'>Profiles you visited</Link></div>
-			<div><Link to='/profile/option/liked_by'>Who likes you</Link></div>
-			<div><Link to='/profile/option/matches'>Your matches</Link></div>
-			<div><Link to='/profile/option/likes'>Who you like</Link></div>
+			<div><LinkElem to='/profile/option/viewed_by/'>Your visitors</LinkElem></div>
+			<div><LinkElem to='/profile/option/viewed/'>Profiles you visited</LinkElem></div>
+			<div><LinkElem to='/profile/option/liked_by/'>Who likes you</LinkElem></div>
+			<div><LinkElem to='/profile/option/matches/'>Your matches</LinkElem></div>
+			<div><LinkElem to='/profile/option/likes/'>Who you like</LinkElem></div>
 			</>)}
 		{userM.id !== user.id && (<>
-			<div><ShowIsOnline userId={userM.id} initStatus={userM.connected} lastSeen={userM.last_connection} /> </div>
-			<div><ButtonLike liked={liked} handleOnClick={handleOnClick} /></div>
-			{showReported &&<div><Button text='Report user' onClick={handleOnReportUser} /></div>}
-			<div><Button text={blockedMsg} onClick={handleOnBlockUser} /></div>
+			<div>
+				<LinkElem>
+					<ShowIsOnline userId={userM.id} initStatus={userM.connected} lastSeen={userM.last_connection} />
+				</LinkElem>
+			</div>
+			<div>
+				{/* <LinkElem handleOnClick={handleOnClick} >{liked}</LinkElem> */}
+				<ButtonLike liked={liked} handleOnClick={handleOnClick} />
+			</div>
+			{showReported && (<div>
+				<LinkElem handleOnClick={handleOnReportUser} >Report user</LinkElem>
+			</div>)}
+			<div>
+				<LinkElem handleOnClick={handleOnBlockUser} >{blockedMsg}</LinkElem>
+			</div>
 			</>)}
-	</div></>)
+	</div>
+	</>)
+}
+
+function ShowUserReported() {
+	return (<>
+	<div className='grid grid-cols-4 pl-2 pb-2 border-b border-gray-200'>
+			<div className='col-span-1'>
+				<svg className="flex-shrink-0 w-5 h-5 text-red-500 transition duration-75 dark:text-red-400 group-hover:text-red-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+					<path d="M10 0a10 10 0 1 1 0 20 10 10 0 0 1 0-20zm0 18.25a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5zM11 6.5h-2a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-5a1 1 0 0 0-1-1z"/>
+				</svg>
+			</div>
+			<div className='col-span-3'>
+				User reported
+			</div>
+	</div>
+</>)
+}
+/* <Button text='Report user' onClick={handleOnReportUser} /> */
+/* <Button text={blockedMsg} onClick={handleOnBlockUser} /> */
+
+type PropLinkElem = {
+	to?: string;
+	hover?: boolean;
+	children?: any;
+	handleOnClick?: any;
+}
+function LinkElem({ to, hover=true, children, handleOnClick }: PropLinkElem) {
+	const styleP: string = `flex items-center text-gray-900 rounded-lg ${hover && 'hover:bg-gray-300'} group font-medium`
+	return (<div className='flex flex-row pb-4 border-b border-gray-200'>
+		<svg className="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 10 16">
+			<path d="M3.414 1A2 2 0 0 0 0 2.414v11.172A2 2 0 0 0 3.414 15L9 9.414a2 2 0 0 0 0-2.828L3.414 1Z"/>
+		</svg>
+
+		<p className={styleP}>
+			{to && (
+				<Link to={to}>
+					<span className="flex-1 ml-3 whitespace-nowrap space-y-2">{children}</span>
+				</Link>
+			)}
+			{handleOnClick && (
+				<span 
+					className="flex-1 ml-3 whitespace-nowrap space-y-2"
+					onClick={handleOnClick}
+				>
+					{children}
+				</span>
+			)}
+			{!to && !handleOnClick && (
+				<span className="flex-1 ml-3 whitespace-nowrap space-y-2">{children}</span>
+			)}
+		</p>
+		</div>
+	)
 }
 
 type PropButtonLike = {

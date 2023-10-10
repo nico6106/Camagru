@@ -29,7 +29,6 @@ function ShowIsOnline({ userId, initStatus, lastSeen }: Prop) {
 				if (data.lastSeen) {
 					setLastSeenU(data.lastSeen);
 				} 
-				console.log('handled')
             }
 			console.log('message : +userId='+userId)
 			console.log(data)
@@ -41,7 +40,7 @@ function ShowIsOnline({ userId, initStatus, lastSeen }: Prop) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-	return isConnected ? (<>Online</>) : (<>last seen: {ShowDate(lastSeenU)}</>);
+	return isConnected ? (<>Online</>) : (<>{ShowDate(lastSeenU)}</>);
 }
 
 function ShowDate(dateUser: number) {
