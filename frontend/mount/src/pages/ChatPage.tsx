@@ -21,7 +21,7 @@ function ChatPage() {
 						<ChatShowDiscussions setCurrChat={setCurrChat} setAlertMsg={setAlertMsg} />
 					</div>
 					<div className="w-3/4 flex flex-col">Discussion
-						<ChatDiscussion currChat={currChat} setCurrChat={setCurrChat} setAlertMsg={setAlertMsg} />
+						<ChatDiscussion currChat={currChat} setAlertMsg={setAlertMsg} />
 					</div>
 				</div>
 

@@ -2,7 +2,8 @@ import { Server, Socket } from 'socket.io';
 import http from 'http'; 
 import { OnlineUsers } from './socket.users';
 import { Database } from '../../database/db';
-import { DataSocketPing } from './socket.type';
+import { DataSocketChatServ, DataSocketPing } from './socket.type';
+import { handleIncomeChatMsg } from '../chat/socket.chat';
 
 export async function handlingSocket(server: http.Server, db: Database, io: Server, users: OnlineUsers) {
 
@@ -22,6 +23,10 @@ export async function listenOnSocket(socket: Socket, users: OnlineUsers) {
 
 	socket.on('ping', (data: DataSocketPing) => {
 		handlePing(socket, users, data);
+	});
+
+	socket.on('chat-serv', (data: DataSocketChatServ) => {
+		handleIncomeChatMsg(socket, users, data);
 	});
 
 	socket.on('logout', () => {
