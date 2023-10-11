@@ -6,6 +6,7 @@ import { CannotLikeOtherPhotoEmpty, CannotLikeYourPhotoEmpty, ErrorMsg, NotConne
 import { UserLinkFromDB, addElemToJSONData } from "./users.service";
 import { computeFame } from "./users.fame.service";
 import { handleNotificationCreation } from "./users.notifications.service";
+import { createChatUsers } from "../chat/chat.service";
 
 export async function likeUser(db: Database, req: Request, res: Response) {
 	const { id } = req.params;
@@ -47,11 +48,14 @@ export async function likeUser(db: Database, req: Request, res: Response) {
 				await db.AmendElemsFromTable(TableUsersName, 'id', users[0].id, ['matches'], [[...users[0].matches, meUser.id]]);
 
 			//handle notif in case it's a match
-			handleNotificationCreation(db, res, 'match', users[0], meUser.id);
+			await handleNotificationCreation(db, res, 'match', users[0], meUser.id);
+
+			//create chat between 2 users:
+			await createChatUsers(db, meUser.id, users[0].id);
 		}
 		else
 			//handle notif in case only a like
-			handleNotificationCreation(db, res, 'like', users[0], meUser.id);
+			await handleNotificationCreation(db, res, 'like', users[0], meUser.id);
 	}
 	return res.status(200).json({ message: SuccessMsg });
 }
@@ -100,7 +104,7 @@ export async function unlikeUser(db: Database, req: Request, res: Response) {
 			await db.AmendElemsFromTable(TableUsersName, 'id', meUser.id, ['matches'], [newListMacthesMe]);
 
 			//handle notif in case only a like
-			handleNotificationCreation(db, res, 'unlike', users[0], meUser.id);
+			await handleNotificationCreation(db, res, 'unlike', users[0], meUser.id);
 		}
 		if (users[0].matches.includes(meUser.id)) {
 			const newListMacthesHim: number[] = users[0].matches.filter((elem) => elem !== meUser.id);

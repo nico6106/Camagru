@@ -3,7 +3,7 @@ import { connexion_connectDb, connexion_initConnectionDb, connexion_testTable } 
 import { exec_executeQueryNoArg, exec_executeQueryOneArg, exec_insertToTable } from "./db-execQuery";
 import { test_SelectEntryOneArg } from "./db-testEntries";
 import { TableUser } from "./data";
-import { exec_SelectAllElemFromTable, exec_SelectOneElemFromTable } from "./db-select";
+import { exec_SelectAllElemFromTable, exec_SelectElemsFromTableMultiplesArgsOR, exec_SelectOneElemFromTable } from "./db-select";
 import { exec_AmendElemsFromTable, exec_AmendOneElemFromTable } from "./db-amend";
 
 export class Database {
@@ -62,6 +62,10 @@ export class Database {
 
   async selectAllElemFromTable(table: string): Promise<TableUser[] | null> {
 	return exec_SelectAllElemFromTable(this, table);
+  }
+
+  async SelectElemsFromTableMultiplesArgsOR(table: string, fields: string[], values: any[], require?: string): Promise<any[] | null> {
+	return exec_SelectElemsFromTableMultiplesArgsOR(this, table, fields, values, require);
   }
 
   //UPDATE

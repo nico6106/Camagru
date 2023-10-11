@@ -1,5 +1,5 @@
 import { QueryResult } from "pg";
-import { TableUserQuery, TableUsersName } from "./data";
+import { TableChatName, TableChatQuery, TableUserQuery, TableUsersName } from "./data";
 import { Database } from "./db";
 
 export async function connexion_initConnectionDb(db: Database): Promise<boolean> {
@@ -9,6 +9,9 @@ export async function connexion_initConnectionDb(db: Database): Promise<boolean>
 
     //test Users
     if (!db.testTable(TableUsersName, TableUserQuery)) return false;
+
+	//test Chat
+    if (!db.testTable(TableChatName, TableChatQuery)) return false;
 
     return true;
   } catch (err) {

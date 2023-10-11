@@ -69,7 +69,7 @@ export async function getUserById(db: Database, req: Request, res: Response) {
 		userBlocked =  meUser.blocked_user.includes(users[0].id);
 
 		//handle notif
-		handleNotificationCreation(db, res, 'viewed', users[0], meUser.id);
+		await handleNotificationCreation(db, res, 'viewed', users[0], meUser.id);
 
 		//add user to viewer (so that user can see if this user disconnect/connect)
 		const connectedUsers: OnlineUsers = res.locals.users;

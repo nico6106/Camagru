@@ -62,6 +62,9 @@ app.use('/auth', authRouter)
 const usersRouter = require('./routes/users/users.controllers')
 app.use('/users', usersRouter)
 
+const chatRouter = require('./routes/chat/chat.controllers')
+app.use('/chat', chatRouter)
+
 app.get('/', (req: Request, res: Response) => {
 	res.send('Hiii')
 	console.log('ouou')

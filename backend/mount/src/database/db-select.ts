@@ -31,3 +31,26 @@ export async function exec_SelectAllElemFromTable(db: Database, table: string): 
 		return null;
 	}
 }
+
+/*select a value in the table*/
+export async function exec_SelectElemsFromTableMultiplesArgsOR(db: Database, table: string, fields: string[], values: any[], require?: string): Promise<any[] | null> {
+	let setText: string = '';
+	if (fields.length !== values.length) return null;
+	for (let i: number = 0; i < fields.length; i++) {
+		setText = setText + (i > 0 ? ' OR ' : '') + `${fields[i]} = $${i + 1}`;
+	}
+	const selectElem: string = require ? require : '*';
+	const query: string = `SELECT ${selectElem} FROM ${table} WHERE ${setText}`;
+	console.log('query')
+	console.log(query)
+	console.log(values)
+	try {
+		const retour = await db.executeQueryArgs(query, values);
+		if (retour) {
+			return retour.rows;
+		}
+		return null;
+	} catch (err) {
+		return null;
+	}
+}
