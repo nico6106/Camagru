@@ -94,6 +94,14 @@ export async function createChatUsers(
 export async function getChatHistory(db: Database, req: Request, res: Response) {
 	const { id } = req.params;
 	const idChat = parseInt(id);
+	if (idChat === 0) return ;
+
+	//verif me
+    const user: TableUser | null = await getUserFromRequest(db, req);
+    if (!user)
+        return res
+            .status(200)
+            .json({ message: ErrorMsg, error: 'not connected' });
 
 	//extract chat
 	const chatsUser: TableChat[] | null =
@@ -106,7 +114,23 @@ export async function getChatHistory(db: Database, req: Request, res: Response) 
         return res
             .status(200)
             .json({ message: ErrorMsg, error: 'error loading chats' });
+	if (chatsUser.length === 0)
+		return res
+			.status(200)
+			.json({ message: ErrorMsg, error: 'No chats' });
+		
 	const chat: TableChat = chatsUser[0];
+	
+	console.log('chatsUser:')
+	console.log(chatsUser)
+	console.log('chat:')
+	console.log(chat)
 
-	return res.status(200).json({ message: SuccessMsg, chats: chatRetour });
+	if (!(user.id === chat.id_a || user.id === chat.id_b))
+	return res
+		.status(200)
+		.json({ message: ErrorMsg, error: 'not your chat' });
+	
+	const unread: number = user.id === chat.id_a ? chat.unread_a : chat.id_b;
+	return res.status(200).json({ message: SuccessMsg, chats: chat.messages, unread: unread });
 }

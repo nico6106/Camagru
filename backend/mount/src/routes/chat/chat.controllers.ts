@@ -1,7 +1,7 @@
 import { Database } from '../../database/db';
 import { Request, Response } from 'express';
 import { checkConnected } from '../auth/middlewares/check-connection.middleware';
-import { getAllChats } from './chat.service';
+import { getAllChats, getChatHistory } from './chat.service';
 import { validateUserIdFormat } from '../users/middlewares/check-userId.midleware';
 
 const express = require('express');
@@ -16,7 +16,7 @@ router.get('/all', checkConnected, (req: Request, res: Response) => {
 });
 
 router.get('/:id', checkConnected, validateUserIdFormat, (req: Request, res: Response) => {
-    return getAllChats(db, req, res);
+    return getChatHistory(db, req, res);
 });
 
 /*

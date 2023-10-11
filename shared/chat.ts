@@ -9,7 +9,7 @@ export type ChatRetour = {
 }
 
 export type MsgChatRetour = {
-	idSender: number;
+	sender: number;
 	date: number;
 	content: string;
 }

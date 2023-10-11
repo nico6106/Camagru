@@ -72,7 +72,8 @@ export const TableChatQuery: string = `CREATE TABLE chat (
 	id SERIAL PRIMARY KEY,
 	id_a INT,
 	id_b INT,
-	unread INT DEFAULT 0,
+	unread_a INT DEFAULT 0,
+	unread_b INT DEFAULT 0,
 	messages JSONB DEFAULT '[]'::JSONB
 	)`;
 

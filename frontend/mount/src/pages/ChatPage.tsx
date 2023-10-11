@@ -1,43 +1,31 @@
+import { useState } from 'react';
 import UserNotSignedIn from '../components/auth/UserNotSignedIn';
+import ChatShowDiscussions from '../components/chat/ChatShowDiscussions';
 import TitleSmall from '../components/elems/TitleSmall';
 import TramePage from '../components/elems/TramePage';
 import { useUserContext } from '../context/UserContext';
+import ChatDiscussion from '../components/chat/ChatDiscussion';
 
 function ChatPage() {
     const { user } = useUserContext();
+	const [currChat, setCurrChat] = useState<number>(0);
+	const [alert, setAlertMsg] = useState<string | null>(null);
 
-	const usersTest: string[] = ['user1', 'user2', 'user3', 'user4', 'user5', 'user6', 'user7', 'user8']
-	const chatTest: string[] = ['oula', 'gdfgdfa gdf df gdfg sdfg sdfg sd fg', 'gadfg', 'gadfg adfg adfg ', 'gadfg', 'asgas gd dg', 'asg sdg', 'fg ag ', 'ffsfsdfs', 'f45er1f56',
-							'oula', 'gdfgdfa', 'gadfg', 'gadfg adfg adfg ', 'gadfg', 'asgas gd dg', 'asg sdg', 'fg ag ', 'ffsfsdfs', 'f45er1f56',
-							'oula', 'gdfgdfa', 'gadfg', 'gadfg adfg adfg ', 'gadfg', 'asgas gd dg', 'asg sdg', 'fg ag ', 'ffsfsdfs', 'f45er1f56']
     return user ? (
         <>
-            <TramePage>
+            {/* <TramePage> */}
                 <TitleSmall text="Chat" space="1" />
 
-				<div className="flex flex-row">
-					<div className="basis-1/4 border">Friends
-						<div className='hover:overflow-y-scroll '>
-							{usersTest.map((elem => 
-								<div>
-									{elem}
-								</div>
-								))}
-						</div>
+				<div className="h-full  flex border">
+					<div className="w-1/4 bg-gray-200 p-4">Friends
+						<ChatShowDiscussions setCurrChat={setCurrChat} setAlertMsg={setAlertMsg} />
 					</div>
-					<div className="basis-3/4 border">Discussion
-					<div className='overflow-hidden overflow-y-scroll h-64'>
-						{chatTest.map((elem => 
-								<div>
-									-{elem}
-								</div>
-								))}
-					</div>
-							
+					<div className="w-3/4 flex flex-col">Discussion
+						<ChatDiscussion currChat={currChat} setCurrChat={setCurrChat} setAlertMsg={setAlertMsg} />
 					</div>
 				</div>
 
-            </TramePage>
+            {/* </TramePage> */}
         </>
     ) : (
         <UserNotSignedIn />
@@ -45,3 +33,14 @@ function ChatPage() {
 }
 
 export default ChatPage;
+
+{/* <div className="flex flex-row">
+					<div className="basis-1/4 border">Friends
+						<ChatShowDiscussions setCurrChat={setCurrChat} setAlertMsg={setAlertMsg} />
+					</div>
+					<div className="basis-3/4 border">Discussion
+						<div className='overflow-hidden overflow-y-scroll h-64'>
+							<ChatDiscussion currChat={currChat} setCurrChat={setCurrChat} setAlertMsg={setAlertMsg} />
+						</div>
+					</div>
+				</div> */}
