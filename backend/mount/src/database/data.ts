@@ -83,5 +83,11 @@ export type TableChat = {
     id_b: number;
     unread_a: number;
     unread_b: number;
-    messages: { sender: number; date: number; content: string }[];
+    messages: ChatMessage[];
 };
+
+export type ChatMessage = {
+	sender: number;
+	date: number;
+	content: string
+}

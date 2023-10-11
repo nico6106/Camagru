@@ -12,5 +12,6 @@ export type DataSocketPing = {
 }
 
 export type DataSocketChatServ = {
+	idChat: number;
 	message: string;
 }

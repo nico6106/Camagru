@@ -5,7 +5,7 @@ type PropChatHistory = {
 }
 function ChatHistoryMesssages({ chats }: PropChatHistory) {
 	return (<>
-		{chats.map((elem) => <div>{elem.content}</div>)}
+		{chats.map((elem, index) => <div key={index}>{elem.content}</div>)}
 	</>);
 }
 

@@ -6,6 +6,7 @@ type PropChatSend = {
 }
 
 export type DataSocketChatServ = {
+	idChat: number;
 	message: string;
 }
 
@@ -17,6 +18,7 @@ function ChatSendMessage({ currChat }: PropChatSend) {
 		event.preventDefault();
 		if (msg === '') return ;
 		const newMsg: DataSocketChatServ = {
+			idChat: currChat,
 			message: msg,
 		} 
 		socket.emit('chat-serv', newMsg);

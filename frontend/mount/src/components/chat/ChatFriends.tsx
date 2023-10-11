@@ -7,7 +7,7 @@ type PropChatDiscussions = {
     setCurrChat: any;
     setAlertMsg: any;
 };
-function ChatShowDiscussions({
+function ChatFriends({
     setCurrChat,
     setAlertMsg,
 }: PropChatDiscussions) {
@@ -102,5 +102,6 @@ function EmptyElems({ nb }: { nb: number }) {
     );
 }
 
-export default ChatShowDiscussions;
+export default ChatFriends
+
 // "bg-gray-200 hover:bg-gray-400"

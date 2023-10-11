@@ -5,6 +5,10 @@ import { Database } from '../../database/db';
 import { DataSocketChatServ, DataSocketPing } from './socket.type';
 import { handleIncomeChatMsg } from '../chat/socket.chat';
 
+//DB
+const db = new Database();
+db.connectDb();
+
 export async function handlingSocket(server: http.Server, db: Database, io: Server, users: OnlineUsers) {
 
 	io.on('connection', (socket: Socket) => {
@@ -26,7 +30,7 @@ export async function listenOnSocket(socket: Socket, users: OnlineUsers) {
 	});
 
 	socket.on('chat-serv', (data: DataSocketChatServ) => {
-		handleIncomeChatMsg(socket, users, data);
+		handleIncomeChatMsg(db, socket, users, data);
 	});
 
 	socket.on('logout', () => {

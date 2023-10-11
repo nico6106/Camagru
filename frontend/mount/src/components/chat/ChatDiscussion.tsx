@@ -9,6 +9,8 @@ import { WebsocketContext } from '../../context/WebsocketContext';
 type PropChatDiscussions = {
     currChat: number;
     setAlertMsg: any;
+	chat: MsgChatRetour[];
+	setChat: any;
 };
 
 type SocketReceiveMsg = {
@@ -16,18 +18,23 @@ type SocketReceiveMsg = {
 	msg: MsgChatRetour;
 };
 
-function ChatDiscussion({
+function ChatShowMessages({
     currChat,
     setAlertMsg,
+	chat,
+	setChat,
 }: PropChatDiscussions) {
-    const [chat, setChat] = useState<MsgChatRetour[] | null>(null);
 	const socket = useContext(WebsocketContext);
+
     useEffect(() => {
-        if (currChat !== 0) execBackendGetOneChat();
 
 		//socket
 		socket.on('chat', (data: SocketReceiveMsg) => {
-			if (!chat) return ;
+			console.log(data)
+			// console.log(chat)
+			// if (!chat) return ;
+			console.log('step currChat='+currChat)
+			
             if (data.idChat === currChat) {
                 const newList: MsgChatRetour[] = [...chat, data.msg];
 				setChat(newList);
@@ -41,32 +48,7 @@ function ChatDiscussion({
         };
     }, []);
 
-    useEffect(() => {
-        if (currChat !== 0) execBackendGetOneChat();
-    }, [currChat]);
-
-    async function execBackendGetOneChat() {
-        try {
-            const response = await axios.get(
-                `http://${process.env.REACT_APP_SERVER_ADDRESS}:3333/chat/${currChat}`,
-                {
-                    withCredentials: true,
-                },
-            );
-            console.log(response.data);
-            if (response.data.message === SuccessMsg) {
-                setChat(response.data.chats);
-                setAlertMsg(null);
-            } else {
-                setAlertMsg(response.data.error);
-                setChat(null);
-            }
-        } catch (error) {
-            //to handle ?
-            return null;
-        }
-    }
-
+    
     return chat ? (
 		<div className='h-full'>
 			<div className="h-5/6 overflow-y-auto p-4 bg-gray-100 border">
@@ -79,4 +61,4 @@ function ChatDiscussion({
 	) : <div className="flex-1 overflow-y-auto p-4 bg-gray-100 border">Select a chat</div>;
 }
 
-export default ChatDiscussion;
+export default ChatShowMessages;

@@ -1,15 +1,44 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import UserNotSignedIn from '../components/auth/UserNotSignedIn';
-import ChatShowDiscussions from '../components/chat/ChatShowDiscussions';
 import TitleSmall from '../components/elems/TitleSmall';
-import TramePage from '../components/elems/TramePage';
 import { useUserContext } from '../context/UserContext';
-import ChatDiscussion from '../components/chat/ChatDiscussion';
+import ChatShowMessages from '../components/chat/ChatDiscussion';
+import { MsgChatRetour } from '../shared/chat';
+import ChatFriends from '../components/chat/ChatFriends';
+import axios from 'axios';
+import { SuccessMsg } from '../shared/errors';
 
 function ChatPage() {
     const { user } = useUserContext();
 	const [currChat, setCurrChat] = useState<number>(0);
+	const [chat, setChat] = useState<MsgChatRetour[] | null>(null);
 	const [alert, setAlertMsg] = useState<string | null>(null);
+
+	useEffect(() => {
+        if (currChat !== 0) execBackendGetOneChat();
+    }, [currChat]);
+
+	async function execBackendGetOneChat() {
+        try {
+            const response = await axios.get(
+                `http://${process.env.REACT_APP_SERVER_ADDRESS}:3333/chat/${currChat}`,
+                {
+                    withCredentials: true,
+                },
+            );
+            console.log(response.data);
+            if (response.data.message === SuccessMsg) {
+                setChat(response.data.chats);
+                setAlertMsg(null);
+            } else {
+                setAlertMsg(response.data.error);
+                setChat(null);
+            }
+        } catch (error) {
+            //to handle ?
+            return null;
+        }
+    }
 
     return user ? (
         <>
@@ -18,10 +47,17 @@ function ChatPage() {
 
 				<div className="h-full  flex border">
 					<div className="w-1/4 bg-gray-200 p-4">Friends
-						<ChatShowDiscussions setCurrChat={setCurrChat} setAlertMsg={setAlertMsg} />
+						<ChatFriends setCurrChat={setCurrChat} setAlertMsg={setAlertMsg} />
 					</div>
 					<div className="w-3/4 flex flex-col">Discussion
-						<ChatDiscussion currChat={currChat} setAlertMsg={setAlertMsg} />
+					{chat && <ChatShowMessages 
+							currChat={currChat}
+							setAlertMsg={setAlertMsg}
+							chat={chat}
+							setChat={setChat}
+							/>
+					}
+						
 					</div>
 				</div>
 
