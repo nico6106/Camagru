@@ -19,6 +19,7 @@ import axios from "axios";
 import { SuccessMsg } from "../shared/errors";
 import PhotoUploader from "../components/settings/PhotoUpload";
 import ShowPictures from "../components/settings/ShowPictures";
+import AskGeolocalisation from "../components/settings/AskGeo";
 
 function SettingsPage() {
 	const [error, setError] = useState<string>('');

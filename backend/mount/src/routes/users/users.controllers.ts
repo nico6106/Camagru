@@ -11,6 +11,8 @@ import { validateUserIdFormat } from "./middlewares/check-userId.midleware";
 import { likeUser, reportUser, unlikeUser } from "./users.likes.service";
 import { blockUser, unblockUser } from "./users.block.service";
 import { getNbNotifs, getNotifs } from "./users.notifications.service";
+import { validateGeoBody } from "./middlewares/check-geo.middleware";
+import { geolocUser } from "./users.geoloc.service";
 
 const express = require('express')
 const router = express.Router();
@@ -84,6 +86,10 @@ router.get('/setimage/:filename', checkConnected, imageFileFilter, (req: Request
 router.delete('/image/:filename', checkConnected, imageFileFilter, (req: Request, res: Response) => {
 	return deleteImg(db, req, res); 
 });
+
+router.post('/geoloc', checkConnected, validateGeoBody, (req: Request, res: Response) => {
+	return geolocUser(db, req, res);
+})
 
 //check viewed/viewed_by/likes/liked_by
 router.get('/:option/:id',  validateUserIdFormat, (req: Request, res: Response) => {

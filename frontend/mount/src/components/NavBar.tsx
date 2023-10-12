@@ -6,6 +6,7 @@ import Button from './elems/Button';
 import axios from 'axios';
 import { SuccessMsg } from '../shared/errors';
 import NbNotif from './profile/NbNotifs';
+import AskGeolocalisation from './settings/AskGeo';
 
 function MobileMenuBoutton({
     showMenu,
@@ -352,6 +353,7 @@ function NavBar() {
                     <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
 						{user && <ButtonChat />}
                         {user && <ButtonNotifications />}
+						{user && <AskGeolocalisation />}
                         <DropdownMenu />
                     </div>
                 </div>

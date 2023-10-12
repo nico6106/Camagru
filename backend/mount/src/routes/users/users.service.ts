@@ -214,7 +214,7 @@ export async function updateSettings(db: Database, req: Request, res: Response) 
     console.log(user);
 
 	//amend user
-	db.AmendElemsFromTable(
+	await db.AmendElemsFromTable(
         TableUsersName,
         'id',
         user.id,
@@ -244,7 +244,7 @@ export async function uploadImg(db: Database, req: Request, res: Response) {
 	let profilePicture: string = user.profile_picture;
 
 	if (user.pictures.length === 0 || user.profile_picture === '') {
-		db.AmendElemsFromTable(
+		await db.AmendElemsFromTable(
 			TableUsersName,
 			'id',
 			user.id,
@@ -254,7 +254,7 @@ export async function uploadImg(db: Database, req: Request, res: Response) {
 		profilePicture = file.filename;
 	}
 	else {
-		db.AmendElemsFromTable(
+		await db.AmendElemsFromTable(
 			TableUsersName,
 			'id',
 			user.id,
@@ -306,7 +306,7 @@ export async function deleteImg(db: Database, req: Request, res: Response) {
 		let newProfilePicture: string = '';
 		if (newListImgUser.length > 0)
 			newProfilePicture = newListImgUser[0];
-		db.AmendElemsFromTable(
+		await db.AmendElemsFromTable(
 			TableUsersName,
 			'id',
 			user.id,
@@ -316,7 +316,7 @@ export async function deleteImg(db: Database, req: Request, res: Response) {
 		profilePicture = newProfilePicture;
 	}
 	else {
-		db.AmendElemsFromTable(
+		await db.AmendElemsFromTable(
 			TableUsersName,
 			'id',
 			user.id,
@@ -397,7 +397,7 @@ export async function setNewProfileImg(db: Database, req: Request, res: Response
 
 	//update bdd
 	if (user.profile_picture !== filename) {
-		db.AmendElemsFromTable(
+		await db.AmendElemsFromTable(
 			TableUsersName,
 			'id',
 			user.id,

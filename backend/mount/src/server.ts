@@ -3,6 +3,7 @@ import { Request, Response } from 'express';
 import { handlingSocket } from "./routes/socket/socket.controller";
 import { Server } from "socket.io";
 import { OnlineUsers } from "./routes/socket/socket.users";
+import { createLife } from "./routes/create-life";
 
 const cookieParser = require('cookie-parser')
 
@@ -56,6 +57,10 @@ app.use((req: Request, res: Response, next: any) => {
 });
 
 //Routes
+app.get('/create/life', (req: Request, res: Response) => {
+	return createLife(db, req, res);
+})
+
 const authRouter = require('./routes/auth/auth.controllers')
 app.use('/auth', authRouter)
 

@@ -262,7 +262,7 @@ export async function ForgotPwd(db: Database, req: Request, res: Response) {
 	//generate a link to reset pwd
 	const confirmID: string = generateId();
 
-	db.AmendElemsFromTable(
+	await db.AmendElemsFromTable(
         TableUsersName,
         'id',
         user.id,
@@ -341,7 +341,7 @@ export async function ResetPwd(db: Database, req: Request, res: Response) {
 	const hash = await hashPassword(password);
 
 	//amend user
-	db.AmendElemsFromTable(
+	await db.AmendElemsFromTable(
         TableUsersName,
         'id',
         user.id,

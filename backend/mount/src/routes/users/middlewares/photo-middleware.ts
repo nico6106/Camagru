@@ -13,11 +13,11 @@ export function imageFileFilter(req: Request, res: Response, next: any) {
 		.status(200)
 		.json({ message: ErrorMsg, error: InvalidPhotoId });
 	}
-	if (!filename.match(/^\d+_/)) {
-		return res
-		.status(200)
-		.json({ message: ErrorMsg, error: InvalidPhotoId });
-	}
+	// if (!filename.match(/^\d+_/)) {
+	// 	return res
+	// 	.status(200)
+	// 	.json({ message: ErrorMsg, error: InvalidPhotoId });
+	// }
 
 	next();
 };
