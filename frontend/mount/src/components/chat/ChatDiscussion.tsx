@@ -36,8 +36,9 @@ function ChatShowMessages({
 			console.log('step currChat='+currChat)
 			
             if (data.idChat === currChat) {
-                const newList: MsgChatRetour[] = [...chat, data.msg];
-				setChat(newList);
+                // const newList: MsgChatRetour[] = chat;
+				// newList.push(data.msg);
+				setChat((prevState: MsgChatRetour[]) => [...prevState, data.msg]);
             }
 			console.log('message : +userId=')
 			console.log(data)
