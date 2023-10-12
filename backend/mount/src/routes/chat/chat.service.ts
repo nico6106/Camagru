@@ -6,6 +6,7 @@ import { ErrorMsg, SuccessMsg } from '../../shared/errors';
 import { QueryResult } from 'pg';
 import { ChatRetour } from '../../shared/chat';
 import { T_ListRequest, giveListIdToRequest } from './tools-db';
+import { OnlineUsers } from '../socket/socket.users';
 
 /*retourne all chats: nom, prenom, image_profil, unread_msg*/
 export async function getAllChats(db: Database, req: Request, res: Response) {
@@ -47,7 +48,7 @@ export async function getAllChats(db: Database, req: Request, res: Response) {
 	const chatRetour: ChatRetour[] = [];
 	for (const elem of chatsUser) {
 		const idUser: number = elem.id_a !== user.id ? elem.id_a : elem.id_b;
-		const unread: number = elem.id_a !== user.id ? elem.unread_a : elem.unread_b;
+		const unread: number = elem.id_a === user.id ? elem.unread_a : elem.unread_b;
 		const indexUser: number = usersCrossCheck.findIndex((elem) => elem.id === idUser);
 		if (indexUser !== -1) {
 			const elemChat: ChatRetour = {
@@ -131,6 +132,28 @@ export async function getChatHistory(db: Database, req: Request, res: Response) 
 		.status(200)
 		.json({ message: ErrorMsg, error: 'not your chat' });
 	
-	const unread: number = user.id === chat.id_a ? chat.unread_a : chat.id_b;
+	const unread: number = user.id === chat.id_a ? chat.unread_a : chat.unread_b;
+
+	//send info to decrease chat notif
+	const connectedUsers: OnlineUsers = res.locals.users;
+	connectedUsers.sendMsg(user.id, 'chat-read', {
+		idChat: chat.id,
+		nbRead: unread,
+	});
+	connectedUsers.sendMsg(user.id, 'chat-read2', {
+		idChat: chat.id,
+		nbRead: unread,
+	});
+
+	//amend nb read
+	const fieldUser: string = user.id === chat.id_a ? 'unread_a' : 'unread_b';
+	await db.AmendElemsFromTable(
+        TableChatName,
+        'id',
+        chat.id,
+        [fieldUser],
+        [0],
+    );
+
 	return res.status(200).json({ message: SuccessMsg, chats: chat.messages, unread: unread });
 }

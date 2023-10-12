@@ -45,19 +45,18 @@ function ChatPage() {
             {/* <TramePage> */}
                 <TitleSmall text="Chat" space="1" />
 
-				<div className="h-full  flex border">
+				<div className="h-full flex border">
 					<div className="w-1/4 bg-gray-200 p-4">Friends
 						<ChatFriends setCurrChat={setCurrChat} setAlertMsg={setAlertMsg} />
 					</div>
-					<div className="w-3/4 flex flex-col">Discussion
-					{chat && <ChatShowMessages 
+					<div className="h-96 w-3/4 flex flex-col">Discussion
+						{chat && <ChatShowMessages 
 							currChat={currChat}
 							setAlertMsg={setAlertMsg}
 							chat={chat}
 							setChat={setChat}
 							/>
-					}
-						
+						}
 					</div>
 				</div>
 

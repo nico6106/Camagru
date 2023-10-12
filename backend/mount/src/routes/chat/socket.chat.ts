@@ -34,7 +34,7 @@ export async function handleIncomeChatMsg(
     const chat: TableChat = chatsUser[0];
 
     const newElemChat: ChatMessage = {
-        sender: 1,
+        sender: users.users[indexUser].idUser,
         date: Date.now(),
         content: data.message,
     };
@@ -61,4 +61,6 @@ export async function handleIncomeChatMsg(
 	console.log(elemToSend)
 	users.sendMsg(chat.id_a, 'chat', elemToSend);
 	users.sendMsg(chat.id_b, 'chat', elemToSend);
+	users.sendMsg(chat.id_a, 'chat2', elemToSend);
+	users.sendMsg(chat.id_b, 'chat2', elemToSend);
 }

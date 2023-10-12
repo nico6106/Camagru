@@ -1,6 +1,4 @@
-import axios from 'axios';
-import { useContext, useEffect, useState } from 'react';
-import { SuccessMsg } from '../../shared/errors';
+import { useContext, useEffect } from 'react';
 import { MsgChatRetour } from '../../shared/chat';
 import ChatSendMessage from './ChatSendMessage';
 import ChatHistoryMesssages from './ChatHistoryMessages';
@@ -13,7 +11,7 @@ type PropChatDiscussions = {
 	setChat: any;
 };
 
-type SocketReceiveMsg = {
+export type SocketReceiveMsg = {
 	idChat: number;
 	msg: MsgChatRetour;
 };
@@ -31,28 +29,22 @@ function ChatShowMessages({
 		//socket
 		socket.on('chat', (data: SocketReceiveMsg) => {
 			console.log(data)
-			// console.log(chat)
-			// if (!chat) return ;
 			console.log('step currChat='+currChat)
 			
             if (data.idChat === currChat) {
-                // const newList: MsgChatRetour[] = chat;
-				// newList.push(data.msg);
 				setChat((prevState: MsgChatRetour[]) => [...prevState, data.msg]);
             }
-			console.log('message : +userId=')
-			console.log(data)
         });
 
 		return () => {
             socket.off('chat');
         };
-    }, []);
+    }, [currChat]);
 
     
     return chat ? (
-		<div className='h-full'>
-			<div className="h-5/6 overflow-y-auto p-4 bg-gray-100 border">
+		<div className='h-full '>
+			<div className="h-5/6 overflow-y-auto scrolling-touch overflow-clip pl-4 bg-gray-100 border">
 				<ChatHistoryMesssages chats={chat} />
 			</div>
 			<div className="h-1/6">

@@ -1,7 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { ChatRetour } from '../../shared/chat';
 import axios from 'axios';
 import { SuccessMsg } from '../../shared/errors';
+import { WebsocketContext } from '../../context/WebsocketContext';
+import { SocketReceiveMsg } from './ChatDiscussion';
+import { useUserContext } from '../../context/UserContext';
 
 type PropChatDiscussions = {
     setCurrChat: any;
@@ -63,13 +66,38 @@ type PropChatIndivFriend = {
 };
 function ChatShowIndivFriend({ chatElem, setCurrChat }: PropChatIndivFriend) {
     const styleP: string = `flex items-center text-gray-900  ${''} group font-medium
-							flex-1 ml-3 whitespace-nowrap space-y-2`;
+							flex-1 ml-4 whitespace-nowrap space-y-2`;
 	const link: string = chatElem.picture !== '' ? `http://${process.env.REACT_APP_SERVER_ADDRESS}:3333/users/image/${chatElem.picture}` : '/carousel-2.svg';
+	const socket = useContext(WebsocketContext);
+	const { user } = useUserContext();
+	const [nbNotifChat, setNbNotifChat] = useState<number>(0);
 
     function handleOnClick() {
         console.log('clicked chatid=' + chatElem.idChat);
         setCurrChat(chatElem.idChat);
     }
+
+	useEffect(() => {
+
+		setNbNotifChat(chatElem.nbUnread);
+
+		socket.on('chat-read', (data: any) => {
+			if (data.idChat === chatElem.idChat)
+				setNbNotifChat(prevNbChat => (prevNbChat - data.nbRead) > 0 ? (prevNbChat - data.nbRead) : 0);
+		});
+
+		socket.on('chat', (data: SocketReceiveMsg) => {
+            if (user && data.msg.sender !== user.id)
+				setNbNotifChat((prevnbChat) => prevnbChat + 1);
+        });
+	
+		return () => {
+			socket.off('chat');
+			socket.off('chat-read');
+		};
+	}, [])
+	
+
     return (
         <div
             className="flex flex-row pt-4 pb-4 border-gray-900 rounded-lg hover:bg-gray-300"
@@ -80,6 +108,9 @@ function ChatShowIndivFriend({ chatElem, setCurrChat }: PropChatIndivFriend) {
                         src={link}
                         alt="profile picture"
                     />
+			<div className="ml-6 mt-3 absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full">
+				{nbNotifChat}
+			</div>
             <div className={styleP}>
                 {chatElem.firstName + ' ' + chatElem.lastName}
             </div>
