@@ -20,6 +20,7 @@ import { SuccessMsg } from "../shared/errors";
 import PhotoUploader from "../components/settings/PhotoUpload";
 import ShowPictures from "../components/settings/ShowPictures";
 import AskGeolocalisation from "../components/settings/AskGeo";
+import CheckboxAskGeoModify from "../components/settings/CheckboxAskGeo";
 
 function SettingsPage() {
 	const [error, setError] = useState<string>('');
@@ -37,6 +38,9 @@ function SettingsPage() {
 	const [tagsAll, setTagsAll] = useState<string[]>([]);
 	const [pictures, setPictures] = useState<string[]>([]);
 	const [mainPicture, setMainPicture] = useState<string>('');
+	const [longitude, setLongitude] = useState<string>('');
+	const [latitude, setLatitude] = useState<string>('');
+	const [amendPosition, setAmendPosition] = useState<boolean>(false);
 	
 
 	const [maxAge, setMaxAge] = useState<string>('');
@@ -75,6 +79,9 @@ function SettingsPage() {
 		if (userInfo.date_birth)
 			setDatebirth(formatDateYYYYMMDD(userInfo.date_birth));
 		setGender(userInfo.gender);
+		setLongitude(userInfo.position.longitude.toString());
+		setLatitude(userInfo.position.latitude.toString());
+		setAmendPosition(userInfo.force_position);
 	}
 
 	async function saveUserInfo() {
@@ -129,6 +136,12 @@ function SettingsPage() {
 	function handleOnChangeBio(e: React.ChangeEvent<HTMLInputElement>) {
         setBio(e.target.value);
     }
+	function handleOnChangeLatitude(e: React.ChangeEvent<HTMLInputElement>) {
+        setLatitude(e.target.value);
+    }
+	function handleOnChangeLongitude(e: React.ChangeEvent<HTMLInputElement>) {
+        setLongitude(e.target.value);
+    }
 
 	function handleSaveSettings(event: any) {
         event.preventDefault();
@@ -174,6 +187,25 @@ function SettingsPage() {
 							max={maxAge}
 							init={datebirth}
 						/>
+					
+					<MultiplesInputOneRow nbInRow="2">
+						<ErrorField
+							name="latitude"
+							title="Latitude"
+							onBlur={handleOnChangeLatitude}
+							init={latitude}
+							disabled={!amendPosition}
+						/>
+						<ErrorField
+							name="longitude"
+							title="Longitude"
+							onBlur={handleOnChangeLongitude}
+							init={longitude}
+							disabled={!amendPosition}
+						/>
+					</MultiplesInputOneRow>
+
+					<CheckboxAskGeoModify elemChecked={amendPosition} setElemChecked={setAmendPosition} />
 
 					{/* <MultiplesInputOneRow nbInRow="2"> */}
 						

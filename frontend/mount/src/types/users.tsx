@@ -15,4 +15,6 @@ export type User = {
 	biography: string;
 	pictures: string[];
 	profile_picture: string;
+	position: { longitude: number; latitude: number };
+	force_position: boolean;
 }

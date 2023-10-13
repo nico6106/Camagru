@@ -29,9 +29,20 @@ app.use(cors({
 	optionsSuccessStatus: 204,
 }));
 
+// //ip info
+// const ipinfo = require('ipinfo-express')
+// app.use(ipinfo({
+//     token: `${process.env.IPINFO_TOKEN}`,
+//     cache: null,
+//     timeout: 5000,
+//     ipSelector: null
+// }));
+app.set('trust proxy', true);
+
 //DB
 const db = new Database;
 db.initConnectionDb();
+
 
 //socket-io
 const http = require('http');
