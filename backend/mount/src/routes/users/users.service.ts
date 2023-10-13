@@ -16,6 +16,11 @@ export type UserLinkFromDB = {
 	date: number;
 }
 
+export type TPosition = {
+	longitude: number;
+	latitude: number;
+}
+
 export async function getMe(db: Database, req: Request, res: Response) {
 	
 	const user: TableUser | null = await getUserFromRequest(db, req);
@@ -204,6 +209,10 @@ function computeAgeUser(dateBirth: Date): number {
 
 export async function updateSettings(db: Database, req: Request, res: Response) {
 	const { email, lastname, firstname, datebirth, gender, preference, biography, tags} = req.body;
+	const { amend_position, latitude, longitude } = req.body;
+	const numLatitude = parseFloat(latitude);
+	const numLongitude = parseFloat(longitude);
+
     console.log('update settings');
 
     //recuperer USER
@@ -213,13 +222,25 @@ export async function updateSettings(db: Database, req: Request, res: Response) 
 
     console.log(user);
 
+	let position: TPosition
+	if (amend_position) {
+		position = {
+			latitude: numLatitude,
+			longitude: numLongitude,
+		}
+	} else {
+		position = {
+			latitude: user.position.latitude,
+			longitude: user.position.longitude,
+		}
+	}
 	//amend user
 	await db.AmendElemsFromTable(
         TableUsersName,
         'id',
         user.id,
-		['email', 'last_name', 'first_name', 'date_birth', 'gender', 'preference', 'interests', 'biography'],
-        [email, lastname, firstname, datebirth, gender, preference, tags, biography],
+		['email', 'last_name', 'first_name', 'date_birth', 'gender', 'preference', 'interests', 'biography', 'force_position', 'position'],
+        [email, lastname, firstname, datebirth, gender, preference, tags, biography, amend_position, position],
     );
 
     return res.status(200).json({ message: SuccessMsg });

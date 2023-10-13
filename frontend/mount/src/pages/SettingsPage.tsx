@@ -97,6 +97,9 @@ function SettingsPage() {
 					preference: preference,
 					biography: bio,
 					tags: tagsUser,
+					amend_position: amendPosition,
+					longitude: longitude,
+					latitude: latitude,
                 },
                 {
                     withCredentials: true,

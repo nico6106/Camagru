@@ -18,6 +18,9 @@ export async function geolocUser(db: Database, req: Request, res: Response) {
 		return res.status(200).json({ message: ErrorMsg, error: "not connected", user: null });
 
 
+	//verif si user force sa position via settings
+	if (user.force_position === true) return res.status(200).json({ message: SuccessMsg }); 
+
 	if (valid) {
 		//sauvegarder geoloc user
 		sauvGeoloc(db, user.id, longitude, latitude); 

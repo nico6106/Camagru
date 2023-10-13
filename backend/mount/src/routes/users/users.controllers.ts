@@ -13,6 +13,7 @@ import { blockUser, unblockUser } from "./users.block.service";
 import { getNbNotifs, getNotifs } from "./users.notifications.service";
 import { validateGeoBody } from "./middlewares/check-geo.middleware";
 import { geolocUser } from "./users.geoloc.service";
+import { validateGeolocModifyBody } from "./middlewares/check-geo-modifu.middleware";
 
 const express = require('express')
 const router = express.Router();
@@ -39,7 +40,7 @@ router.get('/:id', checkConnected, validateUserIdFormat, (req: Request, res: Res
 	return getUserById(db, req, res);
 })
 
-router.post('/updatesettings', checkConnected, validateSignUpBody, validateSettings, (req: Request, res: Response) => {
+router.post('/updatesettings', checkConnected, validateSignUpBody, validateSettings, validateGeolocModifyBody, (req: Request, res: Response) => {
 	return updateSettings(db, req, res);
 })
 
