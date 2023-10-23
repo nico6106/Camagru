@@ -30,46 +30,55 @@ export async function getAllChats(db: Database, req: Request, res: Response) {
             .json({ message: ErrorMsg, error: 'error loading chats' });
 
 	//withdraw all users that are blocked
-	const chatsUser: TableChat[] = 
+	const chatsUserFilterBlocked: TableChat[] = 
 		chatsUserTab.filter(
 			elem => !(
 				user.blocked_user.includes(elem.id_a) || user.blocked_user.includes(elem.id_b)
 			));
+	//withdraw all chats with people that we do not like anymore
+	const chatsUser: TableChat[] = 
+		chatsUserFilterBlocked.filter(elem => 
+			user.matches.includes(elem.id_a) || user.matches.includes(elem.id_b)
+			);
 	//extract all infos of users that are in my chats list
 	const ids: number[] = chatsUser.map(item => item.id_a !== user.id ? item.id_a : item.id_b);
-	const helpRequest: T_ListRequest = giveListIdToRequest('id', ids);
-	const usersCrossCheck: TableUser[] | null =
+	const chatRetour: ChatRetour[] = [];
+
+	if (ids.length > 0) {
+		const helpRequest: T_ListRequest = giveListIdToRequest('id', ids);
+		const usersCrossCheck: TableUser[] | null =
         await db.SelectElemsFromTableMultiplesArgsOR(
             TableUsersName,
             helpRequest.fields,
             helpRequest.values,
 			'id, first_name, last_name, profile_picture'
         );
-	if (!usersCrossCheck)
-        return res
-            .status(200)
-            .json({ message: ErrorMsg, error: 'error loading chats' });
+		if (!usersCrossCheck)
+			return res
+				.status(200)
+				.json({ message: ErrorMsg, error: 'error loading chats' });
 
-	//generate the new list with names/pictures
-	const chatRetour: ChatRetour[] = [];
-	for (const elem of chatsUser) {
-		const idUser: number = elem.id_a !== user.id ? elem.id_a : elem.id_b;
-		const unread: number = elem.id_a === user.id ? elem.unread_a : elem.unread_b;
-		const indexUser: number = usersCrossCheck.findIndex((elem) => elem.id === idUser);
-		if (indexUser !== -1) {
-			const elemChat: ChatRetour = {
-				idChat: elem.id,
-				idUser: idUser,
-				firstName: usersCrossCheck[indexUser].first_name,
-				lastName: usersCrossCheck[indexUser].last_name,
-				picture: usersCrossCheck[indexUser].profile_picture,
-				nbUnread: unread,
-				connected: usersCrossCheck[indexUser].connected,
+		//generate the new list with names/pictures
+		for (const elem of chatsUser) {
+			const idUser: number = elem.id_a !== user.id ? elem.id_a : elem.id_b;
+			const unread: number = elem.id_a === user.id ? elem.unread_a : elem.unread_b;
+			const indexUser: number = usersCrossCheck.findIndex((elem) => elem.id === idUser);
+			if (indexUser !== -1) {
+				const elemChat: ChatRetour = {
+					idChat: elem.id,
+					idUser: idUser,
+					firstName: usersCrossCheck[indexUser].first_name,
+					lastName: usersCrossCheck[indexUser].last_name,
+					picture: usersCrossCheck[indexUser].profile_picture,
+					nbUnread: unread,
+					connected: usersCrossCheck[indexUser].connected,
+				}
+				chatRetour.push(elemChat);
 			}
-			chatRetour.push(elemChat);
 		}
-	}
 
+	}
+	
     return res.status(200).json({ message: SuccessMsg, chats: chatRetour });
 }
 

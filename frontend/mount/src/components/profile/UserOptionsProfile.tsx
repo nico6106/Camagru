@@ -147,6 +147,11 @@ function UserOptionProfile({ userM, liked, setLiked, showReported, setShowReport
 				</LinkElem>
 			</div>
 			<div>
+				<LinkElem>
+					<ShowUserRelation myId={user.id} liked={liked} userM={userM} />
+				</LinkElem>
+			</div>
+			<div>
 				{/* <LinkElem handleOnClick={handleOnClick} >{liked}</LinkElem> */}
 				<ButtonLike liked={liked} handleOnClick={handleOnClick} />
 			</div>
@@ -159,6 +164,41 @@ function UserOptionProfile({ userM, liked, setLiked, showReported, setShowReport
 			</>)}
 	</div>
 	</>)
+}
+
+type PropRelationUser = {
+	myId: number;
+	liked: boolean;
+	userM: UserExport;
+}
+//show if user like me / matched with me
+function ShowUserRelation({ myId, liked, userM }: PropRelationUser) {
+	const [showMsg, setMsg] = useState<string>('');
+	const [userLikeMe, setUserLikeMe] = useState<boolean>(false);
+	
+	useEffect(() => {
+		for (const elem of userM.likes) {
+			if (elem.id === myId) {
+				setUserLikeMe(true);
+				break ;
+			}
+		}
+	}, []);
+
+	useEffect(() => {
+		if (liked === true && userLikeMe === true)
+			setMsg('You matched !')
+		else if (userLikeMe === true) {
+			const text: string = `${userM.first_name} likes you`
+			setMsg(text)
+		}
+		else if (liked === true)
+			setMsg('Be patient !')
+		else
+			setMsg('Like first !')
+	}, [userLikeMe, liked])
+		
+	return (<>{showMsg}</>);
 }
 
 function ShowUserReported() {

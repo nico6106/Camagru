@@ -33,13 +33,15 @@ export async function getNbNotifs(db: Database, req: Request, res: Response) {
             .status(200)
             .json({ message: ErrorMsg, error: 'error loading chats' });
 	for (const elem of chatsUser) {
-		if (elem.id_a === user.id) {
-			if (!user.blocked_user.includes(elem.id_b))
-				nbNotifChat = nbNotifChat + elem.unread_a;
-		}
-		else {
-			if (!user.blocked_user.includes(elem.id_a))
-				nbNotifChat = nbNotifChat + elem.unread_b;
+		if (user.matches.includes(elem.id_a) || user.matches.includes(elem.id_b)) {
+			if (elem.id_a === user.id) {
+				if (!user.blocked_user.includes(elem.id_b))
+					nbNotifChat = nbNotifChat + elem.unread_a;
+			}
+			else {
+				if (!user.blocked_user.includes(elem.id_a))
+					nbNotifChat = nbNotifChat + elem.unread_b;
+			}
 		}
 	}
 	return res.status(200).json({ message: SuccessMsg, value: nbNotif, valueChat: nbNotifChat });
