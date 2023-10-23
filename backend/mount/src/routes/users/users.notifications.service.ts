@@ -33,10 +33,14 @@ export async function getNbNotifs(db: Database, req: Request, res: Response) {
             .status(200)
             .json({ message: ErrorMsg, error: 'error loading chats' });
 	for (const elem of chatsUser) {
-		if (elem.id_a === user.id)
-			nbNotifChat = nbNotifChat + elem.unread_a;
-		else
-			nbNotifChat = nbNotifChat + elem.unread_b;
+		if (elem.id_a === user.id) {
+			if (!user.blocked_user.includes(elem.id_b))
+				nbNotifChat = nbNotifChat + elem.unread_a;
+		}
+		else {
+			if (!user.blocked_user.includes(elem.id_a))
+				nbNotifChat = nbNotifChat + elem.unread_b;
+		}
 	}
 	return res.status(200).json({ message: SuccessMsg, value: nbNotif, valueChat: nbNotifChat });
 }
@@ -98,6 +102,10 @@ export async function getNotifs(db: Database, req: Request, res: Response) {
 }
 
 export async function handleNotificationCreation(db: Database, res: Response, notif: TypeNotif, userReceive: TableUser, idSend: number) {
+	//verif user not blocked
+	if (userReceive.blocked_user.includes(idSend))
+		return ;
+
 	const now = Date.now();
 	//save to DB
 	const newData = [...userReceive.notifications, {

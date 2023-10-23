@@ -1,9 +1,10 @@
 import { Socket } from 'socket.io';
 import { OnlineUsers } from '../socket/socket.users';
 import { DataSocketChatServ } from '../socket/socket.type';
-import { ChatMessage, TableChat, TableChatName } from '../../database/data';
+import { ChatMessage, TableChat, TableChatName, TableUser, TableUsersName } from '../../database/data';
 import { Database } from '../../database/db';
 import { MsgChatRetour } from '../../shared/chat';
+import { getUserFromRequest } from '../auth/auth.service';
 
 type SocketReceiveMsg = {
 	idChat: number;
@@ -59,8 +60,31 @@ export async function handleIncomeChatMsg(
 	}
 	console.log('sending msg:')
 	console.log(elemToSend)
-	users.sendMsg(chat.id_a, 'chat', elemToSend);
-	users.sendMsg(chat.id_b, 'chat', elemToSend);
-	users.sendMsg(chat.id_a, 'chat2', elemToSend);
-	users.sendMsg(chat.id_b, 'chat2', elemToSend);
+
+	//verif if user not blocked before sending live notif
+	//get id of receiver + get the user we receive
+	let idUserReceive: number = -1;
+	if (chat.id_a === users.users[indexUser].idUser)
+		idUserReceive = chat.id_b;
+	else
+		idUserReceive = chat.id_a;
+	
+	const userReceiveMsg: TableUser[] | null = await db.selectOneElemFromTable(
+        TableUsersName,
+        'id',
+        idUserReceive,
+    );
+    if (!userReceiveMsg || userReceiveMsg.length !== 1)
+        return ;
+	console.log(userReceiveMsg[0].blocked_user)
+	console.log('a=' + chat.id_a + ', b=' + chat.id_b)
+	//send live msg if user not blocked
+	if (chat.id_a === users.users[indexUser].idUser || !userReceiveMsg[0].blocked_user.includes(chat.id_b)) {
+		users.sendMsg(chat.id_a, 'chat', elemToSend);
+		users.sendMsg(chat.id_a, 'chat2', elemToSend);
+	}
+	if (chat.id_b === users.users[indexUser].idUser || !userReceiveMsg[0].blocked_user.includes(chat.id_a)) {
+		users.sendMsg(chat.id_b, 'chat', elemToSend);
+		users.sendMsg(chat.id_b, 'chat2', elemToSend);
+	}
 }

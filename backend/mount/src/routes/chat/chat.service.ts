@@ -18,17 +18,23 @@ export async function getAllChats(db: Database, req: Request, res: Response) {
             .json({ message: ErrorMsg, error: 'not connected' });
 
 	//extract all my chats
-    const chatsUser: TableChat[] | null =
+    const chatsUserTab: TableChat[] | null =
         await db.SelectElemsFromTableMultiplesArgsOR(
             TableChatName,
             ['id_a', 'id_b'],
             [user.id, user.id],
         );
-    if (!chatsUser)
+    if (!chatsUserTab)
         return res
             .status(200)
             .json({ message: ErrorMsg, error: 'error loading chats' });
 
+	//withdraw all users that are blocked
+	const chatsUser: TableChat[] = 
+		chatsUserTab.filter(
+			elem => !(
+				user.blocked_user.includes(elem.id_a) || user.blocked_user.includes(elem.id_b)
+			));
 	//extract all infos of users that are in my chats list
 	const ids: number[] = chatsUser.map(item => item.id_a !== user.id ? item.id_a : item.id_b);
 	const helpRequest: T_ListRequest = giveListIdToRequest('id', ids);
