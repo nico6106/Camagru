@@ -65,8 +65,8 @@ function MobileMenu({ showMenu }: { showMenu: boolean }) {
                         block={true}
                     />
                     <ButtonLinkNavBar
-                        text="Team"
-                        page="/"
+                        text="Find profile"
+                        page="/find"
                         selected={false}
                         block={true}
                     />
@@ -120,6 +120,7 @@ function ButtonLinkNavBar({
 function LinkNavBar() {
 	const { user } = useUserContext();
 	const profileLink: string = `/profile/${user?.id}`;
+	
     return (
         <div className="hidden sm:ml-6 sm:block">
             <div className="flex space-x-4">
@@ -130,20 +131,8 @@ function LinkNavBar() {
                     block={false}
                 />
                 <ButtonLinkNavBar
-                    text="Team"
-                    page=""
-                    selected={false}
-                    block={false}
-                />
-                <ButtonLinkNavBar
-                    text="Projects"
-                    page=""
-                    selected={false}
-                    block={false}
-                />
-                <ButtonLinkNavBar
-                    text="Calendar"
-                    page=""
+                    text="Browsing"
+                    page="/find"
                     selected={false}
                     block={false}
                 />

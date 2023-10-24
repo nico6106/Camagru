@@ -57,7 +57,8 @@ export async function geolocUser(db: Database, req: Request, res: Response) {
 async function getMyIp() {
 	const axios = require('axios');
 	const userIp = '62.210.34.250';
-
+	return userIp;
+	
 	try {
 		const response = await axios.get(
 			`https://api.ipify.org/?format=json`,

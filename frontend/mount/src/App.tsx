@@ -18,6 +18,7 @@ import TrackingOnline from './components/auth/TrackingOnline';
 import TrackeurTest from './components/profile/TrackerTest';
 import NotificationsPage from './pages/NotificationsPage';
 import ChatPage from './pages/ChatPage';
+import FindUserPage from './pages/FindPage';
 
 function App() {
     return (
@@ -44,6 +45,7 @@ function App() {
 					<Route path="/profile" element={<ProfilePage />} />
 					<Route path="/notifications" element={<NotificationsPage />} />
 					<Route path="/chat" element={<ChatPage />} />
+					<Route path="/find" element={<FindUserPage />} />
                     <Route path="/404" element={<Page404 />} />
                     <Route path="*" element={<Page404 />} />
                 </Routes>

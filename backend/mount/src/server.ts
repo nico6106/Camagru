@@ -81,6 +81,9 @@ app.use('/users', usersRouter)
 const chatRouter = require('./routes/chat/chat.controllers')
 app.use('/chat', chatRouter)
 
+const searchRouter = require('./routes/search/search.controllers')
+app.use('/search', searchRouter)
+
 app.get('/', (req: Request, res: Response) => {
 	res.send('Hiii')
 	console.log('ouou')
