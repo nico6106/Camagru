@@ -31,7 +31,7 @@ export async function geolocUser(db: Database, req: Request, res: Response) {
 
 		let userIp = req.ip;
 		if (userIp.match('::fff'))
-			userIp = '62.210.34.250';
+			userIp = await getMyIp();
 
 		ipinfoWrapper.lookupIp(userIp).then((response: IPinfo) => {
 			console.log(response);
@@ -52,6 +52,27 @@ export async function geolocUser(db: Database, req: Request, res: Response) {
 
 	}
 	return res.status(200).json({ message: SuccessMsg });
+}
+
+async function getMyIp() {
+	const axios = require('axios');
+	const userIp = '62.210.34.250';
+
+	try {
+		const response = await axios.get(
+			`https://api.ipify.org/?format=json`,
+			{
+				withCredentials: true,
+			},
+		);
+		console.log(response.data);
+		if (response.data.ip)
+			return response.data.ip
+		return userIp;
+	} catch (error) {
+		//to handle ?
+		return userIp;
+	}
 }
 
 export async function sauvGeoloc(db: Database, userId: number, longitude: string, latitude: string ) {
