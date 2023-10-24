@@ -70,5 +70,9 @@ export async function browsingProfiles(db: Database, req: Request, res: Response
 
 function computeCommonTags(tagsUser1: string[], tagsUser2: string[]): string[] {
 	const commonTags: string[] = [];
+	for (const elem of tagsUser1) {
+		if (tagsUser2.includes(elem))
+			commonTags.push(elem)
+	}
 	return commonTags;
 }
