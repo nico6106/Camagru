@@ -58,7 +58,7 @@ export type TableUser = {
     likes: { id: number; date: number }[];
     liked_by: { id: number; date: number }[];
     matches: number[];
-    position: { longitude: number; latitude: number };
+    position: GPSCoordinates;
 	force_position: boolean;
     fame_rating: number;
     fame_evol: number;
@@ -92,4 +92,9 @@ export type ChatMessage = {
 	sender: number;
 	date: number;
 	content: string
+}
+
+export type GPSCoordinates = {
+	longitude: number;
+	latitude: number;
 }

@@ -20,6 +20,9 @@ type FormatCSV = {
 	interests: string;
 	profile_picture: string;
 	date_birth: string;
+	latitude: string;
+	longitude: string;
+	fame_rating: string;
 }
 export async function createLife(db: Database, req: Request, res: Response) {
 	let retour;
@@ -43,9 +46,12 @@ export async function createLife(db: Database, req: Request, res: Response) {
 export async function loopData(db: Database, data: FormatCSV[]) {
 	if (data.length === 0) return ;
 
-	for (let i = 0; i < data.length; i++) {
-		await createOne(db, data, i);
-	}
+	await createOne(db, data, 0);
+	await createOne(db, data, 1);
+
+	// for (let i = 0; i < data.length; i++) {
+	// 	await createOne(db, data, i);
+	// }
 	
 }
 
@@ -57,6 +63,11 @@ export async function createOne(db: Database, data: FormatCSV[], index: number) 
     const confirmID: string = generateId();
 
 	const interests: string[] = data[index].interests.split(' ');
+
+	const position = { 
+		longitude: parseFloat(data[index].longitude),
+		latitude: parseFloat(data[index].latitude),
+	};
 
 	let values: any[] = [
         data[index].pseudo,
@@ -72,10 +83,12 @@ export async function createOne(db: Database, data: FormatCSV[], index: number) 
 		data[index].bio,
 		data[index].profile_picture,
 		[data[index].profile_picture],
-		interests
+		interests,
+		parseInt(data[index].fame_rating),
+		position,
     ];
     const fields: string =
-        'username, email, first_name, last_name, password, email_confirm_id, date_birth, gender, preference, email_verified, biography, profile_picture, pictures, interests';
+        'username, email, first_name, last_name, password, email_confirm_id, date_birth, gender, preference, email_verified, biography, profile_picture, pictures, interests, fame_rating, position';
 	
 		//add user to db
     await db.insertToTable(TableUsersName, fields, values);

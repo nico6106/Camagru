@@ -1,4 +1,4 @@
-import { TableUser, TableUsersName } from "../../database/data";
+import { GPSCoordinates, TableUser, TableUsersName } from "../../database/data";
 import { Database } from "../../database/db"
 import { Request, Response } from "express";
 import { getUserFromRequest, verifyJWT } from "../auth/auth.service";
@@ -169,10 +169,28 @@ export async function transformUserDbInUserExport(db: Database, userDB: TableUse
 		fake_account: userDB.fake_account.length,
 		connected: userDB.connected,
 		last_connection: userDB.last_connection,
-		city: 'Paris',
+		city: userDB.position ? await getCityByGPSLocalisation(userDB.position) :  'No city',
 		age: computeAgeUser(userDB.date_birth),
 	}
 	return user;
+}
+
+async function getCityByGPSLocalisation(coordinates: GPSCoordinates) {
+	const axios = require('axios');
+
+	try {
+		const response = await axios.get(
+			`https://nominatim.openstreetmap.org/reverse?lat=${coordinates.latitude}&lon=${coordinates.longitude}&format=json`,
+			{
+				withCredentials: true,
+			},
+		);
+		console.log(response.data);
+		return response.data.address.town
+	} catch (error) {
+		//to handle ?
+		return 'No city';
+	}
 }
 
 function transformListConnexionInUserShort(data: TableUser[] | null, userList: UserLinkFromDB[]): UserShort[] {
