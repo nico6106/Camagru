@@ -186,7 +186,11 @@ async function getCityByGPSLocalisation(coordinates: GPSCoordinates) {
 			},
 		);
 		console.log(response.data);
-		return response.data.address.town
+		if (response.data.address.town)
+			return response.data.address.town
+		else if (response.data.address.city)
+			return response.data.address.city
+		return response.data.address.country
 	} catch (error) {
 		//to handle ?
 		return 'No city';
