@@ -23,15 +23,13 @@ function FindUserPage() {
 	useEffect(() => {
 		if (!dataCards)
 			return ;
-		console.log('change: '+orderBy)
 		// console.log(dataCards)
 		sortCards(dataCards, orderBy);
 	}, [orderBy]);
 
 	function sortCards(data: MatchingResponse[], type: OrderBy) {
-		const newData: MatchingResponse[] = data;
+		const newData: MatchingResponse[] = [...data];
 
-		console.log('changing here: '+type)
 		if (type === "Magic")
 			newData.sort((a, b) => b.autoRank - a.autoRank);
 		else if (type === "Distance")
