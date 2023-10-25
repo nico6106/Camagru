@@ -5,30 +5,12 @@ import { getUserFromRequest } from "../auth/auth.service";
 import { ErrorMsg, NotConnected, SuccessMsg } from "../../shared/errors";
 import { haversineDistance } from "./distance.service";
 import { computeAgeUser } from "../users/users.service";
+import { MatchingResponse, UserInfoMatching } from "../../shared/search";
 
 type MatchingUsers = {
 	user: TableUser;
 	distance: number;
 	nbCommonTags: number;
-	commonTags: string[];
-	normDist: number;
-	normTags: number;
-	normFame: number;
-	autoRank: number;
-}
-
-type UserInfoMatching = {
-	id: number;
-	first_name: string;
-    last_name: string;
-	age: number;
-	gender: 'male' | 'female' | 'other';
-	profile_picture: string;
-}
-
-type MatchingResponse = {
-	user: UserInfoMatching;
-	distance: number;
 	commonTags: string[];
 	normDist: number;
 	normTags: number;
