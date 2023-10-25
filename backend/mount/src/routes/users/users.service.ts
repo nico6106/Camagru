@@ -220,7 +220,7 @@ function transformListConnexionInUserShort(data: TableUser[] | null, userList: U
 	return newList;
 }
 
-function computeAgeUser(dateBirth: Date): number {
+export function computeAgeUser(dateBirth: Date): number {
 	const x = new Date();
 	const y = dateBirth;
 	const diff = x.getTime() - y.getTime();

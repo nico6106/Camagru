@@ -46,7 +46,7 @@ export async function createLife(db: Database, req: Request, res: Response) {
 export async function loopData(db: Database, data: FormatCSV[]) {
 	if (data.length === 0) return ;
 
-	for (let i = 0; i < 15; i++) {
+	for (let i = 0; i < 20; i++) {
 		await createOne(db, data, i);
 	}
 
@@ -63,7 +63,7 @@ export async function createOne(db: Database, data: FormatCSV[], index: number) 
 	const hash = await hashPassword(data[index].password);
     const confirmID: string = generateId();
 
-	const interests: string[] = data[index].interests.split(' ');
+	const interests: string[] = data[index].interests.split(',');
 
 	const position = { 
 		longitude: parseFloat(data[index].longitude),
