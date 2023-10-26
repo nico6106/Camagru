@@ -6,6 +6,7 @@ import { ErrorMsg, NotConnected, SuccessMsg } from "../../shared/errors";
 import { haversineDistance } from "./distance.service";
 import { computeAgeUser } from "../users/users.service";
 import { MatchingGlobalData, MatchingResponse, UserInfoMatching } from "../../shared/search";
+import { AvailableTags } from "../../data/data-tags";
 
 type MatchingUsers = {
 	user: TableUser;
@@ -60,7 +61,7 @@ export async function browsingProfiles(db: Database, req: Request, res: Response
 	const global: MatchingGlobalData = createResponseGlobalData(response, allDistances, allNbTags, allFame);
 	
 	//compute distance from other users and 
-	return res.status(200).json({ message: SuccessMsg, data_search: response, data_global: global });
+	return res.status(200).json({ message: SuccessMsg, data_search: response, data_global: global, availables_tags: AvailableTags, user_tags: meUser.interests });
 }
 
 function createResponseGlobalData(
@@ -107,6 +108,7 @@ function createResponse(usersMatching: MatchingUsers[]): MatchingResponse[] {
 			gender: elem.user.gender,
 			profile_picture: elem.user.profile_picture,
 			fame_rating: elem.user.fame_rating,
+			tags: elem.user.interests,
 		};
 		const tmpElem: MatchingResponse = {
 			user: tmpUser,

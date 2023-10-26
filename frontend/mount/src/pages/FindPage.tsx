@@ -19,6 +19,7 @@ export type MinMaxInit = {
 	fameMax: number;
 	minNbCommonTags: number;
 	maxNbCommonTags: number;
+	availableTags: string[];
 }
 function FindUserPage() {
     const { user } = useUserContext();
@@ -33,6 +34,10 @@ function FindUserPage() {
     const [fameMax, setFameMax] = useState<number>(0);
     const [nbCommonTags, setNbCommonTags] = useState<number>(0);
 	const [minMax, setMinMax] = useState<MinMaxInit | null>(null);
+
+	const [tagsUser, setTagsUser] = useState<string[]>([]);
+	const [tagsPossible, setTagsPossible] = useState<string[]>([]);
+
 
     useEffect(() => {
         searchInitBackend();
@@ -64,10 +69,28 @@ function FindUserPage() {
 			//filter by fame
 			if (!(elem.user.fame_rating >= fameMin && elem.user.fame_rating <= fameMax))
 				add = false;
+			//filter by tag
+			if (elem.user.id === 143)
+				console.log(elem.user.tags)
+			if (filterbyTags(elem.user.tags, tagsUser))
+				add = false;
 			if (add)
 				newData.push(elem);
 		}
 		return newData;
+	}
+
+	//filter si un user a pas au moins un tag de la liste
+	function filterbyTags(tagsUser: string[], tagsFilter: string[]): boolean {
+
+		for (const tag of tagsUser) {
+			if (tagsFilter.includes(tag)) {
+				return false;
+			}
+		}
+		if (tagsFilter.includes('None') && tagsUser.length === 0)
+			return false;
+		return true;
 	}
 
     function sortCards(data: MatchingResponse[], type: OrderBy) {
@@ -108,6 +131,7 @@ function FindUserPage() {
                 setFameMin(global.minFame);
                 setFameMax(global.maxFame);
                 setNbCommonTags(global.maxTags);
+				const availableTags: string[] = response.data.user_tags ? [...response.data.user_tags, 'None'] : [];
 				setMinMax({
 					distMin: global.minDist,
 					distMax: global.maxDist,
@@ -117,8 +141,18 @@ function FindUserPage() {
 					fameMax: global.maxFame,
 					minNbCommonTags: global.minTags,
 					maxNbCommonTags: global.maxTags,
+					availableTags: availableTags,
 				})
+
+				if (response.data.user_tags) {
+					const tags: string[] = [...response.data.availables_tags, 'None']
+					setTagsUser(tags);
+					setTagsPossible(tags);
+				}
+				//availables_tags
+				//user_tags
             }
+
             return response.data;
         } catch (error) {
             // setRetour(null);
@@ -148,6 +182,9 @@ function FindUserPage() {
                 setNbCommonTags={setNbCommonTags}
 				initMinMax={minMax}
 				functionButton={filter}
+				tagsUser={tagsUser}
+				tagsPossible={tagsPossible}
+				setTagsUser={setTagsUser}
             />}
             {dataCards && <ShowAllCards data={dataCards} />}
         </TramePage>

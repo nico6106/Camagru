@@ -6,6 +6,7 @@ export type UserInfoMatching = {
 	gender: 'male' | 'female' | 'other';
 	profile_picture: string;
 	fame_rating: number;
+	tags: string[];
 }
 
 export type MatchingResponse = {

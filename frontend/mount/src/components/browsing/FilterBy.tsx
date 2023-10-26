@@ -1,7 +1,9 @@
+import { useState } from "react";
 import { MinMaxInit, OrderBy } from "../../pages/FindPage";
 import Button from "../elems/Button";
 import { ErrorField } from "../elems/ErrorFields";
 import SelectInput from "../elems/SelectInput";
+import { FilterByTags } from "./FilterByTags";
 
 type PropShowFilters = {
     orderBy: OrderBy;
@@ -22,6 +24,9 @@ type PropShowFilters = {
     setNbCommonTags: any;
 	initMinMax: MinMaxInit;
 	functionButton: any;
+	tagsUser: string[];
+	tagsPossible: string[];
+	setTagsUser: any;
 };
 function ShowFilters({
     orderBy,
@@ -42,6 +47,9 @@ function ShowFilters({
     setNbCommonTags,
 	initMinMax,
 	functionButton,
+	tagsUser,
+	tagsPossible,
+	setTagsUser,
 }: PropShowFilters) {
     const allFilter: string[] = [
         'Magic',
@@ -51,6 +59,9 @@ function ShowFilters({
         'Common Tags',
     ];
     const spaceFilter: number = 20;
+
+	const [showFilterOptions, setFilterOptions] = useState<boolean>(false);
+	const [styleFilterOptions, setStyleFilterOptions] = useState<string>('hidden')
 
     function handleOnChange(e: React.ChangeEvent<HTMLInputElement>) {
         setOrderBy(e.target.value);
@@ -88,6 +99,16 @@ function ShowFilters({
         const nb = parseInt(e.target.value);
         if (!isNaN(nb)) setFameMax(e.target.value);
     }
+
+	//show filtering options
+	function handleShowFilteringOptions() {
+		if (!showFilterOptions)
+			setStyleFilterOptions('')
+		else
+			setStyleFilterOptions('hidden')
+		setFilterOptions(prevFilterOptions => !prevFilterOptions);
+		
+	}
     return (
         <>
             <div className="flex flex-wrap pl-3">
@@ -102,92 +123,110 @@ function ShowFilters({
                         size={40}
                     />
                 </div>
-            </div>
-            <div className="flex flex-wrap pl-3">
-				{/* <div className="pr-5">
-					<RangeElem min={0} max={distMax} title='Dist from you' setValue={handleOnChangeDistMax} />
-				</div> */}
-                <div className="pr-5">
-                    <ErrorField
-                        name="filterDistMin"
-                        title="Distance min"
-                        onBlur={handleOnChangeDistMin}
-                        init={distMin.toString()}
-                        size={spaceFilter}
-                        type={'number'}
-						min={initMinMax.distMin}
-						max={initMinMax.distMax}
-
-                    />
-                </div>
-                <div className="pr-5">
-                    <ErrorField
-                        name="filterDistMax"
-                        title="Distance Max"
-                        onBlur={handleOnChangeDistMax}
-                        init={distMax.toString()}
-                        size={spaceFilter}
-                        type={'number'}
-						min={initMinMax.distMin}
-						max={initMinMax.distMax}
-                    />
-                </div>
-                <div className="pr-5">
-                    <ErrorField
-                        name="filterAgeMin"
-                        title="Age min"
-                        onBlur={handleOnChangeAgeMin}
-                        init={ageMin.toString()}
-                        size={spaceFilter}
-                        type={'number'}
-						min={initMinMax.ageMin}
-						max={initMinMax.ageMax}
-                    />
-                </div>
-                <div className="pr-5">
-                    <ErrorField
-                        name="filterAgeMax"
-                        title="Age Max"
-                        onBlur={handleOnChangeAgeMax}
-                        init={ageMax.toString()}
-                        size={spaceFilter}
-                        type={'number'}
-						min={initMinMax.ageMin}
-						max={initMinMax.ageMax}
-                    />
-                </div>
-
-				<div className="pr-5">
-                    <ErrorField
-                        name="filterFameMin"
-                        title="Fame min"
-                        onBlur={handleOnChangeFameMin}
-                        init={fameMin.toString()}
-                        size={spaceFilter}
-                        type={'number'}
-						min={initMinMax.fameMin}
-						max={initMinMax.fameMax}
-                    />
-                </div>
-                <div className="pr-5">
-                    <ErrorField
-                        name="filterFameMax"
-                        title="Fame Max"
-                        onBlur={handleOnChangeFameMax}
-                        init={fameMax.toString()}
-                        size={spaceFilter}
-                        type={'number'}
-						min={initMinMax.fameMin}
-						max={initMinMax.fameMax}
-                    />
-                </div>
-				<div className="pr-5 pt-7">
-                    <Button 
-						text='Filter'
+				<div className="pr-5 pt-6 ">
+					<Button 
+						text={showFilterOptions ? 'Hide filtering options' : 'Show filtering options'}
 						type='button'
-						onClick={functionButton} />
-                </div>
+						onClick={handleShowFilteringOptions}
+					/>
+				</div>
             </div>
+
+			<div className={styleFilterOptions}>
+				<div className="flex flex-wrap pl-3">
+					<div className="pr-5">
+						<ErrorField
+							name="filterDistMin"
+							title="Distance min"
+							onBlur={handleOnChangeDistMin}
+							init={distMin ? distMin.toString() : '0'}
+							size={spaceFilter}
+							type={'number'}
+							min={initMinMax.distMin}
+							max={initMinMax.distMax}
+
+						/>
+					</div>
+					<div className="pr-5">
+						<ErrorField
+							name="filterDistMax"
+							title="Distance Max"
+							onBlur={handleOnChangeDistMax}
+							init={distMax ? distMax.toString() : '0'}
+							size={spaceFilter}
+							type={'number'}
+							min={initMinMax.distMin}
+							max={initMinMax.distMax}
+						/>
+					</div>
+					<div className="pr-5">
+						<ErrorField
+							name="filterAgeMin"
+							title="Age min"
+							onBlur={handleOnChangeAgeMin}
+							init={ageMin ? ageMin.toString() : '0'}
+							size={spaceFilter}
+							type={'number'}
+							min={initMinMax.ageMin}
+							max={initMinMax.ageMax}
+						/>
+					</div>
+					<div className="pr-5">
+						<ErrorField
+							name="filterAgeMax"
+							title="Age Max"
+							onBlur={handleOnChangeAgeMax}
+							init={ageMax ? ageMax.toString() : '0'}
+							size={spaceFilter}
+							type={'number'}
+							min={initMinMax.ageMin}
+							max={initMinMax.ageMax}
+						/>
+					</div>
+
+					<div className="pr-5">
+						<ErrorField
+							name="filterFameMin"
+							title="Fame min"
+							onBlur={handleOnChangeFameMin}
+							init={fameMin ? fameMin.toString() : '0'}
+							size={spaceFilter}
+							type={'number'}
+							min={initMinMax.fameMin}
+							max={initMinMax.fameMax}
+						/>
+					</div>
+					<div className="pr-5">
+						<ErrorField
+							name="filterFameMax"
+							title="Fame Max"
+							onBlur={handleOnChangeFameMax}
+							init={fameMax ? fameMax.toString() : '0'}
+							size={spaceFilter}
+							type={'number'}
+							min={initMinMax.fameMin}
+							max={initMinMax.fameMax}
+						/>
+					</div>
+				</div>
+				<div className="flex flex-wrap pl-3 pt-3">
+						<div>
+							<FilterByTags 
+								tagsUser={tagsUser}
+								tagsPossible={tagsPossible}
+								setTagsUser={setTagsUser}
+							/>
+						</div>
+				</div>
+				<div className="flex flex-wrap pl-3 pt-3">
+						<div className="pr-5">
+							<Button 
+								text='Filter'
+								type='button'
+								onClick={functionButton} />
+						</div>
+				</div>
+		</div>
         </>
     );
 }

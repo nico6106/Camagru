@@ -9,5 +9,5 @@ export const AvailableTags: string[] = [
 	'lazy',
 	'music',
 	'friends',
-	'fidelity',
 ];
+//'fidelity'
