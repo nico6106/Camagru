@@ -5,7 +5,7 @@ import { getUserFromRequest } from "../auth/auth.service";
 import { ErrorMsg, NotConnected, SuccessMsg } from "../../shared/errors";
 import { haversineDistance } from "./distance.service";
 import { computeAgeUser } from "../users/users.service";
-import { MatchingResponse, UserInfoMatching } from "../../shared/search";
+import { MatchingGlobalData, MatchingResponse, UserInfoMatching } from "../../shared/search";
 
 type MatchingUsers = {
 	user: TableUser;
@@ -56,9 +56,43 @@ export async function browsingProfiles(db: Database, req: Request, res: Response
 	showResults(usersMatching);
 
 	const response: MatchingResponse[] = createResponse(usersMatching);
+
+	const global: MatchingGlobalData = createResponseGlobalData(response, allDistances, allNbTags, allFame);
 	
 	//compute distance from other users and 
-	return res.status(200).json({ message: SuccessMsg, data_search: response });
+	return res.status(200).json({ message: SuccessMsg, data_search: response, data_global: global });
+}
+
+function createResponseGlobalData(
+	response: MatchingResponse[],
+	allDistances: number[],
+	allNbTags: number[],
+	allFame: number[]) {
+	let ageMin: number = 0;
+	let ageMax: number = 0;
+	if (response.length > 0) {
+		ageMin = response[0].user.age;
+		ageMax = response[0].user.age;
+	}
+
+	for (const elem of response) {
+		if (ageMin > elem.user.age)
+			ageMin = elem.user.age;
+		if (ageMax < elem.user.age)
+			ageMax = elem.user.age;
+	}
+
+	const global: MatchingGlobalData = {
+		minAge: ageMin,
+		maxAge: ageMax,
+		minDist: Math.trunc(Math.min(...allDistances)),
+		maxDist: Math.trunc(Math.max(...allDistances)) + 1,
+		minFame: Math.min(...allFame),
+		maxFame: Math.max(...allFame),
+		minTags: Math.min(...allNbTags),
+		maxTags: Math.max(...allNbTags),
+	}
+	return global;
 }
 
 function createResponse(usersMatching: MatchingUsers[]): MatchingResponse[] {
@@ -72,6 +106,7 @@ function createResponse(usersMatching: MatchingUsers[]): MatchingResponse[] {
 			age: computeAgeUser(elem.user.date_birth),
 			gender: elem.user.gender,
 			profile_picture: elem.user.profile_picture,
+			fame_rating: elem.user.fame_rating,
 		};
 		const tmpElem: MatchingResponse = {
 			user: tmpUser,

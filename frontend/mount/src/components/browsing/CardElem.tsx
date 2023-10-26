@@ -36,7 +36,7 @@ function CardElemUser({ user, distance, commonTags, elem }: Prop) {
 				<p>Rank={elem.autoRank}</p>
 				<p>NormDist={elem.normDist}</p>
 				<p>NormTags={elem.normTags}</p>
-				<p>NormFame={elem.normFame}</p>
+				<p>NormFame={elem.normFame} ({elem.user.fame_rating})</p>
             </div>
         </div>
 		</>
