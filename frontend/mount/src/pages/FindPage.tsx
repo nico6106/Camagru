@@ -38,6 +38,8 @@ function FindUserPage() {
 			newData.sort((a, b) => b.normFame - a.normFame);
 		else if (type === "Common Tags")
 			newData.sort((a, b) => b.normTags - a.normTags);
+		else if (type === "Age")
+			newData.sort((a, b) => a.user.age - b.user.age);
 		setDatacards(newData);
 	}
 
