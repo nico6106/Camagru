@@ -108,6 +108,7 @@ export async function advancedSearch(
 
     //log
     showResults(usersMatching);
+	console.log(options);
 
     const data: MatchingResponse[] = createResponse(usersMatching);
 
@@ -117,16 +118,12 @@ export async function advancedSearch(
         options,
     );
 
-	console.log(response);
-
     const global: MatchingGlobalData = createResponseGlobalData(
         response,
         allDistances,
         allNbTags,
         allFame,
     );
-
-	console.log(response);
 
     //compute distance from other users and
     return res
