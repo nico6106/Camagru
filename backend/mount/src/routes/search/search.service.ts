@@ -8,7 +8,7 @@ import { computeAgeUser } from "../users/users.service";
 import { MatchingGlobalData, MatchingResponse, UserInfoMatching } from "../../shared/search";
 import { AvailableTags } from "../../data/data-tags";
 
-type MatchingUsers = {
+export type MatchingUsers = {
 	user: TableUser;
 	distance: number;
 	nbCommonTags: number;
@@ -64,7 +64,7 @@ export async function browsingProfiles(db: Database, req: Request, res: Response
 	return res.status(200).json({ message: SuccessMsg, data_search: response, data_global: global, availables_tags: AvailableTags, user_tags: meUser.interests });
 }
 
-function createResponseGlobalData(
+export function createResponseGlobalData(
 	response: MatchingResponse[],
 	allDistances: number[],
 	allNbTags: number[],
@@ -96,7 +96,7 @@ function createResponseGlobalData(
 	return global;
 }
 
-function createResponse(usersMatching: MatchingUsers[]): MatchingResponse[] {
+export function createResponse(usersMatching: MatchingUsers[]): MatchingResponse[] {
 	const response: MatchingResponse[] = [];
 
 	for (const elem of usersMatching) {
@@ -124,7 +124,7 @@ function createResponse(usersMatching: MatchingUsers[]): MatchingResponse[] {
 	return response;
 }
 
-function computeRawDataForAnalysis(meUser: TableUser,
+export function computeRawDataForAnalysis(meUser: TableUser,
 	matchesBySexPref : TableUser[],
 	coordCurrUser: GPSCoordinates,
 	allDistances: number[],
@@ -175,7 +175,7 @@ function computeCommonTags(tagsUser1: string[], tagsUser2: string[]): string[] {
 	return commonTags;
 }
 
-function normalizeResults(usersMatching: MatchingUsers[], allDistances: number[], allNbTags: number[], allFame: number[]) {
+export function normalizeResults(usersMatching: MatchingUsers[], allDistances: number[], allNbTags: number[], allFame: number[]) {
 	const info = {
 		distMin: Math.min(...allDistances),
 		distMax: Math.max(...allDistances),
@@ -206,7 +206,7 @@ function normalizeResults(usersMatching: MatchingUsers[], allDistances: number[]
 	}
 }
 
-function showResults(usersMatching: MatchingUsers[]) {
+export function showResults(usersMatching: MatchingUsers[]) {
 	for (let i = 0; i < usersMatching.length; i++) {
 		console.log('username='+usersMatching[i].user.username+'('+usersMatching[i].user.id+')'
 			+': gender='+usersMatching[i].user.gender

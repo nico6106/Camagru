@@ -26,7 +26,7 @@ export function validateSettings(req: Request, res: Response, next: any) {
     next();
 }
 
-function validateTags(tagsUser: string[]): boolean {
+export function validateTags(tagsUser: string[]): boolean {
 	const allTags: string[] = AvailableTags;
 	if (tagsUser.length === 0) return true;
 	tagsUser.forEach((e) => {

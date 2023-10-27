@@ -24,12 +24,18 @@ type PropShowFilters = {
     nbCommonTags: number;
     setNbCommonTags: any;
     initMinMax: MinMaxInit;
+	setMinMax: any;
     functionButton: any;
     tagsUser: string[];
     tagsPossible: string[];
     setTagsUser: any;
 	setInitDatacards: any;
+	sortCards: any;
+	showAdvancedSearch: boolean;
+	setAdvancedSearch: any;
+	setTagsPossible: any;
 };
+
 function ShowFilters({
     orderBy,
     setOrderBy,
@@ -46,11 +52,17 @@ function ShowFilters({
     fameMax,
     setFameMax,
     initMinMax,
+	setMinMax,
     functionButton,
     tagsUser,
     tagsPossible,
     setTagsUser,
 	setInitDatacards,
+	sortCards,
+	showAdvancedSearch,
+	setAdvancedSearch,
+	setTagsPossible,
+	setNbCommonTags
 }: PropShowFilters) {
     const allFilter: string[] = [
         'Magic',
@@ -61,7 +73,7 @@ function ShowFilters({
     ];
 
     const [showFilterOptions, setFilterOptions] = useState<boolean>(false);
-	const [showAdvancedSearch, setAdvancedSearch] = useState<boolean>(false);
+	
 
     function handleOnChange(e: React.ChangeEvent<HTMLInputElement>) {
         setOrderBy(e.target.value);
@@ -74,7 +86,7 @@ function ShowFilters({
     }
 
 	function handleClickAdvancedSearch() {
-		setAdvancedSearch((prevAvancedSearch) => !prevAvancedSearch);
+		setAdvancedSearch((prevAvancedSearch: boolean) => !prevAvancedSearch);
 		setFilterOptions(false);
 	}
 
@@ -82,39 +94,56 @@ function ShowFilters({
         <>
             <div className="flex flex-wrap pl-3">
                 <div className="pr-5 pb-3">
-                    <SelectInput
-                        title="Sort by"
-                        name="sortby"
-                        nameDefault={orderBy}
-                        list={allFilter}
-                        onBlur={handleOnChange}
-                        init={orderBy}
-                        size={40}
-                    />
+					{showAdvancedSearch === false && 
+					<SelectInput
+					title="Sort by"
+					name="sortby"
+					nameDefault={orderBy}
+					list={allFilter}
+					onBlur={handleOnChange}
+					init={orderBy}
+					size={40}
+				/>}
+                </div>
+                <div className="pr-5 pt-6 ">
+					{showAdvancedSearch === false && 
+					<Button
+						text={
+							showFilterOptions
+								? 'Hide filtering options'
+								: 'Show filtering options'
+						}
+						type="button"
+						onClick={handleShowFilteringOptions}
+					/>}
+                    
                 </div>
                 <div className="pr-5 pt-6 ">
                     <Button
-                        text={
-                            showFilterOptions
-                                ? 'Hide filtering options'
-                                : 'Show filtering options'
-                        }
-                        type="button"
-                        onClick={handleShowFilteringOptions}
-                    />
-                </div>
-                <div className="pr-5 pt-6 ">
-                    <Button
-                        text={'Advanced search'}
+                        text={showAdvancedSearch === false ? 'Advanced search' : 'Cancel Advanced search'}
                         type="button"
                         onClick={handleClickAdvancedSearch}
                     />
                 </div>
             </div>
 
-			{showAdvancedSearch && <AdvancedSearch setInitDatacards={setInitDatacards} />}
+			{showAdvancedSearch && 
+				<AdvancedSearch
+                    setDistMin={setDistMin}
+                    setDistMax={setDistMax}
+                    setAgeMin={setAgeMin}
+                    setAgeMax={setAgeMax}
+                    setFameMin={setFameMin}
+                    setFameMax={setFameMax}
+					setMinMax={setMinMax}
+					setInitDatacards={setInitDatacards}
+					sortCards={sortCards}
+					setAdvancedSearch={setAdvancedSearch}
+					setTagsPossible={setTagsPossible}
+					setNbCommonTags={setNbCommonTags}
+				/>}
 
-            {showFilterOptions && (
+            {showFilterOptions && showAdvancedSearch === false && (
                 <ShowFiltersOptions
                     distMin={distMin}
                     setDistMin={setDistMin}

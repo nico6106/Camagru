@@ -4,8 +4,23 @@ import { ErrorField } from "../elems/ErrorFields";
 import { MinMaxInit } from "../../pages/FindPage";
 import { FilterByTags } from "./FilterByTags";
 import Button from "../elems/Button";
+import axios from "axios";
+import { MatchingGlobalData } from "../../shared/search";
 
-type AllGenders = 'Female' | 'Male' | 'Both';
+type AllGenders = 'female' | 'male' | 'Both';
+
+type BodyAdvancedSearch = {
+	dist_min: number | null;
+	dist_max: number | null;
+	age_min: number | null;
+	age_max: number | null;
+	fame_min: number | null;
+	fame_max: number | null;
+	gender: AllGenders;
+	tags: string[];
+	latitude: number | null;
+	longitude: number | null;
+}
 
 const defaultMinMax: MinMaxInit = {
 	distMin: 0,
@@ -36,56 +51,159 @@ function isNb(input: string): boolean {
   }
 
 type PropAdvancedSearch = {
+    setDistMin: any;
+    setDistMax: any;
+    setAgeMin: any;
+    setAgeMax: any;
+    setFameMin: any;
+    setFameMax: any;
+	setMinMax: any;
 	setInitDatacards: any;
+	sortCards: any;
+	setAdvancedSearch: any;
+	setTagsPossible: any;
+	setNbCommonTags: any;
 }
-function AdvancedSearch({ setInitDatacards }: PropAdvancedSearch) {
-	const [gender, setGender] = useState<string>('Both');
-	const [distMin, setDistMin] = useState<number | string>('');
-    const [distMax, setDistMax] = useState<number |string>('');
-    const [ageMin, setAgeMin] = useState<number |string>('');
-    const [ageMax, setAgeMax] = useState<number |string>('');
-    const [fameMin, setFameMin] = useState<number |string>('');
-    const [fameMax, setFameMax] = useState<number |string>('');
+function AdvancedSearch({
+    setDistMin,
+    setDistMax,
+    setAgeMin,
+    setAgeMax,
+    setFameMin,
+    setFameMax,
+	setMinMax,
+	setInitDatacards,
+	sortCards,
+	setAdvancedSearch,
+	setTagsPossible,
+	setNbCommonTags }: PropAdvancedSearch) {
+	const [gender, setGender] = useState<AllGenders>('Both');
+	const [distMinSearch, setDistMinSearch] = useState<number | ''>('');
+    const [distMaxSearch, setDistMaxSearch] = useState<number | ''>('');
+    const [ageMinSearch, setAgeMinSearch] = useState<number | ''>('');
+    const [ageMaxSearch, setAgeMaxSearch] = useState<number | ''>('');
+    const [fameMinSearch, setFameMinSearch] = useState<number | ''>('');
+    const [fameMaxSearch, setFameMaxSearch] = useState<number | ''>('');
 
 	const [tagsUser, setTagsUser] = useState<string[]>([]);
 
 	const spaceFilter: number = 20;
 
 	function handleOnChangeGender(e: React.ChangeEvent<HTMLInputElement>) {
-        setGender(e.target.value);
+		if (e.target.value === 'female' || e.target.value === 'male' || e.target.value === 'Both')
+        	setGender(e.target.value);
     }
 
 	//dist
-    function handleOnChangeDistMin(e: React.ChangeEvent<HTMLInputElement>) {
-        if (checkValueAndAlert(e.target.value, 0, 200000, 'Distance')) {
-            setDistMin(e.target.value);
-        }
+    function handleOnChangeDistMinSearch(e: React.ChangeEvent<HTMLInputElement>) {
+        checkValueAndAlert(e.target.value, 0, 200000, 'Distance', setDistMinSearch);
     }
 
     function handleOnChangeDistMax(e: React.ChangeEvent<HTMLInputElement>) {
-        if (checkValueAndAlert(e.target.value, 0, 200000, 'Distance')) setDistMax(e.target.value);
+        checkValueAndAlert(e.target.value, 0, 200000, 'Distance', setDistMaxSearch);
     }
     //age
     function handleOnChangeAgeMin(e: React.ChangeEvent<HTMLInputElement>) {
-        if (checkValueAndAlert(e.target.value, 1, 150, 'Age')) setAgeMin(e.target.value);
+        checkValueAndAlert(e.target.value, 1, 150, 'Age', setAgeMinSearch)
     }
     function handleOnChangeAgeMax(e: React.ChangeEvent<HTMLInputElement>) {
-        if (checkValueAndAlert(e.target.value, 1, 150, 'Age')) setAgeMax(e.target.value);
+        checkValueAndAlert(e.target.value, 1, 150, 'Age', setAgeMaxSearch);
     }
     //fame
     function handleOnChangeFameMin(e: React.ChangeEvent<HTMLInputElement>) {
-        if (checkValueAndAlert(e.target.value, 1, 10, 'Fame')) setFameMin(e.target.value);
+        checkValueAndAlert(e.target.value, 1, 10, 'Fame', setFameMinSearch);
     }
     function handleOnChangeFameMax(e: React.ChangeEvent<HTMLInputElement>) {
-        if (checkValueAndAlert(e.target.value, 1, 10, 'Fame')) setFameMax(e.target.value);
+        checkValueAndAlert(e.target.value, 1, 10, 'Fame', setFameMaxSearch);
     }
 
 	//confirm
-	function handleConfirmAdvancedSearch() {
-		;
+	async function handleConfirmAdvancedSearch() {
+		//verif
+		const body: BodyAdvancedSearch = {
+			dist_min: (distMinSearch !== '') ?  distMinSearch : null,
+			dist_max: (distMaxSearch !== '') ?  distMaxSearch : null,
+			age_min: (ageMinSearch !== '') ?  ageMinSearch : null,
+			age_max: (ageMaxSearch !== '') ?  ageMaxSearch : null,
+			fame_min: (fameMinSearch !== '') ?  fameMinSearch : null,
+			fame_max: (fameMaxSearch !== '') ?  fameMaxSearch : null,
+			gender: gender,
+			tags: tagsUser,
+			latitude: null,
+			longitude: null,
+		}
+
+		//exec
+		await searchInitBackend(body);
+
+		setAdvancedSearch(false);
 	}
 
-	function checkValueAndAlert(value: any, min: number, max: number, type: string): boolean {
+	async function searchInitBackend(body: BodyAdvancedSearch) {
+        try {
+            const response = await axios.post(
+                `http://${process.env.REACT_APP_SERVER_ADDRESS}:3333/search/advanced`,
+				{
+					dist_min: body.dist_min,
+					dist_max: body.dist_max,
+					age_min: body.age_min,
+					age_max: body.age_max,
+					fame_min: body.fame_min,
+					fame_max: body.fame_max,
+					gender: body.gender,
+					tags: body.tags,
+					latitude: body.latitude,
+					longitude: body.longitude,
+				},
+                {
+                    withCredentials: true,
+                },
+            );
+			console.log('advanced search')
+            console.log(response.data);
+            if (response.data && response.data.data_search) {
+				setInitDatacards(response.data.data_search);
+				sortCards(response.data.data_search, 'Magic');
+			}
+                
+			if (response.data && response.data.data_global) {
+                const global: MatchingGlobalData = response.data.data_global;
+                setDistMin(global.minDist);
+                setDistMax(global.maxDist);
+                setAgeMin(global.minAge);
+                setAgeMax(global.maxAge);
+                setFameMin(global.minFame);
+                setFameMax(global.maxFame);
+                setNbCommonTags(global.maxTags);
+				const availableTags: string[] = response.data.user_tags ? [...response.data.user_tags, 'None'] : [];
+				setMinMax({
+					distMin: global.minDist,
+					distMax: global.maxDist,
+					ageMin: global.minAge,
+					ageMax: global.maxAge,
+					fameMin: global.minFame,
+					fameMax: global.maxFame,
+					minNbCommonTags: global.minTags,
+					maxNbCommonTags: global.maxTags,
+					availableTags: availableTags,
+				})
+
+				if (response.data.user_tags) {
+					const tags: string[] = [...response.data.availables_tags, 'None']
+					setTagsUser(tags);
+					setTagsPossible(tags);
+				}
+				//availables_tags
+				//user_tags
+            }
+
+            return response.data;
+        } catch (error) {
+            // setRetour(null);
+        }
+    }
+
+	function checkValueAndAlert(value: any, min: number, max: number, type: string, setter: any): boolean {
 		if (isNb(value) || value === '') {
 			if (!(value === '')) {
 				const nb: number = parseInt(value);
@@ -93,7 +211,10 @@ function AdvancedSearch({ setInitDatacards }: PropAdvancedSearch) {
 					alert(`${type} value must be between ${min} to ${max}`)
 					return false;
 				}
+				setter(nb);
+				return true;
 			}
+			setter('');
 			return true;
 		}
 		return false;
@@ -105,7 +226,7 @@ function AdvancedSearch({ setInitDatacards }: PropAdvancedSearch) {
 			<SelectInput 
 				title="Gender you are looking for"
 				name="gender"
-				list={['Female', 'Male', 'Both']}
+				list={['female', 'male', 'Both']}
 				onBlur={handleOnChangeGender}
 				init={gender}
 			/>
@@ -113,10 +234,10 @@ function AdvancedSearch({ setInitDatacards }: PropAdvancedSearch) {
 
 		<div className="pr-5">
                     <ErrorField
-                        name="filterDistMin"
+                        name="filterDistMinSearch"
                         title="Distance min"
-                        onBlur={handleOnChangeDistMin}
-                        init={distMin.toString()}
+                        onBlur={handleOnChangeDistMinSearch}
+                        init={distMinSearch.toString()}
                         size={spaceFilter}
                         type={'text'}
                         
@@ -127,11 +248,9 @@ function AdvancedSearch({ setInitDatacards }: PropAdvancedSearch) {
                         name="filterDistMax"
                         title="Distance Max"
                         onBlur={handleOnChangeDistMax}
-                        init={distMax.toString()}
+                        init={distMaxSearch.toString()}
                         size={spaceFilter}
                         type={'text'}
-                        min={defaultMinMax.distMin}
-                        max={defaultMinMax.distMax}
                     />
                 </div>
 
@@ -140,11 +259,9 @@ function AdvancedSearch({ setInitDatacards }: PropAdvancedSearch) {
                         name="filterAgeMin"
                         title="Age min"
                         onBlur={handleOnChangeAgeMin}
-                        init={ageMin.toString()}
+                        init={ageMinSearch.toString()}
                         size={spaceFilter}
                         type={'text'}
-                        min={defaultMinMax.ageMin}
-                        max={defaultMinMax.ageMax}
                     />
                 </div>
                 <div className="pr-5">
@@ -152,11 +269,9 @@ function AdvancedSearch({ setInitDatacards }: PropAdvancedSearch) {
                         name="filterAgeMax"
                         title="Age Max"
                         onBlur={handleOnChangeAgeMax}
-                        init={ageMax ? ageMax.toString() : ''}
+                        init={ageMaxSearch ? ageMaxSearch.toString() : ''}
                         size={spaceFilter}
                         type={'text'}
-                        min={defaultMinMax.ageMin}
-                        max={defaultMinMax.ageMax}
                     />
                 </div>
 
@@ -165,11 +280,9 @@ function AdvancedSearch({ setInitDatacards }: PropAdvancedSearch) {
                         name="filterFameMin"
                         title="Fame min"
                         onBlur={handleOnChangeFameMin}
-                        init={fameMin ? fameMin.toString() : ''}
+                        init={fameMinSearch ? fameMinSearch.toString() : ''}
                         size={spaceFilter}
                         type={'text'}
-                        min={defaultMinMax.fameMin}
-                        max={defaultMinMax.fameMax}
                     />
                 </div>
                 <div className="pr-5">
@@ -177,11 +290,9 @@ function AdvancedSearch({ setInitDatacards }: PropAdvancedSearch) {
                         name="filterFameMax"
                         title="Fame Max"
                         onBlur={handleOnChangeFameMax}
-                        init={fameMax ? fameMax.toString() : ''}
+                        init={fameMaxSearch ? fameMaxSearch.toString() : ''}
                         size={spaceFilter}
                         type={'text'}
-                        min={defaultMinMax.fameMin}
-                        max={defaultMinMax.fameMax}
                     />
                 </div>
 				<div className="pr-5 pt-6">

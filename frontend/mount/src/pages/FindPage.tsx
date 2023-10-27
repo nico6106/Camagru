@@ -21,6 +21,16 @@ export type MinMaxInit = {
 	maxNbCommonTags: number;
 	availableTags: string[];
 }
+
+export type FilterOptions = {
+    distMin: number;
+    distMax: number;
+    ageMin: number;
+    ageMax: number;
+    fameMin: number;
+    fameMax: number;
+}
+
 function FindUserPage() {
     const { user } = useUserContext();
     const [dataCards, setDatacards] = useState<MatchingResponse[] | null>(null);
@@ -38,6 +48,7 @@ function FindUserPage() {
 	const [tagsUser, setTagsUser] = useState<string[]>([]);
 	const [tagsPossible, setTagsPossible] = useState<string[]>([]);
 
+	const [showAdvancedSearch, setAdvancedSearch] = useState<boolean>(false);
 
     useEffect(() => {
         searchInitBackend();
@@ -186,8 +197,13 @@ function FindUserPage() {
 				tagsPossible={tagsPossible}
 				setTagsUser={setTagsUser}
 				setInitDatacards={setInitDatacards}
+				sortCards={sortCards}
+				showAdvancedSearch={showAdvancedSearch}
+				setAdvancedSearch={setAdvancedSearch}
+				setMinMax={setMinMax}
+				setTagsPossible={setTagsPossible}
             />}
-            {dataCards && <ShowAllCards data={dataCards} />}
+            {dataCards && showAdvancedSearch === false && <ShowAllCards data={dataCards} />}
         </TramePage>
     ) : (
         <UserNotSignedIn />
