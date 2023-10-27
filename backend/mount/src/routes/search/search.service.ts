@@ -167,10 +167,18 @@ function computeRawDataForAnalysis(meUser: TableUser,
 
 function computeCommonTags(tagsUser1: string[], tagsUser2: string[]): string[] {
 	const commonTags: string[] = [];
+	console.log('common tags:')
+	console.log(tagsUser1)
+	console.log(tagsUser2)
 	for (const elem of tagsUser1) {
-		if (tagsUser2.includes(elem))
-			commonTags.push(elem)
+		console.log(elem+' is being tested')
+		if (tagsUser2.includes(elem)) {
+			commonTags.push(elem);
+			console.log(elem+' is a common tag')
+		}
+			
 	}
+	console.log('==>'+commonTags)
 	return commonTags;
 }
 
