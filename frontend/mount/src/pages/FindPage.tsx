@@ -185,6 +185,7 @@ function FindUserPage() {
 				tagsUser={tagsUser}
 				tagsPossible={tagsPossible}
 				setTagsUser={setTagsUser}
+				setInitDatacards={setInitDatacards}
             />}
             {dataCards && <ShowAllCards data={dataCards} />}
         </TramePage>

@@ -1,7 +1,7 @@
 type Prop = {
     title: string;
 	name?: string;
-    nameDefault: string;
+    nameDefault?: string;
     list: string[];
 	onBlur: any;
 	init?: string;

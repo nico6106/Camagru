@@ -28,6 +28,7 @@ type PropShowFilters = {
     tagsUser: string[];
     tagsPossible: string[];
     setTagsUser: any;
+	setInitDatacards: any;
 };
 function ShowFilters({
     orderBy,
@@ -49,6 +50,7 @@ function ShowFilters({
     tagsUser,
     tagsPossible,
     setTagsUser,
+	setInitDatacards,
 }: PropShowFilters) {
     const allFilter: string[] = [
         'Magic',
@@ -110,7 +112,7 @@ function ShowFilters({
                 </div>
             </div>
 
-			{showAdvancedSearch && <AdvancedSearch />}
+			{showAdvancedSearch && <AdvancedSearch setInitDatacards={setInitDatacards} />}
 
             {showFilterOptions && (
                 <ShowFiltersOptions
@@ -289,6 +291,13 @@ function ShowFiltersOptions({
                         max={initMinMax.fameMax}
                     />
                 </div>
+				<div className="pr-5 pt-6">
+                    <Button
+                        text="Filter"
+                        type="button"
+                        onClick={functionButton}
+                    />
+                </div>
             </div>
             <div className="flex flex-wrap pl-3 pt-3">
                 <div>
@@ -299,7 +308,7 @@ function ShowFiltersOptions({
                     />
                 </div>
             </div>
-            <div className="flex flex-wrap pl-3 pt-3">
+            {/* <div className="flex flex-wrap pl-3 pt-3">
                 <div className="pr-5">
                     <Button
                         text="Filter"
@@ -307,7 +316,7 @@ function ShowFiltersOptions({
                         onClick={functionButton}
                     />
                 </div>
-            </div>
+            </div> */}
         </div>
     );
 }
