@@ -75,12 +75,12 @@ function ShowImg({ picture, pictures, mainPicture, setPictures, setMainPicture, 
             />
             <div className="group absolute top-0 left-0 w-full h-full opacity-0 transition-opacity hover:opacity-100">
                 {picture !== mainPicture && (
-                    <label className="block text-sm font-semibold py-1 text-gray-900 dark:text-white w-full text-center bg-white bg-opacity-60 cursor-pointer">
+                    <label className="block text-sm font-semibold py-1 text-gray-900 dark:text-gray w-full text-center bg-white bg-opacity-60 cursor-pointer">
                         Set main
                         <button className="hidden" onClick={handleOnSetMain}></button>
                     </label>
                 )}
-                <label className="block text-sm font-semibold py-1 text-gray-900 dark:text-white absolute bottom-0 left-0 w-full text-center bg-white bg-opacity-60 cursor-pointer">
+                <label className="block text-sm font-semibold py-1 text-gray-900 dark:text-gray absolute bottom-0 left-0 w-full text-center bg-white bg-opacity-60 cursor-pointer">
                     Delete
                     <button className="hidden" onClick={handleOnDeleteImg}></button>
                 </label>

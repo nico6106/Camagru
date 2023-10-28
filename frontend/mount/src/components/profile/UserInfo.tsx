@@ -9,7 +9,7 @@ function UserInfo({ user }: Prop) {
   	const htmlText = { __html: formattedText };
     return (
         <div>
-            <h5 className="text-xl font-bold dark:text-white">{user.first_name} {user.last_name}, {user.age}</h5>
+            <h5 className="text-xl font-bold">{user.first_name} {user.last_name}, {user.age}</h5>
             <p className="mb-0 text-lg text-gray-500 md:text-xl dark:text-gray-400">
                 {user.city}
             </p>

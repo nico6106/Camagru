@@ -50,15 +50,15 @@ function Pagination({
         <div className="flex flex-col items-center">
             <span className="text-sm text-gray-700 dark:text-gray-400">
                 Showing{' '}
-                <span className="font-semibold text-gray-900 dark:text-white">
+                <span className="font-semibold text-gray-900">
                     {nbStart}
                 </span>{' '}
                 to{' '}
-                <span className="font-semibold text-gray-900 dark:text-white">
+                <span className="font-semibold text-gray-900">
                     {nbEnd}
                 </span>{' '}
                 of{' '}
-                <span className="font-semibold text-gray-900 dark:text-white">
+                <span className="font-semibold text-gray-900">
                     {nb_tot}
                 </span>{' '}
                 Entries
@@ -66,7 +66,7 @@ function Pagination({
             <div className="inline-flex mt-2 xs:mt-0">
                 <button
                     onClick={handleOnPrevious}
-                    className="flex items-center justify-center px-3 h-8 text-sm font-medium text-white bg-gray-800 rounded-l hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                    className="flex items-center justify-center px-3 h-8 text-sm font-medium text-white bg-gray-800 rounded-l hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700"
                 >
                     <svg
                         className="w-3.5 h-3.5 mr-2"
