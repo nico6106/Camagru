@@ -23,9 +23,14 @@ function ViewImage() {
 
     return user ? (
         <TramePage>
-            <TitleSmall text="View image" />
+            <TitleSmall text="View image" space='1' />
 
-			<img src={link} className="" alt="User image" />
+			<div className='flex justify-center pt-5'>
+				<div className='aspect-w-16 aspect-h-9'>
+					<img src={link} className="" alt="User image" />
+				</div>
+			</div>
+			
 
         </TramePage>
     ) : (<UserNotSignedIn />);

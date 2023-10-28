@@ -19,6 +19,7 @@ import TrackeurTest from './components/profile/TrackerTest';
 import NotificationsPage from './pages/NotificationsPage';
 import ChatPage from './pages/ChatPage';
 import FindUserPage from './pages/FindPage';
+import MapUsersPage from './pages/MapUsersPage';
 
 function App() {
     return (
@@ -46,6 +47,7 @@ function App() {
 					<Route path="/notifications" element={<NotificationsPage />} />
 					<Route path="/chat" element={<ChatPage />} />
 					<Route path="/find" element={<FindUserPage />} />
+					<Route path="/map" element={<MapUsersPage />} />
                     <Route path="/404" element={<Page404 />} />
                     <Route path="*" element={<Page404 />} />
                 </Routes>

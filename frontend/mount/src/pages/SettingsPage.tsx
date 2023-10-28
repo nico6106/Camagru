@@ -60,6 +60,7 @@ function SettingsPage() {
 		if (retour.message === SuccessMsg && retour.user) {
 			setUser(retour.user);
 			setUserInfoForForm(retour.user);
+			console.log(retour);
 			if (retour.tags)
 				setTagsAll(retour.tags);
 		}

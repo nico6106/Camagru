@@ -28,7 +28,7 @@ function CardElemUser({ user, distance, commonTags, elem }: Prop) {
                     </h5>
 				</Link>
                 <p className="font-normal text-gray-700 dark:text-gray-400">
-					{Math.trunc(distance) + 'm away'}
+					{(distance < 5000 ? (Math.trunc(distance) + 'm') : (Math.trunc(distance / 1000) + 'km')) + ' away'}
 				</p>
 				<p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
 					{commonTags.length + ' tags in common'}

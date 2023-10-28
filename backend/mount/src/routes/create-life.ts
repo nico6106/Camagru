@@ -46,13 +46,13 @@ export async function createLife(db: Database, req: Request, res: Response) {
 export async function loopData(db: Database, data: FormatCSV[]) {
 	if (data.length === 0) return ;
 
-	for (let i = 0; i < 6; i++) {
-		await createOne(db, data, i);
-	}
-
-	// for (let i = 0; i < data.length; i++) {
+	// for (let i = 0; i < 20; i++) {
 	// 	await createOne(db, data, i);
 	// }
+
+	for (let i = 0; i < data.length; i++) {
+		await createOne(db, data, i);
+	}
 	
 }
 

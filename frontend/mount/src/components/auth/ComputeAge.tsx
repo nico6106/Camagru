@@ -9,8 +9,8 @@ export function compute18Y(): string {
 
 export function formatDateYYYYMMDD(dateIn: Date): string {
 	const dateObj = new Date(dateIn);
-	const day: string = `${dateObj.getDate() < 9 ? '0' : ''}${dateObj.getDate()}`
-	const month: string = `${dateObj.getMonth() + 1 < 9 ? '0' : ''}${dateObj.getMonth() + 1}`
+	const day: string = `${dateObj.getDate() <= 9 ? '0' : ''}${dateObj.getDate()}`
+	const month: string = `${dateObj.getMonth() + 1 <= 9 ? '0' : ''}${dateObj.getMonth() + 1}`
 	const dateString: string = `${dateObj.getFullYear()}-${month}-${day}`
 	return dateString;
 }

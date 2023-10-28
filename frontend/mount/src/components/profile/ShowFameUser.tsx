@@ -9,19 +9,19 @@ function ShowFameUser({ userM }: Prop) {
 
 	if (userM.fame_rating <= 3) {
 		color = 'bg-gray-100 text-gray-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded border border-gray-500';
-		fame = 'Low rated user'
+		fame = `Low rated user (${userM.fame_rating})`
 	}
 	else if (userM.fame_rating <= 6) {
 		color = 'bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded border border-blue-400';
-		fame = 'Low rated user'
+		fame = `Low rated user (${userM.fame_rating})`
 	}
 	else if (userM.fame_rating <= 8) {
 		color = 'bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded  border border-green-400';
-		fame = 'Popular user'
+		fame = `Popular user (${userM.fame_rating})`
 	}
 	else if (userM.fame_rating <= 10) {
 		color = 'bg-yellow-100 text-yellow-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded 0 border border-yellow-300';
-		fame = 'It\' a star!'
+		fame = `It\' a star! (${userM.fame_rating})`
 	}
 	const styleP: string = `bg-${color}-300 text-${color}-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded inline-flex items-center justify-center`
     

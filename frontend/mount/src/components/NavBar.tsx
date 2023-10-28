@@ -70,6 +70,12 @@ function MobileMenu({ showMenu }: { showMenu: boolean }) {
                         selected={false}
                         block={true}
                     />
+					<ButtonLinkNavBar
+                        text="Map"
+                        page="/map"
+                        selected={false}
+                        block={true}
+                    />
                     <ButtonLinkNavBar
                         text="Settings"
                         page="/settings"
@@ -133,6 +139,12 @@ function LinkNavBar() {
                 <ButtonLinkNavBar
                     text="Browsing"
                     page="/find"
+                    selected={false}
+                    block={false}
+                />
+				<ButtonLinkNavBar
+                    text="Map"
+                    page="/map"
                     selected={false}
                     block={false}
                 />

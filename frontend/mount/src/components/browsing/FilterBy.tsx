@@ -22,18 +22,14 @@ type PropShowFilters = {
     fameMax: number;
     setFameMax: any;
     nbCommonTags: number;
-    setNbCommonTags: any;
     initMinMax: MinMaxInit;
-	setMinMax: any;
     functionButton: any;
     tagsUser: string[];
     tagsPossible: string[];
     setTagsUser: any;
-	setInitDatacards: any;
-	sortCards: any;
 	showAdvancedSearch: boolean;
 	setAdvancedSearch: any;
-	setTagsPossible: any;
+	saveReturnFromBackend: any;
 };
 
 function ShowFilters({
@@ -52,17 +48,13 @@ function ShowFilters({
     fameMax,
     setFameMax,
     initMinMax,
-	setMinMax,
     functionButton,
     tagsUser,
     tagsPossible,
     setTagsUser,
-	setInitDatacards,
-	sortCards,
 	showAdvancedSearch,
 	setAdvancedSearch,
-	setTagsPossible,
-	setNbCommonTags
+	saveReturnFromBackend
 }: PropShowFilters) {
     const allFilter: string[] = [
         'Magic',
@@ -129,18 +121,8 @@ function ShowFilters({
 
 			{showAdvancedSearch && 
 				<AdvancedSearch
-                    setDistMin={setDistMin}
-                    setDistMax={setDistMax}
-                    setAgeMin={setAgeMin}
-                    setAgeMax={setAgeMax}
-                    setFameMin={setFameMin}
-                    setFameMax={setFameMax}
-					setMinMax={setMinMax}
-					setInitDatacards={setInitDatacards}
-					sortCards={sortCards}
 					setAdvancedSearch={setAdvancedSearch}
-					setTagsPossible={setTagsPossible}
-					setNbCommonTags={setNbCommonTags}
+					saveReturnFromBackend={saveReturnFromBackend}
 				/>}
 
             {showFilterOptions && showAdvancedSearch === false && (
@@ -337,15 +319,6 @@ function ShowFiltersOptions({
                     />
                 </div>
             </div>
-            {/* <div className="flex flex-wrap pl-3 pt-3">
-                <div className="pr-5">
-                    <Button
-                        text="Filter"
-                        type="button"
-                        onClick={functionButton}
-                    />
-                </div>
-            </div> */}
         </div>
     );
 }

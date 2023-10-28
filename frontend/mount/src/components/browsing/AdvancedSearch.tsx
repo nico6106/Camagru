@@ -56,32 +56,12 @@ function isNb(input: string): boolean {
 }
 
 type PropAdvancedSearch = {
-    setDistMin: any;
-    setDistMax: any;
-    setAgeMin: any;
-    setAgeMax: any;
-    setFameMin: any;
-    setFameMax: any;
-    setMinMax: any;
-    setInitDatacards: any;
-    sortCards: any;
     setAdvancedSearch: any;
-    setTagsPossible: any;
-    setNbCommonTags: any;
+	saveReturnFromBackend: any;
 };
 function AdvancedSearch({
-    setDistMin,
-    setDistMax,
-    setAgeMin,
-    setAgeMax,
-    setFameMin,
-    setFameMax,
-    setMinMax,
-    setInitDatacards,
-    sortCards,
     setAdvancedSearch,
-    setTagsPossible,
-    setNbCommonTags,
+	saveReturnFromBackend,
 }: PropAdvancedSearch) {
     const [gender, setGender] = useState<AllGenders>('Both');
     const [latitude, setLatitude] = useState<string>('');
@@ -199,46 +179,8 @@ function AdvancedSearch({
 					alert('Error performing this request');
 				return false;
 			}
-            if (response.data && response.data.data_search) {
-                setInitDatacards(response.data.data_search);
-                sortCards(response.data.data_search, 'Magic');
-            }
 
-            if (response.data && response.data.data_global) {
-                const global: MatchingGlobalData = response.data.data_global;
-                setDistMin(global.minDist);
-                setDistMax(global.maxDist);
-                setAgeMin(global.minAge);
-                setAgeMax(global.maxAge);
-                setFameMin(global.minFame);
-                setFameMax(global.maxFame);
-                setNbCommonTags(global.maxTags);
-                const availableTags: string[] = response.data.user_tags
-                    ? [...response.data.user_tags, 'None']
-                    : [];
-                setMinMax({
-                    distMin: global.minDist,
-                    distMax: global.maxDist,
-                    ageMin: global.minAge,
-                    ageMax: global.maxAge,
-                    fameMin: global.minFame,
-                    fameMax: global.maxFame,
-                    minNbCommonTags: global.minTags,
-                    maxNbCommonTags: global.maxTags,
-                    availableTags: availableTags,
-                });
-
-                if (response.data.user_tags) {
-                    const tags: string[] = [
-                        ...response.data.availables_tags,
-                        'None',
-                    ];
-                    setTagsUser(tags);
-                    setTagsPossible(tags);
-                }
-                //availables_tags
-                //user_tags
-            }
+			saveReturnFromBackend(response);
 
             return true;
         } catch (error) {

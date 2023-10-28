@@ -74,14 +74,19 @@ export async function advancedSearch(
         (elem) => elem.id !== meUser.id,
     );
 
+    //filter blocked users
+    const allUsersExceptBlocked: TableUser[] = allUsersExceptMe.filter(
+        (elem) => !meUser.blocked_user.includes(elem.id),
+    );
+
     //filter by gender preference
     let matchesBySexPref: TableUser[] = [];
     if (gender && (gender === 'female' || gender === 'male')) {
-        matchesBySexPref = allUsersExceptMe.filter(
+        matchesBySexPref = allUsersExceptBlocked.filter(
             (elem) => gender === elem.gender,
         );
     } else {
-        matchesBySexPref = allUsersExceptMe;
+        matchesBySexPref = allUsersExceptBlocked;
     }
 
     const allDistances: number[] = [];
@@ -108,7 +113,7 @@ export async function advancedSearch(
 
     //log
     showResults(usersMatching);
-	console.log(options);
+    console.log(options);
 
     const data: MatchingResponse[] = createResponse(usersMatching);
 
@@ -121,18 +126,14 @@ export async function advancedSearch(
     const global: MatchingGlobalData = createResponseGlobalData(
         response,
         allDistances,
-        allNbTags,
-        allFame,
     );
 
     //compute distance from other users and
-    return res
-        .status(200)
-        .json({
-            message: SuccessMsg,
-            data_search: response,
-            data_global: global,
-        });
+    return res.status(200).json({
+        message: SuccessMsg,
+        data_search: response,
+        data_global: global,
+    });
 }
 
 function filterResultsWithAdvancedSearch(
@@ -145,24 +146,27 @@ function filterResultsWithAdvancedSearch(
         let saveElem: boolean = true;
 
         //filter
-		//distance
-        if (options.dist_min && !(elem.distance >= options.dist_min ))
+        //distance
+        if (options.dist_min && !(elem.distance >= options.dist_min))
             saveElem = false;
-        if (options.dist_max && !(elem.distance <= options.dist_max ))
+        if (options.dist_max && !(elem.distance <= options.dist_max))
             saveElem = false;
-		//age
-		if (options.age_min && !(elem.user.age >= options.age_min ))
+        //age
+        if (options.age_min && !(elem.user.age >= options.age_min))
             saveElem = false;
         if (options.age_max && !(elem.user.age <= options.age_max))
             saveElem = false;
-		//fame
-		if (options.fame_min && !(elem.user.fame_rating >= options.fame_min))
+        //fame
+        if (options.fame_min && !(elem.user.fame_rating >= options.fame_min))
             saveElem = false;
         if (options.fame_max && !(elem.user.fame_rating <= options.fame_max))
             saveElem = false;
-		//tags
-		if (options.tags.length > 0 && filterbyTags(elem.user.tags, options.tags))
-			saveElem = false;
+        //tags
+        if (
+            options.tags.length > 0 &&
+            filterbyTags(elem.user.tags, options.tags)
+        )
+            saveElem = false;
 
         //save
         if (saveElem) {
@@ -173,13 +177,11 @@ function filterResultsWithAdvancedSearch(
 }
 
 function filterbyTags(tagsUser: string[], tagsFilter: string[]): boolean {
-
-	for (const tag of tagsUser) {
-		if (tagsFilter.includes(tag)) {
-			return false;
-		}
-	}
-	if (tagsFilter.includes('None') && tagsUser.length === 0)
-		return false;
-	return true;
+    for (const tag of tagsUser) {
+        if (tagsFilter.includes(tag)) {
+            return false;
+        }
+    }
+    if (tagsFilter.includes('None') && tagsUser.length === 0) return false;
+    return true;
 }
