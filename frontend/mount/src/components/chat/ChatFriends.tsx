@@ -8,11 +8,9 @@ import { useUserContext } from '../../context/UserContext';
 
 type PropChatDiscussions = {
     setCurrChat: any;
-    setAlertMsg: any;
 };
 function ChatFriends({
     setCurrChat,
-    setAlertMsg,
 }: PropChatDiscussions) {
     const [chats, setChats] = useState<ChatRetour[] | null>(null);
 
@@ -32,13 +30,9 @@ function ChatFriends({
             console.log(response.data);
             if (response.data.message === SuccessMsg) {
                 setChats(response.data.chats);
-                setAlertMsg(null);
-            } else {
-                setAlertMsg(response.data.error);
-                setChats(null);
-            }
+            } 
         } catch (error) {
-            //to handle ?
+            //to handle?
             return null;
         }
     }
@@ -69,6 +63,7 @@ function ChatShowIndivFriend({ chatElem, setCurrChat }: PropChatIndivFriend) {
     const styleP: string = `flex items-center text-gray-900  ${''} group font-medium
 							flex-1 ml-4 whitespace-nowrap space-y-2`;
 	const link: string = chatElem.picture !== '' ? `http://${process.env.REACT_APP_SERVER_ADDRESS}:3333/users/image/${chatElem.picture}` : '/carousel-2.svg';
+	const altImg: string = `Picture ${chatElem.picture}`;
 	const socket = useContext(WebsocketContext);
 	const { user } = useUserContext();
 	const [nbNotifChat, setNbNotifChat] = useState<number>(0);
@@ -108,7 +103,7 @@ function ChatShowIndivFriend({ chatElem, setCurrChat }: PropChatIndivFriend) {
 			<img
                         className="w-8 h-8 rounded-full"
                         src={link}
-                        alt="profile picture"
+						alt={altImg}
                     />
 			<div className="ml-6 mt-3 absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full">
 				{nbNotifChat}

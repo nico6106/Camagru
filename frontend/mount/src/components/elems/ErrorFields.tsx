@@ -1,5 +1,3 @@
-import { useEffect, useState } from "react";
-
 type Prop = {
 	name: string;
 	title: string;

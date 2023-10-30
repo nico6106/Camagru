@@ -1,24 +1,18 @@
 import { useParams } from 'react-router-dom';
 import UserNotSignedIn from '../components/auth/UserNotSignedIn';
-import TitleSmall from '../components/elems/TitleSmall';
 import TramePage from '../components/elems/TramePage';
-import ImageCarrousel from '../components/profile/ImageCarrousel';
 import { useUserContext } from '../context/UserContext';
 import { useEffect, useState } from 'react';
 import { RetourType } from '../types/response';
-import { UserExport, UserShort } from '../shared/userExport';
+import { UserShort } from '../shared/userExport';
 import PageTitleOneText from '../components/elems/PageTitleOneText';
-import GetUser from '../components/backend/GetUser';
 import { SuccessMsg } from '../shared/errors';
-import UserInfo from '../components/profile/UserInfo';
-import UserOptionProfile from '../components/profile/UserOptionsProfile';
 import GetListUsers from '../components/backend/GetListUsers';
 import ShowListUsers from '../components/profile/ShowUserList';
 
 function DetailsUserListsPage() {
     const { user } = useUserContext();
 	const { option } = useParams();
-	const [retour, setRetour] = useState<RetourType | null>(null);
 	const [userShort, setUserShort] = useState<UserShort[] | null>(null);
 	const [idUser, setIdUser] = useState<number>(-1)
 	const [optionOk, setOptionOk] = useState<string>('');

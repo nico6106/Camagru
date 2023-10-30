@@ -6,7 +6,6 @@ import { SuccessMsg } from "../../shared/errors";
 import ShowAlert from "../elems/ShowAlert";
 import { useEffect, useState } from "react";
 import ShowFameUser from "./ShowFameUser";
-import Button from "../elems/Button";
 import ShowIsOnline from "./ShowIsOnline";
 
 type Prop = {

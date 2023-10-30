@@ -6,7 +6,6 @@ import { WebsocketContext } from '../../context/WebsocketContext';
 
 type PropChatDiscussions = {
     currChat: number;
-    setAlertMsg: any;
 	chat: MsgChatRetour[];
 	setChat: any;
 };
@@ -18,7 +17,6 @@ export type SocketReceiveMsg = {
 
 function ChatShowMessages({
     currChat,
-    setAlertMsg,
 	chat,
 	setChat,
 }: PropChatDiscussions) {

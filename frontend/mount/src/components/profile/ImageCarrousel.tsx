@@ -122,6 +122,7 @@ function ShowImgCarrousel({ picture, visible }: PropShowImg) {
     const classDiv: string = `${
         !picture || picture === visible ? '' : 'hidden'
     } duration-700 ease-in-out`;
+	const altImg: string = `picture ${picture}`;
     const navigate = useNavigate();
 
     function onClickImg() {
@@ -132,26 +133,11 @@ function ShowImgCarrousel({ picture, visible }: PropShowImg) {
             <img
                 src={link}
                 className="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
-                alt="User image"
+                alt={altImg}
                 onClick={onClickImg}
             />
         </div>
     );
 }
 
-type PropButton = {
-    nb: number;
-    current: boolean;
-};
-function PositionImgCarrousel({ nb, current }: PropButton) {
-    return (
-        <button
-            type="button"
-            className="w-3 h-3 rounded-full"
-            aria-current={current}
-            aria-label="Slide 1"
-            data-carousel-slide-to={nb}
-        ></button>
-    );
-}
 export default ImageCarrousel;

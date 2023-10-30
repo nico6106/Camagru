@@ -15,7 +15,6 @@ import ProfilePage from './pages/ProfilePage';
 import ViewImage from './pages/ViewOneImage';
 import DetailsUserListsPage from './pages/DetailsUserListsPage';
 import TrackingOnline from './components/auth/TrackingOnline';
-import TrackeurTest from './components/profile/TrackerTest';
 import NotificationsPage from './pages/NotificationsPage';
 import ChatPage from './pages/ChatPage';
 import FindUserPage from './pages/FindPage';
@@ -26,7 +25,6 @@ function App() {
         <UserProvider>
             <Router>
 				<TrackingOnline />
-				<TrackeurTest />
                 <NavBar />
                 <Routes>
                     <Route path="/" element={<HomePage />} />

@@ -32,13 +32,13 @@ function ShowListUsers({ option, userShort }: Prop) {
         'liked_by',
         'matches',
     ];
-	const typeEvent: string[] = [
-        'viewed',
-        'viewed by',
-        'likes',
-        'liked by',
-        'matches',
-    ];
+	// const typeEvent: string[] = [
+    //     'viewed',
+    //     'viewed by',
+    //     'likes',
+    //     'liked by',
+    //     'matches',
+    // ];
     const title: string[] = [
         'Profiles you viewed',
         'People that looked at your profile',
@@ -80,13 +80,14 @@ type PropIndivUser = {
 function IndivUser({ userShort }: PropIndivUser) {
 	const link: string = userShort.profile_picture !== '' ? `http://${process.env.REACT_APP_SERVER_ADDRESS}:3333/users/image/${userShort.profile_picture}` : '/carousel-2.svg';
     const linkTo: string = `/profile/${userShort.id}`
+	const altImg: string = `profile picture ${userShort.profile_picture}`;
 	return (
             <div className="flex items-center space-x-4 border">
                 <div className="flex-shrink-0">
                     <img
                         className="w-8 h-8 rounded-full"
                         src={link}
-                        alt="profile picture"
+                        alt={altImg}
                     />
                 </div>
                 <div className="flex-1 min-w-0">

@@ -5,7 +5,6 @@ import { MinMaxInit } from '../../pages/FindPage';
 import { FilterByTags } from './FilterByTags';
 import Button from '../elems/Button';
 import axios from 'axios';
-import { MatchingGlobalData } from '../../shared/search';
 
 type AllGenders = 'female' | 'male' | 'Both';
 

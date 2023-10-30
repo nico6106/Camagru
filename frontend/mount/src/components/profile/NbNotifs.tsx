@@ -30,17 +30,19 @@ function NbNotif({ option }: Prop) {
             setNbNotif(0);
         });
 
-		socket.on('chat-read2', (data: any) => {
-            setNbChat(prevNbChat => (prevNbChat - data.nbRead) > 0 ? (prevNbChat - data.nbRead) : 0);
+        socket.on('chat-read2', (data: any) => {
+            setNbChat((prevNbChat) =>
+                prevNbChat - data.nbRead > 0 ? prevNbChat - data.nbRead : 0,
+            );
         });
 
         return () => {
             socket.off('notif');
             socket.off('notif_raz');
-			socket.off('chat2');
+            socket.off('chat2');
             socket.off('chat-read2');
         };
-		// eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     async function execBackend() {
@@ -54,10 +56,10 @@ function NbNotif({ option }: Prop) {
             console.log(response.data);
             if (response.data.message === SuccessMsg) {
                 setNbNotif(response.data.value);
-				setNbChat(response.data.valueChat);
+                setNbChat(response.data.valueChat);
             } else {
                 setNbNotif(0);
-				setNbChat(0);
+                setNbChat(0);
             }
         } catch (error) {
             //to handle ?

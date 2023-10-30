@@ -3,8 +3,6 @@ import OutsideClickHandler from 'react-outside-click-handler';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useUserContext } from '../context/UserContext';
 import Button from './elems/Button';
-import axios from 'axios';
-import { SuccessMsg } from '../shared/errors';
 import NbNotif from './profile/NbNotifs';
 import AskGeolocalisation from './settings/AskGeo';
 
@@ -123,26 +121,24 @@ function ButtonLinkNavBar({
 	currLink: string;
 	setCurrLink: any;
 }) {
-    let style: string = `text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium ${
+    let styleInit: string = `text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium ${
         block && 'block'
     }`;
+	const [style, setStyle] = useState<string>(styleInit);
 	useEffect(() => {
 		console.log('page=' + page + ', currLink='+currLink)
-		if (page === currLink) {
-			style = `bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium ${
+		if (page.match(currLink)) {
+			setStyle(`bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium ${
 				block && 'block'
-			}`;
-			console.log('you are here')
+			}`)
 		}
 		else
-			style = `text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium ${
-				block && 'block'}`;
+			setStyle(`text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium`);
 				// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [currLink]);
 
 	function handleChangePage(page: string) {
 		setCurrLink(page);
-		console.log('doing it '+page)
 	}
     return (
         <Link to={page}>
@@ -150,9 +146,6 @@ function ButtonLinkNavBar({
                 {text}
             </p>
         </Link>
-        // <a href="#" className={style} aria-current="page">
-
-        // </a>
     );
 }
 
@@ -248,19 +241,6 @@ function ButtonChat() {
         </button>);
 }
 
-{/* <button
-            type="button"
-            className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
-			onClick={handleClickNotif}
-		>
-            <span className="absolute -inset-2.5"></span>
-			<span className="sr-only">View notifications</span>
-            <svg className="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 18">
-    			<path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 5h9M5 9h5m8-8H2a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h4l3.5 4 3.5-4h5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1Z"/>
-			</svg>
-
-        </button> */}
-
 function ButtonNotifications() {
 	const navigate = useNavigate();
 	function handleClickNotif(event: any) {
@@ -295,43 +275,43 @@ function ButtonNotifications() {
     );
 }
 
-function ButtonDropdownMenu({ text, page }: { text: string; page: string }) {
-    return (
-        <p
-            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200 "
-            role="menuitem"
-            id="user-menu-item-0"
-        >
-            <Link to={page}>{text}</Link>
-        </p>
-    );
-}
+// function ButtonDropdownMenu({ text, page }: { text: string; page: string }) {
+//     return (
+//         <p
+//             className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-200 "
+//             role="menuitem"
+//             id="user-menu-item-0"
+//         >
+//             <Link to={page}>{text}</Link>
+//         </p>
+//     );
+// }
 
-function DropdownMenuLinks() {
-	const { user } = useUserContext();
-	const profileLink: string = `/profile/${user?.id}`;
-    return (
-        <div
-            className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
-            role="menu"
-            aria-orientation="vertical"
-            aria-labelledby="user-menu-button"
-        >
-            {/* <!-- Active: "bg-gray-100", Not Active: "" --> */}
-            <ButtonDropdownMenu text="Your Profile" page={profileLink} />
-            <ButtonDropdownMenu text="Settings" page="/settings" />
-            <ButtonDropdownMenu text="Sign out" page="/signout" />
-        </div>
-    );
-}
+// function DropdownMenuLinks() {
+// 	const { user } = useUserContext();
+// 	const profileLink: string = `/profile/${user?.id}`;
+//     return (
+//         <div
+//             className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+//             role="menu"
+//             aria-orientation="vertical"
+//             aria-labelledby="user-menu-button"
+//         >
+//             {/* <!-- Active: "bg-gray-100", Not Active: "" --> */}
+//             <ButtonDropdownMenu text="Your Profile" page={profileLink} />
+//             <ButtonDropdownMenu text="Settings" page="/settings" />
+//             <ButtonDropdownMenu text="Sign out" page="/signout" />
+//         </div>
+//     );
+// }
 
 function DropdownMenu() {
     const { user } = useUserContext();
     const navigate = useNavigate();
-    const [showDropMenu, setShowDropMenu] = useState<boolean>(false);
+    // const [showDropMenu, setShowDropMenu] = useState<boolean>(false);
 
     useEffect(() => {
-        if (!user) setShowDropMenu(false);
+        // if (!user) setShowDropMenu(false);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user]);
 	
@@ -382,7 +362,7 @@ function DropdownMenu() {
 
 function NavBar() {
     const [showMenu, setShowMenu] = useState<boolean>(false);
-	const [currLink, setCurrLink] = useState<string>('');
+	const [currLink, setCurrLink] = useState<string>('no');
 	const { user, verifUser } = useUserContext();
 	const location = useLocation();
 
@@ -399,8 +379,7 @@ function NavBar() {
 		else if (location.pathname.match('/map'))
 			setCurrLink('/map');
 		else
-			setCurrLink('');
-			// console.log('verif');
+			setCurrLink('no');
 			// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [location]);
 

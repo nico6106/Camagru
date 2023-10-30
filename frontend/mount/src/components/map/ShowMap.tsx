@@ -11,9 +11,9 @@ function ShowMap() {
     const map = useRef<mapboxgl.Map | null>(null);
     const [lng, setLng] = useState(2.339868);
     const [lat, setLat] = useState(48.908664);
-    const [zoom, setZoom] = useState(9);
     const [dataMap, setDataMap] = useState<TGeoJSON | null>(null);
-
+	const zoom: number = 9;
+	
 	useEffect(() => {
 		if (process.env.REACT_APP_MAPBOX_API)
 			mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_API;

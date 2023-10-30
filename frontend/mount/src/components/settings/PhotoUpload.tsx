@@ -21,6 +21,7 @@ function PhotoUploader({ pictures, setPictures, setMainPicture, setError }: Prop
             };
             reader.readAsDataURL(selectedImage);
         }
+		if (imageUpdate) {} //useless but for error management purpose
 
         if (selectedImage) {
             let formData = new FormData();

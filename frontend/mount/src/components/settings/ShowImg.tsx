@@ -12,7 +12,7 @@ type Prop = {
 
 function ShowImg({ picture, pictures, mainPicture, setPictures, setMainPicture, setError }: Prop) {
     const link: string = `http://${process.env.REACT_APP_SERVER_ADDRESS}:3333/users/image/${picture}`;
-
+	const altImage: string = `image description ${picture}`;
 	async function deletePictureBackend() {
 		try {
             const response = await axios.delete(
@@ -71,7 +71,7 @@ function ShowImg({ picture, pictures, mainPicture, setPictures, setMainPicture, 
             <img
                 className="w-20 h-20 object-cover"
                 src={link}
-                alt="image description"
+                alt={altImage}
             />
             <div className="group absolute top-0 left-0 w-full h-full opacity-0 transition-opacity hover:opacity-100">
                 {picture !== mainPicture && (

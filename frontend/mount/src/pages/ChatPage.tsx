@@ -12,7 +12,6 @@ function ChatPage() {
     const { user } = useUserContext();
 	const [currChat, setCurrChat] = useState<number>(0);
 	const [chat, setChat] = useState<MsgChatRetour[] | null>(null);
-	const [alert, setAlertMsg] = useState<string | null>(null);
 
 	useEffect(() => {
         if (currChat !== 0) execBackendGetOneChat();
@@ -30,9 +29,7 @@ function ChatPage() {
             console.log(response.data);
             if (response.data.message === SuccessMsg) {
                 setChat(response.data.chats);
-                setAlertMsg(null);
             } else {
-                setAlertMsg(response.data.error);
                 setChat(null);
             }
         } catch (error) {
@@ -48,12 +45,11 @@ function ChatPage() {
 
 				<div className="h-full flex border">
 					<div className="w-1/4 bg-gray-200 p-4">Friends
-						<ChatFriends setCurrChat={setCurrChat} setAlertMsg={setAlertMsg} />
+						<ChatFriends setCurrChat={setCurrChat} />
 					</div>
 					<div className="h-96 w-3/4 flex flex-col">Discussion
 						{chat && <ChatShowMessages 
 							currChat={currChat}
-							setAlertMsg={setAlertMsg}
 							chat={chat}
 							setChat={setChat}
 							/>
@@ -69,14 +65,3 @@ function ChatPage() {
 }
 
 export default ChatPage;
-
-{/* <div className="flex flex-row">
-					<div className="basis-1/4 border">Friends
-						<ChatShowDiscussions setCurrChat={setCurrChat} setAlertMsg={setAlertMsg} />
-					</div>
-					<div className="basis-3/4 border">Discussion
-						<div className='overflow-hidden overflow-y-scroll h-64'>
-							<ChatDiscussion currChat={currChat} setCurrChat={setCurrChat} setAlertMsg={setAlertMsg} />
-						</div>
-					</div>
-				</div> */}
