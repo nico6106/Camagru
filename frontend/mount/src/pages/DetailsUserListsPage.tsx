@@ -30,10 +30,12 @@ function DetailsUserListsPage() {
 			return ;
 		else
 			setOptionOk(option);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
 
 	useEffect(() => {
 		setId();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [user])
 
 	useEffect(() => {
@@ -42,10 +44,12 @@ function DetailsUserListsPage() {
 			return ;
 		else
 			setOptionOk(option);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [option])
 
 	useEffect(() => {
 		getUserInfo();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [idUser])
 
 	function setId() {

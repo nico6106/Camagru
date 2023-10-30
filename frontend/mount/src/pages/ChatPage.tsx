@@ -16,6 +16,7 @@ function ChatPage() {
 
 	useEffect(() => {
         if (currChat !== 0) execBackendGetOneChat();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currChat]);
 
 	async function execBackendGetOneChat() {

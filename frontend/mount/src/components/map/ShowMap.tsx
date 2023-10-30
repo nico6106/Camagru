@@ -5,8 +5,6 @@ import mapboxgl from 'mapbox-gl'; // eslint-disable-line import/no-webpack-loade
 import { TGeoJSON } from '../../shared/map';
 import axios from 'axios';
 
-mapboxgl.accessToken =
-    'pk.eyJ1IjoibWF0Y2hhbG92ZTQyIiwiYSI6ImNsb2EyMmZuYTBjY3cyanFub21jZDV1djEifQ.uyBKYPlM5YIhJEMBRBUh6A';
 
 function ShowMap() {
     const mapContainer = useRef<HTMLDivElement | null>(null);
@@ -15,6 +13,15 @@ function ShowMap() {
     const [lat, setLat] = useState(48.908664);
     const [zoom, setZoom] = useState(9);
     const [dataMap, setDataMap] = useState<TGeoJSON | null>(null);
+
+	useEffect(() => {
+		if (process.env.REACT_APP_MAPBOX_API)
+			mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_API;
+		else
+			return ;
+        searchInitBackend();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     async function searchInitBackend() {
         try {
@@ -38,9 +45,6 @@ function ShowMap() {
         }
     }
 
-    useEffect(() => {
-        searchInitBackend();
-    }, []);
 
     useEffect(() => {
         if (!map.current && dataMap) {
@@ -68,12 +72,13 @@ function ShowMap() {
                     .setPopup(
                         new mapboxgl.Popup({ offset: 25 }) // Add popups
                             .setHTML(
-                                `<h3><b>${feature.properties.title}</b></h3><p>${feature.properties.description}</p>`,
+                                `<a href='/profile/${feature.properties.idUser}'><h3><b>${feature.properties.title}</b></h3><p>${feature.properties.description}</p></a>`,
                             ),
                     )
                     .addTo(map.current);
             }
         }
+		// eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dataMap]);
 
     return (

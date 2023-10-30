@@ -39,6 +39,7 @@ function ChatShowMessages({
 		return () => {
             socket.off('chat');
         };
+		// eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currChat]);
 
     

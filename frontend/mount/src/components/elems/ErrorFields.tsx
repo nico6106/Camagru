@@ -15,11 +15,7 @@ type Prop = {
 }
 
 export function ErrorField({name, title, onBlur, styleError=false, setStyleError=false, init='', disabled=false, size, type=name, min='', max=''}: Prop) {
-	// 
-	// useEffect(() => {
-	// 	setStyleError(error); 
-	// 	console.log('error='+error+', style='+styleError)
-	// }, [error]);
+
 	const style = `block ${size ? 'w-' + size : 'w-full'} rounded-md border-0 py-1.5 pl-2 text-gray-900
 	 shadow-sm ring-1 ring-inset  placeholder:text-gray-400 focus:ring-2 sm:text-sm sm:leading-6
 	  ${styleError ? `border-2 border-rose-600` : `focus:ring-inset focus:ring-indigo-600 ring-gray-300`}

@@ -29,6 +29,7 @@ function NotificationsPage() {
 
 	useEffect(() => {
         execBackend();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
 	async function execBackend() {
@@ -89,13 +90,14 @@ function IndivNotif({ notif, seen }: PropIndivNotif) {
 	const link: string = notif.picture !== '' ? `http://${process.env.REACT_APP_SERVER_ADDRESS}:3333/users/image/${notif.picture}` : '/carousel-2.svg';
     const linkTo: string = `/profile/${notif.idUser}`
 	const formatDiv: string = `flex items-center space-x-4 border ${seen && 'bg-yellow-300'}`
+	const altImage: string = `profile picture-${notif.picture}`;
 	return (
             <div className={formatDiv}>
                 <div className="flex-shrink-0">
                     <img
                         className="w-8 h-8 rounded-full"
                         src={link}
-                        alt="profile picture"
+                        alt={altImage}
                     />
                 </div>
                 <div className="flex-1 min-w-0">

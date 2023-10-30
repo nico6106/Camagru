@@ -5,7 +5,6 @@ import Button from "../components/elems/Button";
 import { ErrorField } from "../components/elems/ErrorFields";
 import LinkText from "../components/elems/LinkText";
 import TitleSmall from "../components/elems/TitleSmall";
-import { useUserContext } from "../context/UserContext";
 import { RetourType } from "../types/response";
 import GetMe from "../components/backend/GetMe";
 import { User } from "../types/users";
@@ -19,7 +18,6 @@ import axios from "axios";
 import { SuccessMsg } from "../shared/errors";
 import PhotoUploader from "../components/settings/PhotoUpload";
 import ShowPictures from "../components/settings/ShowPictures";
-import AskGeolocalisation from "../components/settings/AskGeo";
 import CheckboxAskGeoModify from "../components/settings/CheckboxAskGeo";
 
 function SettingsPage() {
@@ -44,11 +42,11 @@ function SettingsPage() {
 	
 
 	const [maxAge, setMaxAge] = useState<string>('');
-	const [created, setCreated] = useState<boolean>(false);
 
 	useEffect(() => {
 		setMaxAge(compute18Y());
 		getUserInfo();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
 
 	async function getUserInfo() {
@@ -109,13 +107,12 @@ function SettingsPage() {
             console.log(response.data);
             if (response.data.message === SuccessMsg) {
                 setError('');
-                setCreated(true);
             } else {
                 setError(response.data.error);
             }
             return response.data;
         } catch (error) {
-            //to handle ?
+            //to handle ? 
         }
 	}
 
@@ -165,7 +162,8 @@ function SettingsPage() {
                         message={'Impossible to sign up because '}
                     />
                     <ErrorField
-                        name="email"
+                        name="email1"
+						type='email'
                         title="Email"
                         onBlur={handleOnChangeEmail}
 						init={email}

@@ -24,6 +24,7 @@ function ResetPasswordPage() {
 
     useEffect(() => {
         validateLink();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     async function validateLink() {

@@ -78,6 +78,7 @@ export async function dataMap(db: Database, req: Request, res: Response) {
 			title: `${elem.user.first_name}`,
 			description: `${computeAgeUser(elem.user.date_birth)} years old`,
 			image: elem.user.profile_picture,
+			idUser: elem.user.id,
 		}
 		const feature: FeatureType = {
 			type: 'Feature',

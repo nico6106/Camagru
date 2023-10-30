@@ -12,6 +12,7 @@ function ImageCarrousel({ pictures, visible, setVisible }: Prop) {
 
     useEffect(() => {
         if (pictures.length > 0) setVisible(pictures[0]);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     function handleNext(event: any) {

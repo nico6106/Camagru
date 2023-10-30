@@ -50,6 +50,7 @@ function SignUpPage() {
 
     useEffect(() => {
         setMaxAge(compute18Y());
+		// eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     function setFalseAll() {
@@ -80,6 +81,7 @@ function SignUpPage() {
                 setStyleErrorLastname(true);
         }
         setStyleError(false);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
     }, [error, styleError]);
 
     function handleOnChangeUsername(e: React.ChangeEvent<HTMLInputElement>) {

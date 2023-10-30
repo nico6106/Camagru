@@ -27,6 +27,7 @@ function UserOptionProfile({ userM, liked, setLiked, showReported, setShowReport
 	
 	useEffect(() => {
 		blocked && setBlockedMsg('Unblock user');
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	function handleOnClick(event: any) {
@@ -183,6 +184,7 @@ function ShowUserRelation({ myId, liked, userM }: PropRelationUser) {
 				break ;
 			}
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	useEffect(() => {
@@ -196,6 +198,7 @@ function ShowUserRelation({ myId, liked, userM }: PropRelationUser) {
 			setMsg('Be patient !')
 		else
 			setMsg('Like first !')
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [userLikeMe, liked])
 		
 	return (<>{showMsg}</>);

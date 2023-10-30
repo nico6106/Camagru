@@ -2,6 +2,7 @@ export type PropertiesFeature = {
     title: string;
     description: string;
 	image: string;
+	idUser: number;
 };
 
 export type GeometryFeature = {

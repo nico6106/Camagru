@@ -49,7 +49,12 @@ function MobileMenuBoutton({
     );
 }
 
-function MobileMenu({ showMenu }: { showMenu: boolean }) {
+type PropMobileMenuNavBar = {
+	showMenu: boolean;
+	currLink: string;
+	setCurrLink: any;
+}
+function MobileMenu({ showMenu, currLink, setCurrLink }: PropMobileMenuNavBar) {
 	const { user } = useUserContext();
 	const profileLink: string = `/profile/${user?.id}`;
     return showMenu ? (
@@ -63,30 +68,40 @@ function MobileMenu({ showMenu }: { showMenu: boolean }) {
                         page={profileLink}
                         selected={true}
                         block={true}
+						currLink={currLink}
+						setCurrLink={setCurrLink}
                     />
                     <ButtonLinkNavBar
                         text="Browsing"
                         page="/find"
                         selected={false}
                         block={true}
+						currLink={currLink}
+						setCurrLink={setCurrLink}
                     />
 					<ButtonLinkNavBar
                         text="Map"
                         page="/map"
                         selected={false}
                         block={true}
+						currLink={currLink}
+						setCurrLink={setCurrLink}
                     />
                     <ButtonLinkNavBar
                         text="Settings"
                         page="/settings"
                         selected={false}
                         block={true}
+						currLink={currLink}
+						setCurrLink={setCurrLink}
                     />
                     <ButtonLinkNavBar
                         text="Sign out"
                         page="/signout"
                         selected={false}
                         block={true}
+						currLink={currLink}
+						setCurrLink={setCurrLink}
                     />
                 </div>
             </div>
@@ -98,22 +113,40 @@ function ButtonLinkNavBar({
     page,
     selected,
     block,
+	currLink,
+	setCurrLink,
 }: {
     text: string;
     page: string;
     selected: boolean;
     block: boolean;
+	currLink: string;
+	setCurrLink: any;
 }) {
     let style: string = `text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium ${
         block && 'block'
     }`;
-    if (selected)
-        style = `bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium ${
-            block && 'block'
-        }`;
+	useEffect(() => {
+		console.log('page=' + page + ', currLink='+currLink)
+		if (page === currLink) {
+			style = `bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium ${
+				block && 'block'
+			}`;
+			console.log('you are here')
+		}
+		else
+			style = `text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium ${
+				block && 'block'}`;
+				// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [currLink]);
+
+	function handleChangePage(page: string) {
+		setCurrLink(page);
+		console.log('doing it '+page)
+	}
     return (
         <Link to={page}>
-            <p className={style} aria-current="page">
+            <p className={style} aria-current="page" onClick={() => handleChangePage(page)}>
                 {text}
             </p>
         </Link>
@@ -123,7 +156,11 @@ function ButtonLinkNavBar({
     );
 }
 
-function LinkNavBar() {
+type PropLinkNavBar = {
+	currLink: string;
+	setCurrLink: any;
+}
+function LinkNavBar({currLink, setCurrLink}: PropLinkNavBar) {
 	const { user } = useUserContext();
 	const profileLink: string = `/profile/${user?.id}`;
 	
@@ -132,27 +169,35 @@ function LinkNavBar() {
             <div className="flex space-x-4">
                 <ButtonLinkNavBar
                     text="Profile"
-                    page={profileLink}
-                    selected={true}
-                    block={false}
+					page={profileLink}
+					selected={true}
+					block={false}
+					currLink={currLink}
+					setCurrLink={setCurrLink}
                 />
                 <ButtonLinkNavBar
                     text="Browsing"
                     page="/find"
                     selected={false}
                     block={false}
+					currLink={currLink}
+					setCurrLink={setCurrLink}
                 />
 				<ButtonLinkNavBar
                     text="Map"
                     page="/map"
                     selected={false}
                     block={false}
+					currLink={currLink}
+					setCurrLink={setCurrLink}
                 />
 				<ButtonLinkNavBar
                     text="Settings"
                     page="/settings"
                     selected={false}
                     block={false}
+					currLink={currLink}
+					setCurrLink={setCurrLink}
                 />
             </div>
         </div>
@@ -287,6 +332,7 @@ function DropdownMenu() {
 
     useEffect(() => {
         if (!user) setShowDropMenu(false);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user]);
 	
     return user ? (
@@ -336,12 +382,26 @@ function DropdownMenu() {
 
 function NavBar() {
     const [showMenu, setShowMenu] = useState<boolean>(false);
+	const [currLink, setCurrLink] = useState<string>('');
 	const { user, verifUser } = useUserContext();
 	const location = useLocation();
 
 	useEffect(() => {
 		verifUser();
-		// console.log('verif');
+		if (location.pathname.match('/profile')) {
+			setCurrLink('/profile');
+			console.log('oula profile')
+		}
+		else if (location.pathname.match('/settings'))
+			setCurrLink('/settings');
+		else if (location.pathname.match('/find'))
+			setCurrLink('/find');
+		else if (location.pathname.match('/map'))
+			setCurrLink('/map');
+		else
+			setCurrLink('');
+			// console.log('verif');
+			// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [location]);
 
     let outside: boolean = false;
@@ -361,7 +421,10 @@ function NavBar() {
                     </OutsideClickHandler>
                     <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                         <LogoNavBar />
-                        {user && <LinkNavBar />}
+                        {user && <LinkNavBar 
+							currLink={currLink}
+							setCurrLink={setCurrLink}
+							/>}
                     </div>
                     <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
 						{user && <ButtonChat />}
@@ -378,7 +441,11 @@ function NavBar() {
                     outside = false;
                 }}
             >
-                <MobileMenu showMenu={showMenu} />
+                <MobileMenu 
+					showMenu={showMenu}
+					currLink={currLink}
+					setCurrLink={setCurrLink}
+				/>
             </OutsideClickHandler>
         </nav>
     );

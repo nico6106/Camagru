@@ -40,6 +40,7 @@ function NbNotif({ option }: Prop) {
 			socket.off('chat2');
             socket.off('chat-read2');
         };
+		// eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     async function execBackend() {

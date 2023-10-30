@@ -1,6 +1,5 @@
-import React, { useState, ChangeEvent, useEffect } from 'react';
+import { useState, ChangeEvent } from 'react';
 import axios from 'axios';
-import { useUserContext } from '../../context/UserContext';
 import { SuccessMsg } from '../../shared/errors';
 
 type Prop = {
@@ -12,7 +11,6 @@ type Prop = {
 
 function PhotoUploader({ pictures, setPictures, setMainPicture, setError }: Prop) {
     const [imageUpdate, setImageUpdate] = useState<string | null>(null);
-    const { user, updateUser } = useUserContext();
 
     async function handleImageChange(e: ChangeEvent<HTMLInputElement>) {
         const selectedImage = e.target.files?.[0];
@@ -51,11 +49,12 @@ function PhotoUploader({ pictures, setPictures, setMainPicture, setError }: Prop
 
     return (
         <div className="relative w-32">
-            <label className="">
+            <label htmlFor="update-avatar">
                 Update avatar
                
             </label>
 			<input
+				id='update-avatar'
                     type="file"
                     accept="image/*"
                     className=""

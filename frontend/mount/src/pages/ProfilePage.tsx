@@ -25,18 +25,22 @@ function ProfilePage() {
 	
 	useEffect(() => {
 		setId();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
 
 	useEffect(() => {
 		setId();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [user])
 
 	useEffect(() => {
 		setId();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [id])
 
 	useEffect(() => {
 		getUserInfo();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [idUser])
 
 	function setId() {

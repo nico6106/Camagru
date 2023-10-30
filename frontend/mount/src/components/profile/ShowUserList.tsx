@@ -22,6 +22,7 @@ function ShowListUsers({ option, userShort }: Prop) {
 			else
 				setNbEnd(userShort.length);
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
     const dataCheck: string[] = [

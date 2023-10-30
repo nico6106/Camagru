@@ -17,7 +17,7 @@ export function DateInputField({title, onBlur, styleError=false, setStyleError=f
     return (
         <div>
             <label
-                htmlFor="email"
+                htmlFor="datebof"
                 className="block text-sm font-medium leading-6 text-gray-900"
             >
                 {title}

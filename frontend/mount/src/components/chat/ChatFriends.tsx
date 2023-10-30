@@ -18,6 +18,7 @@ function ChatFriends({
 
     useEffect(() => {
         execBackendGetAllChats();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     async function execBackendGetAllChats() {
@@ -95,6 +96,7 @@ function ChatShowIndivFriend({ chatElem, setCurrChat }: PropChatIndivFriend) {
 			socket.off('chat');
 			socket.off('chat-read');
 		};
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
 	
 

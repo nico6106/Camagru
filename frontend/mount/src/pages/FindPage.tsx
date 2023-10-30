@@ -61,12 +61,14 @@ function FindUserPage() {
 
     useEffect(() => {
         searchInitBackend();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {
         if (!dataCards) return;
         // console.log(dataCards)
         sortCards(dataCards, orderBy);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
     }, [orderBy]);
 
     function filter() {

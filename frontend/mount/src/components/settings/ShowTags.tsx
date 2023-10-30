@@ -38,6 +38,7 @@ function UniqueTag({ elem, tagsUser, setTagsUser }: PropUniqueTag) {
 
     useEffect(() => {
         setElemChecked(tagsUser.includes(elem));
+		// eslint-disable-next-line react-hooks/exhaustive-deps
     }, [tagsUser, elem]);
 
     return (
