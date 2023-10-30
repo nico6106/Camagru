@@ -30,7 +30,8 @@ function ForgotPasswordPage() {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
     }, [error, styleError]);
 
-    function handleOnChangeUsername(e: React.ChangeEvent<HTMLInputElement>) {
+	function handleOnChangeEmail(e: React.ChangeEvent<HTMLInputElement>) {
+		console.log('fe')
         setEmail(e.target.value);
     }
 
@@ -78,12 +79,14 @@ function ForgotPasswordPage() {
                 <form className="space-y-6" action="#" onSubmit={handleSignIn}>
                     <ShowErrorMessage
                         error={error}
-                        message={'Impossible to log-in because '}
+                        message={'Impossible to recover because '}
                     />
                     <ErrorField
-                        name="email"
+						name="email1"
+						type='email'
                         title="Email"
-                        onBlur={handleOnChangeUsername}
+                        onBlur={handleOnChangeEmail}
+						init={email}
                         styleError={styleErrorEmail}
                         setStyleError={setStyleErrorEmail}
                     />
