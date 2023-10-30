@@ -10,7 +10,7 @@ function SignOutPage() {
 	useEffect(() => {
 		signOutBackend();
 		logoutUser();
-		navigate(`signin`);
+		navigate(`/signin`);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
 	async function signOutBackend() {
@@ -22,7 +22,7 @@ function SignOutPage() {
                 },
             );
             console.log(response.data);
-			navigate('/');
+			navigate('/signin');
             return response.data;
         } catch (error) {
             // setRetour(null);
