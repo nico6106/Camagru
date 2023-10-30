@@ -92,6 +92,6 @@ function handleChangeCheckbox(
 		setElemChecked(false);
     }
 	
-    console.log(newList);
+    // console.log(newList);
     setTagsUser(newList);
 }

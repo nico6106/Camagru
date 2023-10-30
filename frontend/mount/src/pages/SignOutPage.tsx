@@ -21,7 +21,7 @@ function SignOutPage() {
                     withCredentials: true,
                 },
             );
-            console.log(response.data);
+            // console.log(response.data);
 			navigate('/signin');
             return response.data;
         } catch (error) {

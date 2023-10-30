@@ -32,8 +32,8 @@ export async function exec_AmendElemsFromTable(db: Database, table: string, wher
 	// values.push(elem);
 	try {
 		const retour = await db.executeQueryArgs(query, values)
-		console.log(query)
-		console.log(values)
+		// console.log(query)
+		// console.log(values)
 		if (retour && retour.rowCount !== 0) {
 			return retour;
 		}

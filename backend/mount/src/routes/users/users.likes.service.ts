@@ -25,7 +25,7 @@ export async function likeUser(db: Database, req: Request, res: Response) {
 		return res.status(200).json({ message: ErrorMsg, error: UnknownUsername });
 
 	if (meUser.id !== users[0].id) {
-		console.log(meUser.id+' likes '+users[0].id);
+		// console.log(meUser.id+' likes '+users[0].id);
 		if (checkAlreadyLiked(meUser.likes, users[0].id))
 			return res.status(200).json({ message: ErrorMsg, error: ProfileAlreadyLiked });
 
@@ -87,7 +87,7 @@ export async function unlikeUser(db: Database, req: Request, res: Response) {
 		return res.status(200).json({ message: ErrorMsg, error: UnknownUsername });
 
 	if (meUser.id !== users[0].id) {
-		console.log(meUser.id+' unlikes '+users[0].id);
+		// console.log(meUser.id+' unlikes '+users[0].id);
 
 		if (checkAlreadyLiked(meUser.likes, users[0].id) === false)
 			return res.status(200).json({ message: ErrorMsg, error: ProfileNotLiked });
@@ -143,7 +143,7 @@ export async function reportUser(db: Database, req: Request, res: Response) {
 		return res.status(200).json({ message: ErrorMsg, error: UnknownUsername });
 
 	if (meUser.id !== users[0].id) {
-		console.log(meUser.id+' report user '+users[0].id);
+		// console.log(meUser.id+' report user '+users[0].id);
 		if (checkAlreadyLiked(users[0].fake_account, meUser.id))
 			return res.status(200).json({ message: ErrorMsg, error: 'profile already reported' });
 		

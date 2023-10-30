@@ -42,7 +42,7 @@ export class OnlineUsers {
 			lastSeen: Date.now()
 		});
 
-		console.log('user '+idUser+' added socket='+socketId)
+		// console.log('user '+idUser+' added socket='+socketId)
 	}
 
 	//if force = true, vient de logout (et force deconnexion)
@@ -70,7 +70,7 @@ export class OnlineUsers {
 			//update status in array
 			this.users[index].connected = false;
 
-			console.log('user '+userId+' removed socket='+socketId)
+			// console.log('user '+userId+' removed socket='+socketId)
 		}
 		
 	}
@@ -108,7 +108,7 @@ export class OnlineUsers {
 
 	//send a message to all friends of a user
 	alertFriends(idUser: number, title: string, body: any) {
-		console.log('alert friend')
+		// console.log('alert friend')
 		const index: number = this.users.findIndex((elem) => elem.idUser === idUser);
 		if (index !== -1) {
 			if (this.users[index].matches.length === 0) return ;
@@ -126,15 +126,16 @@ export class OnlineUsers {
 		if (this.users[index].sockets.length === 0) return ; //not connected
 		for (let i = 0; i < this.users[index].sockets.length; i++) {
 			this.io.to(this.users[index].sockets[i]).emit(title, body);
-			console.log('send msg to '+toId+':'+this.users[index].sockets[i]+', say:'+title+'='+body.idUser+'-'+body.type);
+			// console.log('send msg to '+toId+':'+this.users[index].sockets[i]+', say:'+title+'='+body.idUser+'-'+body.type);
 		}
 	}
 
 	tbd() {
-		console.log('ok so we get here');
-		console.log('nb users='+this.users.length);
-		console.log('user[0]: '+this.users[0].idUser+', connected:' +this.users[0].connected);
-		console.log(this.users[0].sockets);
+		// console.log('ok so we get here');
+		// console.log('nb users='+this.users.length);
+		// console.log('user[0]: '+this.users[0].idUser+', connected:' +this.users[0].connected);
+		// console.log(this.users[0].sockets);
+		
 		// this.io.emit("hello", "world", (error: any) => { 
 		// 	console.log('hello world')
 		// 	console.log(error)});

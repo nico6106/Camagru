@@ -20,7 +20,7 @@ export async function handleIncomeChatMsg(
     //identify user
     const indexUser: number = users.giveUserFromSocket(socket);
     if (indexUser === -1) return; //pas de user connu pour cette socket, on ignore
-    console.log('msg recu:' + data.message);
+    // console.log('msg recu:' + data.message);
 
     //get chat info
     const chatsUser: TableChat[] | null =
@@ -78,12 +78,12 @@ export async function handleIncomeChatMsg(
 		idChat: data.idChat,
 		msg: newElemChat,
 	}
-	console.log('sending msg:')
-	console.log(elemToSend)
+	// console.log('sending msg:')
+	// console.log(elemToSend)
 
 	
-	console.log(userReceiveMsg[0].blocked_user)
-	console.log('a=' + chat.id_a + ', b=' + chat.id_b)
+	// console.log(userReceiveMsg[0].blocked_user)
+	// console.log('a=' + chat.id_a + ', b=' + chat.id_b)
 
 	//send live msg if user not blocked
 	if (chat.id_a === users.users[indexUser].idUser || !userReceiveMsg[0].blocked_user.includes(chat.id_b)) {

@@ -126,7 +126,6 @@ function ButtonLinkNavBar({
     }`;
 	const [style, setStyle] = useState<string>(styleInit);
 	useEffect(() => {
-		console.log('page=' + page + ', currLink='+currLink)
 		if (page.match(currLink)) {
 			setStyle(`bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium ${
 				block && 'block'
@@ -368,10 +367,8 @@ function NavBar() {
 
 	useEffect(() => {
 		verifUser();
-		if (location.pathname.match('/profile')) {
+		if (location.pathname.match('/profile'))
 			setCurrLink('/profile');
-			console.log('oula profile')
-		}
 		else if (location.pathname.match('/settings'))
 			setCurrLink('/settings');
 		else if (location.pathname.match('/find'))

@@ -40,7 +40,7 @@ function NotificationsPage() {
                     withCredentials: true,
                 },
             );
-            console.log(response.data);
+            // console.log(response.data);
             if (response.data.message === SuccessMsg) {
                 setNotifs(response.data.notifs);
 				setNbNotif(response.data.value);

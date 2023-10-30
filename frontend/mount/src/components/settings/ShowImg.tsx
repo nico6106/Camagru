@@ -21,7 +21,7 @@ function ShowImg({ picture, pictures, mainPicture, setPictures, setMainPicture, 
                     withCredentials: true,
                 },
             );
-            console.log(response.data);
+            // console.log(response.data);
             if (response.data.message === SuccessMsg) {
                 setMainPicture(response.data.info)
 				setError('');
@@ -43,7 +43,7 @@ function ShowImg({ picture, pictures, mainPicture, setPictures, setMainPicture, 
                     withCredentials: true,
                 },
             );
-            console.log(response.data);
+            // console.log(response.data);
             if (response.data.message === SuccessMsg) {
                 setMainPicture(response.data.info);
 				setError('');

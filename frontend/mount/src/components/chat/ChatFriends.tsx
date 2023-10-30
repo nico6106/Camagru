@@ -27,7 +27,7 @@ function ChatFriends({
                     withCredentials: true,
                 },
             );
-            console.log(response.data);
+            // console.log(response.data);
             if (response.data.message === SuccessMsg) {
                 setChats(response.data.chats);
             } 
@@ -69,7 +69,7 @@ function ChatShowIndivFriend({ chatElem, setCurrChat }: PropChatIndivFriend) {
 	const [nbNotifChat, setNbNotifChat] = useState<number>(0);
 
     function handleOnClick() {
-        console.log('clicked chatid=' + chatElem.idChat);
+        // console.log('clicked chatid=' + chatElem.idChat);
         setCurrChat(chatElem.idChat);
     }
 
@@ -120,7 +120,7 @@ function EmptyElems({ nb }: { nb: number }) {
     for (let i = 0; i < nb; i++) {
         tmp.push(i);
     }
-    console.log('nb to draw=' + nb);
+    // console.log('nb to draw=' + nb);
     return (
         <>
             {tmp.map((elem, index) => (

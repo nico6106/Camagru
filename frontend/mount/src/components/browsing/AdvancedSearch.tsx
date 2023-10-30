@@ -169,8 +169,8 @@ function AdvancedSearch({
                     withCredentials: true,
                 },
             );
-            console.log('advanced search');
-            console.log(response.data);
+            // console.log('advanced search');
+            // console.log(response.data);
 			if (response.data && response.data.message === 'error') {
 				if (response.data.error)
 					alert(response.data.error);

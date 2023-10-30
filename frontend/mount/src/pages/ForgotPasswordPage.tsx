@@ -31,13 +31,12 @@ function ForgotPasswordPage() {
     }, [error, styleError]);
 
 	function handleOnChangeEmail(e: React.ChangeEvent<HTMLInputElement>) {
-		console.log('fe')
         setEmail(e.target.value);
     }
 
     function handleSignIn(event: any) {
         event.preventDefault();
-        console.log('username=' + email );
+        // console.log('username=' + email );
         signInBackend();
     }
 
@@ -52,7 +51,7 @@ function ForgotPasswordPage() {
                     withCredentials: true,
                 },
             );
-            console.log(response.data);
+            // console.log(response.data);
             if (response.data.message === SuccessMsg) {
                 setError('');
                 setStyleError(false);

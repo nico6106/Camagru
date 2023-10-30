@@ -20,7 +20,7 @@ export async function blockUser(db: Database, req: Request, res: Response) {
 		return res.status(200).json({ message: ErrorMsg, error: UnknownUsername });
 
 	if (meUser.id !== users[0].id) {
-		console.log(meUser.id+' block '+users[0].id);
+		// console.log(meUser.id+' block '+users[0].id);
 		if (meUser.blocked_user.includes(users[0].id))
 			return res.status(200).json({ message: ErrorMsg, error: AlreadyBlocked });
 		await db.AmendElemsFromTable(
@@ -50,7 +50,7 @@ export async function unblockUser(db: Database, req: Request, res: Response) {
 		return res.status(200).json({ message: ErrorMsg, error: UnknownUsername });
 
 	if (meUser.id !== users[0].id) {
-		console.log(meUser.id+' unblock '+users[0].id);
+		// console.log(meUser.id+' unblock '+users[0].id);
 		if (!meUser.blocked_user.includes(users[0].id))
 			return res.status(200).json({ message: ErrorMsg, error: ProfileNotBlocked });
 		const newUnblockedUsers: number[] = meUser.blocked_user.filter((elem) => elem !== users[0].id);

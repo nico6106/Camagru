@@ -30,8 +30,8 @@ function ShowIsOnline({ userId, initStatus, lastSeen }: Prop) {
 					setLastSeenU(data.lastSeen);
 				} 
             }
-			console.log('message : +userId='+userId)
-			console.log(data)
+			// console.log('message : +userId='+userId)
+			// console.log(data)
         });
 
         return () => {

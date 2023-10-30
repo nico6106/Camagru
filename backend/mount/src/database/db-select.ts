@@ -41,9 +41,9 @@ export async function exec_SelectElemsFromTableMultiplesArgsOR(db: Database, tab
 	}
 	const selectElem: string = require ? require : '*';
 	const query: string = `SELECT ${selectElem} FROM ${table} WHERE ${setText}`;
-	console.log('query')
-	console.log(query)
-	console.log(values)
+	// console.log('query')
+	// console.log(query)
+	// console.log(values)
 	try {
 		const retour = await db.executeQueryArgs(query, values);
 		if (retour) {

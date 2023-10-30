@@ -31,7 +31,7 @@ function ShowMap() {
                     withCredentials: true,
                 },
             );
-            console.log(response.data);
+            // console.log(response.data);
             if (response.data && response.data.data_map) {
                 setDataMap(response.data.data_map);
             }

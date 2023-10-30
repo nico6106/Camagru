@@ -37,7 +37,7 @@ function ResetPasswordPage() {
                 },
             );
             setRetour(response.data);
-            console.log(response.data);
+            // console.log(response.data);
             if (response.data.error === InvalidId) navigate('/404');
             return response.data;
         } catch (error) {
@@ -56,7 +56,7 @@ function ResetPasswordPage() {
                     withCredentials: true,
                 },
             );
-            console.log(response.data);
+            // console.log(response.data);
             if (response.data.message === SuccessMsg) {
                 setError('');
                 setStyleErrorPassword(false);

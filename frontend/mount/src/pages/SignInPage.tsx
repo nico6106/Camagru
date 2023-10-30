@@ -52,7 +52,7 @@ function SignInPage() {
 
     function handleSignIn(event: any) {
         event.preventDefault();
-        console.log('username=' + username + ', pwd=' + password);
+        // console.log('username=' + username + ', pwd=' + password);
         signInBackend();
     }
 
@@ -68,7 +68,7 @@ function SignInPage() {
                     withCredentials: true,
                 },
             );
-            console.log(response.data);
+            // console.log(response.data);
             if (response.data.message === SuccessMsg) {
                 loginUser(response.data.user);
                 setError('');

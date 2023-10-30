@@ -113,7 +113,7 @@ export async function advancedSearch(
 
     //log
     showResults(usersMatching);
-    console.log(options);
+    // console.log(options);
 
     const data: MatchingResponse[] = createResponse(usersMatching);
 

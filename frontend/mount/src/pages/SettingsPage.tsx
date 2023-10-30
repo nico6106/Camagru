@@ -58,7 +58,7 @@ function SettingsPage() {
 		if (retour.message === SuccessMsg && retour.user) {
 			setUser(retour.user);
 			setUserInfoForForm(retour.user);
-			console.log(retour);
+			// console.log(retour);
 			if (retour.tags)
 				setTagsAll(retour.tags);
 		}
@@ -104,7 +104,7 @@ function SettingsPage() {
                     withCredentials: true,
                 },
             );
-            console.log(response.data);
+            // console.log(response.data);
             if (response.data.message === SuccessMsg) {
                 setError('');
             } else {

@@ -137,10 +137,10 @@ export async function getChatHistory(db: Database, req: Request, res: Response) 
 		
 	const chat: TableChat = chatsUser[0];
 	
-	console.log('chatsUser:')
-	console.log(chatsUser)
-	console.log('chat:')
-	console.log(chat)
+	// console.log('chatsUser:')
+	// console.log(chatsUser)
+	// console.log('chat:')
+	// console.log(chat)
 
 	if (!(user.id === chat.id_a || user.id === chat.id_b))
 	return res

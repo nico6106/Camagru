@@ -55,8 +55,6 @@ function ShowListUsers({ option, userShort }: Prop) {
     ];
     const dataIndex: number = dataCheck.findIndex((elem) => elem === option);
 
-	console.log('hrer')
-
     return (
         <>
             <TitleSmall text={title[dataIndex]} space="1" />

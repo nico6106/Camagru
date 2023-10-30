@@ -53,7 +53,7 @@ function NbNotif({ option }: Prop) {
                     withCredentials: true,
                 },
             );
-            console.log(response.data);
+            // console.log(response.data);
             if (response.data.message === SuccessMsg) {
                 setNbNotif(response.data.value);
                 setNbChat(response.data.valueChat);

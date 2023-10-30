@@ -58,7 +58,7 @@ export async function loopData(db: Database, data: FormatCSV[]) {
 
 export async function createOne(db: Database, data: FormatCSV[], index: number) {
 
-	console.log(data[index])
+	// console.log(data[index])
 
 	const hash = await hashPassword(data[index].password);
     const confirmID: string = generateId();

@@ -53,7 +53,7 @@ export async function getUserById(db: Database, req: Request, res: Response) {
 
 	//handle visit profile (I visit a profile + profile i see get visited)
 	if (meUser.id !== user.id) {
-		console.log(meUser.id+' visited '+users[0].id)
+		// console.log(meUser.id+' visited '+users[0].id)
 		await addElemToJSONData(db, meUser.viewed, {id: users[0].id, date: now}, meUser.id, 'viewed');
 		await addElemToJSONData(db, users[0].viewed_by, {id: meUser.id, date: now}, users[0].id, 'viewed_by');
 
@@ -185,7 +185,7 @@ async function getCityByGPSLocalisation(coordinates: GPSCoordinates) {
 				withCredentials: true,
 			},
 		);
-		console.log(response.data);
+		// console.log(response.data);
 		if (response.data.address.town)
 			return response.data.address.town
 		else if (response.data.address.city)
@@ -235,14 +235,14 @@ export async function updateSettings(db: Database, req: Request, res: Response) 
 	const numLatitude = parseFloat(latitude);
 	const numLongitude = parseFloat(longitude);
 
-    console.log('update settings');
+    // console.log('update settings');
 
     //recuperer USER
     const user: TableUser | null = await getUserFromRequest(db, req);
 	if (!user)
 		return res.status(200).json({ message: ErrorMsg, error: "not connected", user: null });
 
-    console.log(user);
+    // console.log(user);
 
 	let position: TPosition
 	if (amend_position) {
@@ -271,7 +271,7 @@ export async function updateSettings(db: Database, req: Request, res: Response) 
 
 export async function uploadImg(db: Database, req: Request, res: Response) {
 	const file: Express.Multer.File | undefined = req.file;
-	console.log(file);
+	// console.log(file);
 
 	const user: TableUser | null = await getUserFromRequest(db, req);
 	if (!user)
@@ -281,8 +281,8 @@ export async function uploadImg(db: Database, req: Request, res: Response) {
 	
 	const picturesUser: string[] = [...user.pictures, file.filename];
 
-	console.log('now pictures')
-	console.log(picturesUser)
+	// console.log('now pictures')
+	// console.log(picturesUser)
 
 	let profilePicture: string = user.profile_picture;
 

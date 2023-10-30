@@ -81,7 +81,7 @@ export async function browsingProfiles(
     normalizeResults(usersMatching, allDistances, allNbTags, allFame);
 
     //log
-    showResults(usersMatching);
+    // showResults(usersMatching);
 
     const response: MatchingResponse[] = createResponse(usersMatching);
 
@@ -208,19 +208,19 @@ export function computeRawDataForAnalysis(
 
 		const diffFame: number = Math.abs(meUser.fame_rating - elem.fame_rating);
         allFame.push(diffFame);
-        console.log(
-            'comparison with username=' +
-                elem.username +
-                '(' +
-                elem.id +
-                ') : distance=' +
-                distance +
-                ', commonTags=' +
-                commonTags +
-				', diffFame=' +
-				diffFame
+        // console.log(
+        //     'comparison with username=' +
+        //         elem.username +
+        //         '(' +
+        //         elem.id +
+        //         ') : distance=' +
+        //         distance +
+        //         ', commonTags=' +
+        //         commonTags +
+		// 		', diffFame=' +
+		// 		diffFame
 				
-        );
+        // );
 
         //create obj and push it to list
         const elemUserMatching: MatchingUsers = {
@@ -263,7 +263,7 @@ export function normalizeResults(
         fameMin: Math.min(...allFame),
         fameMax: Math.max(...allFame),
     };
-	console.log(info)
+	// console.log(info)
     for (let i = 0; i < usersMatching.length; i++) {
         //normalize distance
         if (info.distMax - info.distMin !== 0) {

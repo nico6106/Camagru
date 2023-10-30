@@ -34,7 +34,7 @@ export async function geolocUser(db: Database, req: Request, res: Response) {
 			userIp = await getMyIp();
 
 		ipinfoWrapper.lookupIp(userIp).then((response: IPinfo) => {
-			console.log(response);
+			// console.log(response);
 			if (response.loc) {
 				const coordinates: string[] = response.loc.split(',');
 				sauvGeoloc(db, user.id, coordinates[1], coordinates[0]); 
@@ -66,7 +66,7 @@ async function getMyIp() {
 				withCredentials: true,
 			},
 		);
-		console.log(response.data);
+		// console.log(response.data);
 		if (response.data.ip)
 			return response.data.ip
 		return userIp;
@@ -83,7 +83,7 @@ export async function sauvGeoloc(db: Database, userId: number, longitude: string
 		longitude: newLongitude,
 		latitude: newLatitude,
 	}
-	console.log(position)
+	// console.log(position)
 	await db.AmendElemsFromTable(
 		TableUsersName,
 		'id',

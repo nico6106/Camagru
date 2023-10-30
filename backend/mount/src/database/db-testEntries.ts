@@ -6,8 +6,8 @@ export async function test_SelectEntryOneArg(db: Database, table: string, field:
 	const query: string = `SELECT * FROM ${table} WHERE ${field} = $1`;
 	const values: any[] = [];
 	values.push(elem);
-	console.log('values =')
-	console.log(values)
+	// console.log('values =')
+	// console.log(values)
 	try {
 		const retour = await db.executeQueryArgs(query, values)
 		if (retour && retour.rowCount !== 0)

@@ -55,7 +55,7 @@ function UserOptionProfile({ userM, liked, setLiked, showReported, setShowReport
 					withCredentials: true,
 				},
 			);
-			console.log(response.data);
+			// console.log(response.data);
 			if (response.data.message === SuccessMsg) {
 				if (liked)
 					setLiked(false);
@@ -82,7 +82,7 @@ function UserOptionProfile({ userM, liked, setLiked, showReported, setShowReport
 					withCredentials: true,
 				},
 			);
-			console.log(response.data);
+			// console.log(response.data);
 			if (response.data.message === SuccessMsg) {
 				if (blocked) {
 					setBlockedMsg('Block user')
@@ -112,7 +112,7 @@ function UserOptionProfile({ userM, liked, setLiked, showReported, setShowReport
 					withCredentials: true,
 				},
 			);
-			console.log(response.data);
+			// console.log(response.data);
 			if (response.data.message === SuccessMsg) {
 				setShowAlert(false);
 			}

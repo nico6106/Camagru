@@ -26,8 +26,8 @@ function ChatShowMessages({
 
 		//socket
 		socket.on('chat', (data: SocketReceiveMsg) => {
-			console.log(data)
-			console.log('step currChat='+currChat)
+			// console.log(data)
+			// console.log('step currChat='+currChat)
 			
             if (data.idChat === currChat) {
 				setChat((prevState: MsgChatRetour[]) => [...prevState, data.msg]);

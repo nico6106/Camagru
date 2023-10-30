@@ -26,7 +26,7 @@ function ChatPage() {
                     withCredentials: true,
                 },
             );
-            console.log(response.data);
+            // console.log(response.data);
             if (response.data.message === SuccessMsg) {
                 setChat(response.data.chats);
             } else {

@@ -97,7 +97,6 @@ function FindUserPage() {
             )
                 add = false;
             //filter by tag
-            if (elem.user.id === 143) console.log(elem.user.tags);
             if (filterbyTags(elem.user.tags, tagsUser)) add = false;
             if (add) newData.push(elem);
         }
@@ -190,7 +189,7 @@ function FindUserPage() {
                     withCredentials: true,
                 },
             );
-            console.log(response.data);
+            // console.log(response.data);
 			saveReturnFromBackend(response);
             return true;
         } catch (error) {

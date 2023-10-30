@@ -23,7 +23,7 @@ export async function handleInterval(users: OnlineUsers) {
 }
 
 export async function listenOnSocket(socket: Socket, users: OnlineUsers) {
-	console.log('a user connected in '+ socket.id);
+	// console.log('a user connected in '+ socket.id);
 
 	socket.on('ping', (data: DataSocketPing) => {
 		handlePing(socket, users, data);
@@ -34,7 +34,7 @@ export async function listenOnSocket(socket: Socket, users: OnlineUsers) {
 	});
 
 	socket.on('logout', () => {
-		console.log(`user logout with socket ID: ${socket.id}`);
+		// console.log(`user logout with socket ID: ${socket.id}`);
 	});
 
 	socket.on('disconnect', () => {
@@ -55,14 +55,14 @@ export async function handlePing(socket: Socket, users: OnlineUsers, data: DataS
 }
 
 export async function handleDisconnect(socket: Socket, users: OnlineUsers) {
-	console.log(`User disconnected with socket ID: ${socket.id}`);
+	// console.log(`User disconnected with socket ID: ${socket.id}`);
 	const index: number = users.giveUserFromSocket(socket);
 	if (index !== -1) 
 		await users.deconnectionUser(index, socket.id, false);
 }
 
 export async function handleLogout(socket: Socket, users: OnlineUsers) {
-	console.log(`User logout with socket ID: ${socket.id}`);
+	// console.log(`User logout with socket ID: ${socket.id}`);
 	const index: number = users.giveUserFromSocket(socket);
 	if (index !== -1) 
 		await users.deconnectionUser(index, socket.id, true);

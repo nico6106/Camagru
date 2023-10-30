@@ -12,8 +12,6 @@ const app = express()
 app.use(logger)
 app.use(cookieParser());
 
-console.log('bonjour')
-
 //middleware body-parser
 const bodyParser = require('body-parser');
 app.use(bodyParser.json()); // Pour les données de requête JSON
@@ -86,11 +84,10 @@ app.use('/search', searchRouter)
 
 app.get('/', (req: Request, res: Response) => {
 	res.send('Hiii')
-	console.log('ouou')
 })
 
 function logger(req: Request, res: Response, next: any) {
-	console.log(req.originalUrl)
+	// console.log(req.originalUrl)
 	next()
 }
 

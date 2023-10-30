@@ -5,7 +5,7 @@ function AskGeolocalisation() {
 	async function backendGeo(valid: boolean, latitude?: number, longitude?: number) {
 		
 		try {
-			const response = await axios.post(
+			await axios.post(
                 `http://${process.env.REACT_APP_SERVER_ADDRESS}:3333/users/geoloc`,
                 {
                     valid: valid,
@@ -16,7 +16,7 @@ function AskGeolocalisation() {
                     withCredentials: true,
                 },
             );
-			console.log(response);
+			// console.log(response);
 			// info
 		} catch {}
 	}

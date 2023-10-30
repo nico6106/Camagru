@@ -61,14 +61,14 @@ function DetailsUserListsPage() {
 	async function getUserInfo() {
 		if (!(idUser > 0)) return ;
 		const retour: RetourType | null = await GetListUsers(idUser, optionOk);
-		console.log(retour)
+		// console.log(retour)
 		if (!retour) {
 			setUserShort(null)
 			return ;
 		}
 		if (retour.message === SuccessMsg && retour.userShort) {
 			setUserShort(retour.userShort);
-			console.log(retour.userShort)
+			// console.log(retour.userShort)
 		}
 		else
 			setUserShort(null);

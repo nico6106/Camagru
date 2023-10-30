@@ -14,7 +14,7 @@ function ConfirmEmailPage() {
 
     useEffect(() => {
         if (idConfirm) {
-            console.log(idConfirm);
+            // console.log(idConfirm);
             validateLink();
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -30,7 +30,7 @@ function ConfirmEmailPage() {
                 },
             );
             setRetour(response.data);
-            console.log(response.data);
+            // console.log(response.data);
             if (response.data.message === 'unknown link') navigate('/404');
             return response.data;
         } catch (error) {

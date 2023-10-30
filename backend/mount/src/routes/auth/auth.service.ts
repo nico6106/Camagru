@@ -11,7 +11,7 @@ import { EmailNotVerified, EmailTaken, ErrorMsg, InvalidId, InvalidPassword, Suc
 
 export async function SignUp(db: Database, req: Request, res: Response) {
     const { username, email, password, lastname, firstname, datebirth, gender } = req.body;
-    console.log(req.body);
+    // console.log(req.body);
 
     //check user/email do not exists
     if (await db.testSelectEntryOneArg(TableUsersName, 'username', username))
@@ -45,7 +45,7 @@ export async function SignUp(db: Database, req: Request, res: Response) {
             'username',
             username,
         );
-        console.log(user);
+        // console.log(user);
 		// const emailBody: string = generateEmailBodyNewUser(username, confirmID);
         // sendEmail('Verify your account', email, emailBody);
 
@@ -96,7 +96,7 @@ export async function SignIn(db: Database, req: Request, res: Response) {
         'username',
         username,
     );
-    console.log(user)
+    // console.log(user)
     if (!user) return res.status(200).json({ message: ErrorMsg, error: UnknownUsername });
     if (user.length !== 1)
         return res.status(200).json({ message: ErrorMsg, error: 'error - multiples users' });
@@ -133,14 +133,14 @@ export async function SignOut(db: Database, req: Request, res: Response) {
 
 export async function ConfirmEmail(db: Database, req: Request, res: Response) {
     const confirmID = req.params.confirmId;
-    console.log('confirm');
+    // console.log('confirm');
     //recuperer USER
     const user: TableUser[] | null = await db.selectOneElemFromTable(
         TableUsersName,
         'email_confirm_id',
         confirmID,
     );
-    console.log(user);
+    // console.log(user);
 
     if (!user || user.length !== 1)
         return res.status(200).json({ message: 'unknown link' });
@@ -194,15 +194,14 @@ export async function getUserFromRequest(
 
 //test
 export async function testJWT(db: Database, req: Request, res: Response) {
-    console.log('test');
 
     const token = req.cookies.signin_matcha;
     let decoded: PayloadJWTType | null = null;
     if (token) {
         try {
             decoded = await verifyJWT(token);
-            console.log('decoded');
-            console.log(decoded);
+            // console.log('decoded');
+            // console.log(decoded);
         } catch (err) {
             return res.status(400).json({ error: 'Not connected' });
         }
@@ -214,7 +213,7 @@ export async function testJWT(db: Database, req: Request, res: Response) {
             'username',
             decoded.login,
         );
-        console.log(user);
+        // console.log(user);
         return res.status(200).json({ msg: 'ok' });
     }
 
@@ -297,15 +296,15 @@ export async function TmpShowUserByEmail(db: Database, req: Request, res: Respon
 	if (!users || users.length !== 1)
         return res.status(200).json({ message: ErrorMsg , error: UnknownUsername });
 	const user: TableUser = users[0];
-	console.log('------USER------');
-	console.log(user)
+	// console.log('------USER------');
+	// console.log(user)
 
     return res.status(200).json({ message: SuccessMsg });
 }
 
 export async function ConfirmForgotPwd(db: Database, req: Request, res: Response) {
 	const confirmID = req.params.confirmId;
-    console.log('confirm');
+    // console.log('confirm');
 
     //recuperer USER
     const user: TableUser[] | null = await db.selectOneElemFromTable(
@@ -313,7 +312,7 @@ export async function ConfirmForgotPwd(db: Database, req: Request, res: Response
         'reset_pwd',
         confirmID,
     );
-    console.log(user);
+    // console.log(user);
 
     if (!user || user.length !== 1)
         return res.status(200).json({ message: ErrorMsg , error: InvalidId });
@@ -324,7 +323,7 @@ export async function ConfirmForgotPwd(db: Database, req: Request, res: Response
 export async function ResetPwd(db: Database, req: Request, res: Response) {
 	const confirmID = req.params.confirmId;
 	const { password } = req.body;
-    console.log('confirm');
+    // console.log('confirm');
 
     //recuperer USER
     const users: TableUser[] | null = await db.selectOneElemFromTable(
@@ -332,7 +331,7 @@ export async function ResetPwd(db: Database, req: Request, res: Response) {
         'reset_pwd',
         confirmID,
     );
-    console.log(users);
+    // console.log(users);
 
     if (!users || users.length !== 1)
         return res.status(200).json({ message: ErrorMsg , error: InvalidId });
