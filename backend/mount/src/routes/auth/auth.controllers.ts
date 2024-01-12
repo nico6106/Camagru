@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { Database } from "../../database/db"
 import { validateSignUpBody } from './middlewares/signup.middleware';
-import { SignUp, SignIn, SignOut, ConfirmEmail, testJWT, ForgotPwd, TmpShowUserByEmail, ConfirmForgotPwd, ResetPwd } from './auth.service';
+import { SignUp, SignIn, SignOut, ConfirmEmail, testJWT, ForgotPwd, TmpShowUserByEmail, ConfirmForgotPwd, ResetPwd, SignInOauth } from './auth.service';
 import { checkConnected } from './middlewares/check-connection.middleware';
 import { validateSignInBody } from './middlewares/signin.body.middleware';
 import { validateForgotPwdBody } from './middlewares/forgotpwd.middleware';
@@ -23,6 +23,18 @@ router.post('/signup', validateSignUpBody, validateSignInBody, (req: Request, re
 
 router.post('/signin', validateSignInBody, (req: Request, res: Response) => {
 	return SignIn(db, req, res);
+})
+
+router.post('/42', (req: Request, res: Response) => {
+	return SignInOauth(db, req, res, '42');
+})
+
+router.post('/github', (req: Request, res: Response) => {
+	return SignInOauth(db, req, res, 'github');
+})
+
+router.post('/google', (req: Request, res: Response) => {
+	return SignInOauth(db, req, res, 'google');
 })
 
 router.get('/signout', checkConnected, (req: Request, res: Response) => {

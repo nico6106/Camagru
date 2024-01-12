@@ -58,7 +58,6 @@ function SettingsPage() {
 		if (retour.message === SuccessMsg && retour.user) {
 			setUser(retour.user);
 			setUserInfoForForm(retour.user);
-			// console.log(retour);
 			if (retour.tags)
 				setTagsAll(retour.tags);
 		}
@@ -78,8 +77,13 @@ function SettingsPage() {
 		if (userInfo.date_birth)
 			setDatebirth(formatDateYYYYMMDD(userInfo.date_birth));
 		setGender(userInfo.gender);
-		setLongitude(userInfo.position.longitude.toString());
-		setLatitude(userInfo.position.latitude.toString());
+		if (userInfo.position.longitude && userInfo.position.latitude) {
+			setLongitude(userInfo.position.longitude.toString());
+			setLatitude(userInfo.position.latitude.toString());
+		} else {
+			setLongitude('0');
+			setLatitude('0');
+		}
 		setAmendPosition(userInfo.force_position);
 	}
 
@@ -166,20 +170,20 @@ function SettingsPage() {
 						type='email'
                         title="Email"
                         onBlur={handleOnChangeEmail}
-						init={email}
+						init={email ? email : ''}
                     />
 					<MultiplesInputOneRow nbInRow="2">
 						<ErrorField
 							name="firstname"
 							title="First name"
 							onBlur={handleOnChangeFirstname}
-							init={firstname}
+							init={firstname ? firstname : ''}
 						/>
 						<ErrorField
 							name="lastname"
 							title="Last name"
 							onBlur={handleOnChangeLastname}
-							init={lastname}
+							init={lastname ? lastname : ''}
 						/>
 					</MultiplesInputOneRow>
 
@@ -215,9 +219,9 @@ function SettingsPage() {
 							title="Gender"
 							name="gender"
 							nameDefault="Select gender"
-							list={['female', 'male']}
+							list={['-', 'female', 'male']}
 							onBlur={handleOnChangeGender}
-							init={gender}
+							init={gender ? gender : '-'}
 						/>
 						<SelectInput
 							title="Sexual preference"

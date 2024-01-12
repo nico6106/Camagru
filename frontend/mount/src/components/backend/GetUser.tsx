@@ -9,9 +9,9 @@ async function GetUser(id: number): Promise<RetourType | null> {
                 withCredentials: true,
             },
         );
-        // console.log(response.data);
         return response.data;
     } catch (error) {
+        console.error(error);
         //to handle ?
 		return null;
     }

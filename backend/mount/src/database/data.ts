@@ -31,6 +31,7 @@ export const TableUserQuery: string = `CREATE TABLE users (
 	connected BOOLEAN DEFAULT FALSE,
 	last_connection TIMESTAMP,
 	notifications JSONB DEFAULT '[]'::JSONB,
+	method VARCHAR(50) DEFAULT 'local',
 	unread_notif INT DEFAULT 0
 	)`;
 
@@ -66,6 +67,7 @@ export type TableUser = {
     connected: boolean;
     last_connection: number;
     notifications: { id: number; date: number; notif: string }[];
+	method: 'local' | '42' | 'github' | 'google';
     unread_notif: number;
 };
 

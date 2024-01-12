@@ -58,7 +58,6 @@ function ProfilePage() {
 	async function getUserInfo() {
 		if (!(idUser > 0)) return ;
 		const retour: RetourType | null = await GetUser(idUser);
-		// console.log(retour)
 		if (retour && retour.message === SuccessMsg && retour.userM) {
 			setUserM(retour.userM);
 			setVisible(retour.userM.profile_picture);

@@ -4,6 +4,7 @@ import Page404 from './pages/Page404';
 import NavBar from './components/NavBar';
 import ConfirmEmailPage from './pages/ConfirmEmailPage';
 import { UserProvider } from './context/UserContext';
+import OauthPage from './pages/OauthPage';
 import SignInPage from './pages/SignInPage';
 import SignOutPage from './pages/SignOutPage';
 import SignUpPage from './pages/SignUpPage';
@@ -33,6 +34,7 @@ function App() {
                         element={<ConfirmEmailPage />}
                     />
                     <Route path="/signin" element={<SignInPage />} />
+					<Route path="/signin/:method" element={<OauthPage />} />
                     <Route path="/signup" element={<SignUpPage />} />
                     <Route path="/signout" element={<SignOutPage />} />
 					<Route path="/forgot/:idConfirm" element={<ResetPasswordPage />} />
