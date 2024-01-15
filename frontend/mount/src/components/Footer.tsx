@@ -11,23 +11,6 @@ function Footer() {
 					</Link>
                     . All Rights Reserved.
                 </span>
-                <ul className="flex flex-wrap items-center mt-3 text-sm font-medium text-gray-500 dark:text-gray-400 sm:mt-0">
-                    <li>
-						<Link to='/profile' className='mr-4 hover:underline md:mr-6'>
-                            Your Profile
-                        </Link>
-                    </li>
-                    <li>
-                        <Link to='/find' className='mr-4 hover:underline md:mr-6'>
-                            Browsing
-                         </Link>
-                    </li>
-                    <li>
-                        <Link to='/settings' className='mr-4 hover:underline md:mr-6'>
-                            Settings
-                         </Link>
-                    </li>
-                </ul>
             </div>
         </footer>
     );

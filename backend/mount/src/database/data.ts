@@ -91,6 +91,7 @@ export type TableChat = {
 };
 
 export type ChatMessage = {
+	type: 'text' | 'image' | 'date';
 	sender: number;
 	date: number;
 	content: string

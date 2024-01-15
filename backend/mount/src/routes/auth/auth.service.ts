@@ -180,11 +180,16 @@ export async function SignInOauth(db: Database, req: Request, res: Response, aut
             email,
         );
     } else {
-        user = await db.SelectElemsFromTableMultiplesArgsAND(
+        user = await db.selectOneElemFromTable(
             TableUsersName,
-            ['username', 'method'],
-            [login, authMethod],
+            'username',
+            login,
         );
+        if (user && user[0].method !== authMethod) {
+            return res
+                .status(200)
+                .json({ message: ErrorMsg, error: 'error login ' + authMethod });
+        }
     }
 
     if (!user || user.length === 0) {
@@ -197,9 +202,7 @@ export async function SignInOauth(db: Database, req: Request, res: Response, aut
             email ? email : '',
             authMethod,
         ];
-        fields =
-            'username, email, method';
-
+        fields = 'username, email, method';
         retour = await db.insertToTable(TableUsersName, fields, values);
         if (retour && retour.rowCount !== 0) {
             //get the user

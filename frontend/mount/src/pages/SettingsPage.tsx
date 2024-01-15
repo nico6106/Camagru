@@ -19,10 +19,13 @@ import { SuccessMsg } from "../shared/errors";
 import PhotoUploader from "../components/settings/PhotoUpload";
 import ShowPictures from "../components/settings/ShowPictures";
 import CheckboxAskGeoModify from "../components/settings/CheckboxAskGeo";
+import { useNavigate } from 'react-router-dom';
+
 
 function SettingsPage() {
 	const [error, setError] = useState<string>('');
 	const [user, setUser] = useState<User | null>(null);
+	const navigate = useNavigate();
 	
 	//fields
     const [email, setEmail] = useState<string>('');
@@ -151,6 +154,7 @@ function SettingsPage() {
 	function handleSaveSettings(event: any) {
         event.preventDefault();
         saveUserInfo();
+		navigate('/profile');
     }
 
 	return !user ? (

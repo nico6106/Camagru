@@ -7,6 +7,7 @@ import { MsgChatRetour } from '../../shared/chat';
 import { getUserFromRequest } from '../auth/auth.service';
 
 type SocketReceiveMsg = {
+    type: string;
 	idChat: number;
 	msg: MsgChatRetour;
 };
@@ -55,6 +56,7 @@ export async function handleIncomeChatMsg(
 
 	//create chat elem
     const newElemChat: ChatMessage = {
+        type: data.type,
         sender: users.users[indexUser].idUser,
         date: Date.now(),
         content: data.message,
@@ -75,6 +77,7 @@ export async function handleIncomeChatMsg(
 
     //send chat to other users
 	const elemToSend: SocketReceiveMsg = {
+        type: data.type,
 		idChat: data.idChat,
 		msg: newElemChat,
 	}

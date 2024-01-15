@@ -10,7 +10,6 @@ async function GetMe(): Promise<RetourType | null> {
                 withCredentials: true,
             },
         );
-        // console.log(response.data);
         return response.data;
     } catch (error) {
         //to handle ?

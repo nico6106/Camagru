@@ -43,7 +43,7 @@ function ChatShowMessages({
     
     return chat ? (
 		<div className='h-full '>
-			<div className="h-5/6 overflow-y-auto scrolling-touch overflow-clip pl-4 bg-gray-100 border">
+			<div className="h-5/6 overflow-y-auto scrolling-touch overflow-clip px-2 bg-gray-100 border">
 				<ChatHistoryMesssages chats={chat} />
 			</div>
 			<div className="h-1/6">

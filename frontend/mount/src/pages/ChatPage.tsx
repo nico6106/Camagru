@@ -47,7 +47,7 @@ function ChatPage() {
 					<div className="w-1/4 bg-gray-200 p-4">Friends
 						<ChatFriends setCurrChat={setCurrChat} />
 					</div>
-					<div className="h-96 w-3/4 flex flex-col">Discussion
+					<div className="h-96 w-3/4 flex flex-col">
 						{chat && <ChatShowMessages 
 							currChat={currChat}
 							chat={chat}
