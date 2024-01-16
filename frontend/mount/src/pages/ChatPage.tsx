@@ -43,11 +43,12 @@ function ChatPage() {
             {/* <TramePage> */}
                 <TitleSmall text="Chat" space="1" />
 
-				<div className="h-full flex border">
-					<div className="w-1/4 bg-gray-200 p-4">Friends
+				<div className="h-[75vh] flex flex-col border md:flex-row">
+					<div className="w-full md:w-1/4 bg-gray-200 overflow-x md:overflow-auto">
+                        <p className='font-bold test-xl px-3 pt-1 border-b border-gray-300'>Friends</p>
 						<ChatFriends setCurrChat={setCurrChat} />
 					</div>
-					<div className="h-96 w-3/4 flex flex-col">
+					<div className="relative h-full md:h-full md:w-3/4 overflow-hidden">
 						{chat && <ChatShowMessages 
 							currChat={currChat}
 							chat={chat}

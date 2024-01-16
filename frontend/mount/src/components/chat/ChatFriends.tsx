@@ -39,7 +39,7 @@ function ChatFriends({
 
     return chats ? (
         <>
-            <div className="hover:overflow-y-scroll">
+            <div className="overflow-auto flex flex-row md:flex-col">
                 {chats.map((elem, index) => (
                     <ChatShowIndivFriend
                         chatElem={elem}
@@ -60,8 +60,8 @@ type PropChatIndivFriend = {
     setCurrChat: any;
 };
 function ChatShowIndivFriend({ chatElem, setCurrChat }: PropChatIndivFriend) {
-    const styleP: string = `flex items-center text-gray-900  ${''} group font-medium
-							flex-1 ml-4 whitespace-nowrap space-y-2`;
+    const styleP: string = `flex items-center text-gray-900  ${''} group
+							flex-1 md:ml-5 whitespace-nowrap space-y-2 font-bold`;
 	const link: string = chatElem.picture !== '' ? `http://${process.env.REACT_APP_SERVER_ADDRESS}:3333/users/image/${chatElem.picture}` : '/carousel-2.svg';
 	const altImg: string = `Picture ${chatElem.picture}`;
 	const socket = useContext(WebsocketContext);
@@ -97,7 +97,7 @@ function ChatShowIndivFriend({ chatElem, setCurrChat }: PropChatIndivFriend) {
 
     return (
         <div
-            className="flex flex-row pt-4 pb-4 border-gray-900 rounded-lg hover:bg-gray-300"
+            className="relative flex flex-col md:flex-row px-6 md:px-2 py-4 hover:bg-gray-300 items-center"
             onClick={handleOnClick}
         >
 			<img
@@ -105,9 +105,11 @@ function ChatShowIndivFriend({ chatElem, setCurrChat }: PropChatIndivFriend) {
                         src={link}
 						alt={altImg}
                     />
-			<div className="ml-6 mt-3 absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full">
-				{nbNotifChat}
-			</div>
+            {nbNotifChat > 0 && (
+			    <div className="ml-6 mt-3 absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full">
+				    {nbNotifChat}
+			    </div>
+            )}
             <div className={styleP}>
                 {chatElem.firstName + ' ' + chatElem.lastName}
             </div>
