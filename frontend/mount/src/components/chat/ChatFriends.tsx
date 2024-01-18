@@ -83,7 +83,7 @@ function ChatShowIndivFriend({ chatElem, setCurrChat }: PropChatIndivFriend) {
 		});
 
 		socket.on('chat', (data: SocketReceiveMsg) => {
-            if (user && data.msg.sender !== user.id)
+            if (user && data.msg.sender !== user.id && data.idChat === chatElem.idChat)
 				setNbNotifChat((prevnbChat) => prevnbChat + 1);
         });
 	
