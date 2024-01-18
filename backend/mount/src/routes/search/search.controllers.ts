@@ -16,7 +16,6 @@ db.connectDb();
 
 //routes
 router.get('/', checkConnected, (req: Request, res: Response) => {
-	console.log('search route');
 	return browsingProfiles(db, req, res);
 })
 
