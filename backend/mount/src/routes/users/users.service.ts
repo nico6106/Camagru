@@ -223,6 +223,7 @@ function transformListConnexionInUserShort(data: TableUser[] | null, userList: U
 export function computeAgeUser(dateBirth: Date): number {
 	const x = new Date();
 	const y = dateBirth;
+	if (!dateBirth) return 0
 	const diff = x.getTime() - y.getTime();
 	const days = diff / (1000 * 60 * 60 * 24);
 	const age = days / 365;
