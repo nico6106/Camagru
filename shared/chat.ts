@@ -9,6 +9,7 @@ export type ChatRetour = {
 }
 
 export type MsgChatRetour = {
+	type: 'text' | 'date' | 'image' | 'video';
 	sender: number;
 	date: number;
 	content: string;

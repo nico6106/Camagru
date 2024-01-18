@@ -1,5 +1,5 @@
 import { useUserContext } from '../../context/UserContext';
-import { MsgChatRetour } from '../../shared/chat';
+import { MsgChatRetour } from '../../../../../shared/chat';
 
 type PropChatHistory = {
     chats: MsgChatRetour[];
