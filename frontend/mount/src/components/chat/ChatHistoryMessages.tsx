@@ -10,12 +10,26 @@ function ChatHistoryMesssages({ chats }: PropChatHistory) {
     return user ? (
         <div className="h-full flex flex-col">
             {chats.map((elem, index) => {
-                const prevElem = index > 0 ? new Date(chats[index - 1].date) : null;
-                const nextElem = index < chats.length - 1 ? new Date(chats[index + 1].date) : null;
-                const prevElemSameUser = prevElem !== null && chats[index - 1].sender === elem.sender;
-                const nextElemSameUser = nextElem !== null && chats[index + 1].sender === elem.sender;
-                const prevSame = prevElemSameUser && new Date(elem.date).getHours() === prevElem.getHours() && new Date(elem.date).getMinutes() === prevElem.getMinutes();
-                const nextSame = nextElemSameUser && new Date(elem.date).getHours() === nextElem.getHours() && new Date(elem.date).getMinutes() === nextElem.getMinutes();
+                const prevElem =
+                    index > 0 ? new Date(chats[index - 1].date) : null;
+                const nextElem =
+                    index < chats.length - 1
+                        ? new Date(chats[index + 1].date)
+                        : null;
+                const prevElemSameUser =
+                    prevElem !== null &&
+                    chats[index - 1].sender === elem.sender;
+                const nextElemSameUser =
+                    nextElem !== null &&
+                    chats[index + 1].sender === elem.sender;
+                const prevSame =
+                    prevElemSameUser &&
+                    new Date(elem.date).getHours() === prevElem.getHours() &&
+                    new Date(elem.date).getMinutes() === prevElem.getMinutes();
+                const nextSame =
+                    nextElemSameUser &&
+                    new Date(elem.date).getHours() === nextElem.getHours() &&
+                    new Date(elem.date).getMinutes() === nextElem.getMinutes();
                 return (
                     <div
                         className={`flex w-full ${
@@ -25,7 +39,13 @@ function ChatHistoryMesssages({ chats }: PropChatHistory) {
                         }`}
                         key={index}
                     >
-                        <div className={`${user.id === elem.sender ? 'min-w-[15%] flex justify-end' : 'max-w-[85%]'}`}>
+                        <div
+                            className={`${
+                                user.id === elem.sender
+                                    ? 'min-w-[15%] flex justify-end'
+                                    : 'max-w-[85%]'
+                            }`}
+                        >
                             {user.id !== elem.sender && (
                                 <ShowIndivMsg
                                     content={elem.content}
@@ -49,7 +69,13 @@ function ChatHistoryMesssages({ chats }: PropChatHistory) {
                                 </div>
                             )}
                         </div>
-                        <div className={`${user.id !== elem.sender ? 'min-w-[15%]' : 'max-w-[85%]'}`}>
+                        <div
+                            className={`${
+                                user.id !== elem.sender
+                                    ? 'min-w-[15%]'
+                                    : 'max-w-[85%]'
+                            }`}
+                        >
                             {user.id === elem.sender && (
                                 <ShowIndivMsg
                                     content={elem.content}
@@ -83,7 +109,7 @@ function ChatHistoryMesssages({ chats }: PropChatHistory) {
 }
 
 type PropIndivMsg = {
-    type: 'text' | 'date' | 'image';
+    type: 'text' | 'date' | 'image' | 'video';
     content: string;
     msgUserId: number;
     prev: boolean;
@@ -99,14 +125,14 @@ function ShowIndivMsg({
     type,
 }: PropIndivMsg) {
     let style = 'px-4 py-2 rounded-xl break-words ';
-    style += prev ? '' : 'mt-2 '
-    style += next ? '' : 'mb-2 '
+    style += prev ? '' : 'mt-2 ';
+    style += next ? '' : 'mb-2 ';
     if (msgUserId === meId) {
-        style += 'bg-sky-200 rounded-br-none '
-        style += prev ? 'rounded-tr-none ' : ''
+        style += 'bg-sky-200 rounded-br-none ';
+        style += prev ? 'rounded-tr-none ' : '';
     } else {
-        style += 'bg-sky-400 rounded-bl-none '
-        style += prev ? 'rounded-tl-none ' : ''
+        style += 'bg-sky-400 rounded-bl-none ';
+        style += prev ? 'rounded-tl-none ' : '';
     }
     if (type === 'text') {
         return <div className={style}>{content}</div>;
@@ -114,6 +140,18 @@ function ShowIndivMsg({
         return (
             <div className={style}>
                 <img src={content} alt="img" className="max-h-52" />
+            </div>
+        );
+    } else if (type === 'video') {
+        return (
+            <div className={style}>
+                <iframe
+                    src={content}
+                    title="YouTube video player"
+                    className="max-h-52"
+                    allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
+                    allowFullScreen
+                />
             </div>
         );
     } else if (type === 'date') {

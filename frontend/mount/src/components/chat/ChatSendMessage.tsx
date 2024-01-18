@@ -29,6 +29,8 @@ function ChatSendMessage({ currChat }: PropChatSend) {
     const [imageUpdate, setImageUpdate] = useState<string | null>(null);
 
     function handleSendMessage(event: any) {
+        const youtubeRegex = /(?:https?:\/\/)?(?:www\.)?youtu\.?be(?:\.com)?\/?.*(?:watch|embed)?(?:.*v=|v\/|\/)([\w\-_]+)\&?/;
+
         if (event) {
             event.preventDefault();
         }
@@ -42,12 +44,21 @@ function ChatSendMessage({ currChat }: PropChatSend) {
             socket.emit('chat-serv', newMsg);
         }
         if (msg !== '') {
-            const newMsg: DataSocketChatServ = {
-                type: 'text',
-                idChat: currChat,
-                message: msg,
-            };
-            socket.emit('chat-serv', newMsg);
+            if (youtubeRegex.test(msg)) {
+                const newMsg: DataSocketChatServ = {
+                    type: 'video',
+                    idChat: currChat,
+                    message: `https://www.youtube.com/embed/${youtubeRegex.exec(msg)![1]}`,
+                };
+                socket.emit('chat-serv', newMsg);
+            } else {
+                const newMsg: DataSocketChatServ = {
+                    type: 'text',
+                    idChat: currChat,
+                    message: msg,
+                };
+                socket.emit('chat-serv', newMsg);
+            }
         }
         setMsg('');
         setImageUpdate(null);
@@ -57,7 +68,11 @@ function ChatSendMessage({ currChat }: PropChatSend) {
         const selectedImage = e.target.files?.[0];
         if (selectedImage && selectedImage.size < 500000) {
             const reader = new FileReader();
-            if (selectedImage.type !== 'image/jpeg' && selectedImage.type !== 'image/png' && selectedImage.type !== 'image/jpg') {
+            if (
+                selectedImage.type !== 'image/jpeg' &&
+                selectedImage.type !== 'image/png' &&
+                selectedImage.type !== 'image/jpg'
+            ) {
                 setError('Wrong format');
                 return;
             }

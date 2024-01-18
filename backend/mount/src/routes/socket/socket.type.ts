@@ -12,7 +12,7 @@ export type DataSocketPing = {
 }
 
 export type DataSocketChatServ = {
-	type: 'text' | 'date' | 'image';
+	type: 'text' | 'date' | 'image' | 'video';
 	idChat: number;
 	message: string;
 }
