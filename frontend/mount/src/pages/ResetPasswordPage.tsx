@@ -106,6 +106,7 @@ function ResetPasswordPage() {
                             onBlur={handleOnChangePassword}
                             styleError={styleErrorPassword}
                             setStyleError={setStyleErrorPassword}
+							init={password}
                         />
 
                         <div>

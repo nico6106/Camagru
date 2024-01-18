@@ -69,7 +69,7 @@ export async function SignUp(db: Database, req: Request, res: Response) {
             'username',
             username,
         );
-        console.log(user);
+        // console.log(user);
         const emailBody: string = generateEmailBodyNewUser(username, confirmID);
         sendEmail('Verify your account', email, emailBody);
 
