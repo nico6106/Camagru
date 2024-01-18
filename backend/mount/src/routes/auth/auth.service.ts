@@ -70,8 +70,8 @@ export async function SignUp(db: Database, req: Request, res: Response) {
             username,
         );
         console.log(user);
-        // const emailBody: string = generateEmailBodyNewUser(username, confirmID);
-        // sendEmail('Verify your account', email, emailBody);
+        const emailBody: string = generateEmailBodyNewUser(username, confirmID);
+        sendEmail('Verify your account', email, emailBody);
 
         return res.status(200).json({ message: SuccessMsg });
     }
@@ -377,8 +377,8 @@ export async function ForgotPwd(db: Database, req: Request, res: Response) {
     );
 
     //send Email
-    // const emailBody: string = generateEmailBodyForgotPwd(user.username, confirmID);
-    // sendEmail('Reset your password', email, emailBody);
+    const emailBody: string = generateEmailBodyForgotPwd(user.username, confirmID);
+    sendEmail('Reset your password', email, emailBody);
 
     return res.status(200).json({ message: SuccessMsg });
 }
