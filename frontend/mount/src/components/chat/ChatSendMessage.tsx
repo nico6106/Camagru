@@ -29,7 +29,7 @@ function ChatSendMessage({ currChat }: PropChatSend) {
     const [imageUpdate, setImageUpdate] = useState<string | null>(null);
 
     function handleSendMessage(event: any) {
-        const youtubeRegex = /(?:https?:\/\/)?(?:www\.)?youtu\.?be(?:\.com)?\/?.*(?:watch|embed)?(?:.*v=|v\/|\/)([\w\-_]+)\&?/;
+        const youtubeRegex = /(?:https?:\/\/)?(?:www\.)?youtu\.?be(?:\.com)?\/?.*(?:watch|embed)?(?:.*v=|v\/|\/)([\w\-_]+)?/;
 
         if (event) {
             event.preventDefault();
@@ -354,7 +354,7 @@ function ChatSendMessage({ currChat }: PropChatSend) {
                     <img
                         className="w-full h-auto"
                         src={imageUpdate ? imageUpdate : ''}
-                        alt="Displayed Image"
+                        alt='img'
                     />
                 </div>
             )}

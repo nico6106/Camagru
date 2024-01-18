@@ -209,6 +209,7 @@ function ShowIndivMsg({
                     href={googleMapsUrl}
                     target="_blank"
                     className="flex row pl-2"
+                    rel="noopener noreferrer"
                 >
                     <svg
                         className="h-5 w-5 mr-1"
