@@ -92,6 +92,9 @@ function ChatSendMessage({ currChat }: PropChatSend) {
 
     function handlePopUp() {
         setImageUpdate(null);
+        setIsCheck(false);
+        setLatitude('');
+        setLongitude('');
         setPopUp(!datePopUp);
     }
 

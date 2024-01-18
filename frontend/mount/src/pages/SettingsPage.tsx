@@ -154,7 +154,6 @@ function SettingsPage() {
 	function handleSaveSettings(event: any) {
         event.preventDefault();
         saveUserInfo();
-		navigate('/profile');
     }
 
 	return !user ? (
@@ -223,9 +222,9 @@ function SettingsPage() {
 							title="Gender"
 							name="gender"
 							nameDefault="Select gender"
-							list={['-', 'female', 'male']}
+							list={['female', 'male']}
 							onBlur={handleOnChangeGender}
-							init={gender ? gender : '-'}
+							init={gender ? gender : 'female'}
 						/>
 						<SelectInput
 							title="Sexual preference"

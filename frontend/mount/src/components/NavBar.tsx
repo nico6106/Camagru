@@ -363,7 +363,6 @@ function NavBar() {
     const [showMenu, setShowMenu] = useState<boolean>(false);
 	const [currLink, setCurrLink] = useState<string>('no');
 	const { user, verifUser } = useUserContext();
-    const [checkData, setCheckData] = useState<boolean>(false);
 	const location = useLocation();
 
 	useEffect(() => {
@@ -382,12 +381,6 @@ function NavBar() {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [location]);
 
-    useEffect(() => {
-        if (user && user.first_name && user.last_name && user.date_birth && user.gender) {
-            setCheckData(true);
-        }
-    }, [user]);
-
     let outside: boolean = false;
     return (
         <nav className="bg-gray-800">
@@ -405,15 +398,15 @@ function NavBar() {
                     </OutsideClickHandler>
                     <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                         <LogoNavBar />
-                        {user && checkData && <LinkNavBar 
+                        {user && <LinkNavBar 
 							currLink={currLink}
 							setCurrLink={setCurrLink}
 							/>}
                     </div>
                     <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-						{user && checkData && <ButtonChat />}
-                        {user && checkData && <ButtonNotifications />}
-						{user && checkData && <AskGeolocalisation />}
+						{user && <ButtonChat />}
+                        {user && <ButtonNotifications />}
+						{user && <AskGeolocalisation />}
                         <DropdownMenu />
                     </div>
                 </div>
